@@ -1,0 +1,68 @@
+
+> community-go-frontend@0.1.0 test C:\rin\coder\i0721\console-web
+> pnpm -r --if-present test
+
+Scope: 12 of 13 workspace projects
+packages/i18n test$ vitest run
+packages/schemas test$ vitest run
+packages/state-foundation test$ vitest run
+packages/schemas test:  RUN  v4.1.11 C:/rin/coder/i0721/console-web/packages/schemas
+packages/i18n test:  RUN  v4.1.11 C:/rin/coder/i0721/console-web/packages/i18n
+packages/state-foundation test:  RUN  v4.1.11 C:/rin/coder/i0721/console-web/packages/state-foundation
+packages/i18n test:  Test Files  1 passed (1)
+packages/i18n test:       Tests  2 passed (2)
+packages/i18n test:    Start at  16:17:54
+packages/i18n test:    Duration  577ms (transform 105ms, setup 0ms, import 218ms, tests 42ms, environment 0ms)
+packages/i18n test: Done
+packages/schemas test:  Test Files  7 passed (7)
+packages/schemas test:       Tests  50 passed (50)
+packages/schemas test:    Start at  16:17:54
+packages/schemas test:    Duration  2.11s (transform 557ms, setup 0ms, import 1.41s, tests 2.87s, environment 1ms)
+packages/schemas test: Done
+packages/state-foundation test:  Test Files  8 passed (8)
+packages/state-foundation test:       Tests  39 passed (39)
+packages/state-foundation test:    Start at  16:17:54
+packages/state-foundation test:    Duration  2.58s (transform 905ms, setup 0ms, import 1.83s, tests 403ms, environment 5.77s)
+packages/state-foundation test: Done
+packages/core test$ vitest run
+packages/form-foundation test$ vitest run
+packages/form-foundation test:  RUN  v4.1.11 C:/rin/coder/i0721/console-web/packages/form-foundation
+packages/core test:  RUN  v4.1.11 C:/rin/coder/i0721/console-web/packages/core
+packages/core test:  Test Files  2 passed (2)
+packages/core test:       Tests  16 passed (16)
+packages/core test:    Start at  16:17:57
+packages/core test:    Duration  333ms (transform 43ms, setup 0ms, import 137ms, tests 27ms, environment 0ms)
+packages/core test: Done
+packages/form-foundation test:  Test Files  1 passed (1)
+packages/form-foundation test:       Tests  2 passed (2)
+packages/form-foundation test:    Start at  16:17:57
+packages/form-foundation test:    Duration  1.40s (transform 33ms, setup 0ms, import 249ms, tests 75ms, environment 838ms)
+packages/form-foundation test: Done
+packages/plugin-framework test$ vitest run
+packages/surface-foundation test$ vitest run
+packages/surface-foundation test:  RUN  v4.1.11 C:/rin/coder/i0721/console-web/packages/surface-foundation
+packages/plugin-framework test:  RUN  v4.1.11 C:/rin/coder/i0721/console-web/packages/plugin-framework
+packages/plugin-framework test:  Test Files  5 passed (5)
+packages/plugin-framework test:       Tests  40 passed (40)
+packages/plugin-framework test:    Start at  16:17:59
+packages/plugin-framework test:    Duration  1.96s (transform 349ms, setup 0ms, import 1.33s, tests 514ms, environment 3.35s)
+packages/plugin-framework test: Done
+packages/surface-foundation test:  Test Files  4 passed (4)
+packages/surface-foundation test:       Tests  45 passed (45)
+packages/surface-foundation test:    Start at  16:17:59
+packages/surface-foundation test:    Duration  2.69s (transform 285ms, setup 0ms, import 1.82s, tests 855ms, environment 2.25s)
+packages/surface-foundation test: Done
+surfaces test$ vitest run
+surfaces test:  RUN  v4.1.11 C:/rin/coder/i0721/console-web/surfaces
+surfaces test:  Test Files  7 passed (7)
+surfaces test:       Tests  49 passed (49)
+surfaces test:    Start at  16:18:02
+surfaces test:    Duration  1.64s (transform 576ms, setup 0ms, import 1.48s, tests 115ms, environment 2.07s)
+surfaces test: Done
+apps/web test$ vitest run --config vitest.config.ts
+apps/web test:  RUN  v4.1.11 C:/rin/coder/i0721/console-web/apps/web
+apps/web test:  Test Files  24 passed (24)
+apps/web test:       Tests  124 passed (124)
+apps/web test:    Start at  16:18:04
+apps/web test:    Duration  7.65s (transform 2.55s, setup 9.81s, import 10.76s, tests 5.31s, environment 37.92s)
+apps/web test: Done

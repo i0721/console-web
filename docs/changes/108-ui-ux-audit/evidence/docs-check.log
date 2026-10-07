@@ -1,0 +1,7 @@
+Command: pnpm docs:check
+Result: exit code 1
+
+Docs structure check failed:
+- broken link: docs/README.md -> ../../docs/repository-scope.md
+
+Captured on 2026-10-07. This is a pre-existing authority link, not a link added by the audit report.

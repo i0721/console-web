@@ -18,3 +18,4 @@
 - [105 Overlay Trigger 交互状态视觉](105-overlay-trigger-visual-states/README.md)：共享 Overlay Trigger 语义层，pressed/hover/focus 不切换 Brand Blue，danger 语义保持；实施与验证已完成。
 - [106 Plugin 架构中装配 schemas 公共 API](106-plugin-schemas-access/README.md)：plugin-framework 暴露浏览器安全 `./schemas` 与 Node `./schemas/runtime` 入口、`/plugin` schemas 命名空间，转出 schemas 公共能力（不访问内部、不改 schemas）；实施与验证已完成。
 - [107 独立 Settings 插件与完整用户设置中心](107-settings-center/README.md)：移除 system-tools 偏好页、新增独立 /settings 插件（八分类即时生效、设置搜索与双层恢复默认）、配套页面标签/通知中心/本地草稿/搜索历史/收藏/最近/工作恢复/命令快捷键与 Design System 主题语义扩展；计划已确认并进入实施（SET-001~005-001、SET-007 清理完成，剩余 SET-002 视觉复核/SET-005 其余/SET-006/SET-008 全量验证）。
+- [108 UI UX 审查](108-ui-ux-audit/README.md)：完成本地网站38个路由的浏览、关键交互、响应式复核（190个基础组合）与移动专项（114个组合、设置八分类、全部内容Tabs/ToggleGroup/PageTabs），记录优点、P0/P1/P2问题、原因、模式比较、统一适配策略与证据；未修改产品实现。
