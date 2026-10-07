@@ -1,0 +1,68 @@
+import { Calendar } from '@heroui/react/calendar';
+import { DateField } from '@heroui/react/date-field';
+import { DatePicker } from '@heroui/react/date-picker';
+import { Description } from '@heroui/react/description';
+import { Label } from '@heroui/react/label';
+
+export type DatePickerFieldProps = Readonly<{
+  label: string;
+  hint?: string;
+  calendarLabel: string;
+  disabled?: boolean;
+  defaultOpen?: boolean;
+  onValueChange?: (value: string | null) => void;
+}>;
+
+export function DatePickerField({
+  label,
+  hint,
+  calendarLabel,
+  disabled = false,
+  defaultOpen = false,
+  onValueChange,
+}: DatePickerFieldProps) {
+  return (
+    <DatePicker
+      className="ui-field"
+      defaultOpen={defaultOpen}
+      isDisabled={disabled}
+      onChange={(value) => onValueChange?.(value?.toString() ?? null)}
+    >
+      <Label className="ui-field-label">{label}</Label>
+      <DateField.Group className="ui-field-control flex items-center">
+        <DateField.Input className="min-w-0 flex-1">
+          {(segment) => (
+            <DateField.Segment
+              className="rounded px-0.5 outline-none data-[focused]:bg-brand-soft data-[focused]:text-brand"
+              segment={segment}
+            />
+          )}
+        </DateField.Input>
+        <DateField.Suffix>
+          <DatePicker.Trigger className="grid size-9 place-items-center rounded-control text-ink-muted hover:bg-surface-muted">
+            <DatePicker.TriggerIndicator className="size-4" />
+          </DatePicker.Trigger>
+        </DateField.Suffix>
+      </DateField.Group>
+      {hint ? <Description className="ui-field-hint">{hint}</Description> : null}
+      <DatePicker.Popover className="ui-overlay-surface p-3">
+        <Calendar aria-label={calendarLabel}>
+          <Calendar.Header>
+            <Calendar.YearPickerTrigger>
+              <Calendar.YearPickerTriggerHeading />
+              <Calendar.YearPickerTriggerIndicator />
+            </Calendar.YearPickerTrigger>
+            <Calendar.NavButton slot="previous" />
+            <Calendar.NavButton slot="next" />
+          </Calendar.Header>
+          <Calendar.Grid>
+            <Calendar.GridHeader>
+              {(day) => <Calendar.HeaderCell>{day}</Calendar.HeaderCell>}
+            </Calendar.GridHeader>
+            <Calendar.GridBody>{(date) => <Calendar.Cell date={date} />}</Calendar.GridBody>
+          </Calendar.Grid>
+        </Calendar>
+      </DatePicker.Popover>
+    </DatePicker>
+  );
+}

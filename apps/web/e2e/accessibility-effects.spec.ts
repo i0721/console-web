@@ -1,0 +1,55 @@
+import { expect, test } from '@playwright/test';
+
+async function openAccessibility(page: import('@playwright/test').Page) {
+  await page.goto('/settings/accessibility');
+  await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
+  await page.getByRole('heading', { name: '可访问性' }).first().scrollIntoViewIfNeeded();
+}
+
+async function toggleSwitch(page: import('@playwright/test').Page, name: string, on: boolean) {
+  const sw = page.getByRole('switch', { name });
+  await sw.focus();
+  await page.keyboard.press('Space');
+  if (on) await expect(sw).toBeChecked();
+  else await expect(sw).not.toBeChecked();
+}
+
+test('增强焦点轮廓：开启写入 data-enhance-focus 且焦点环 Token 加强', async ({ page }) => {
+  await openAccessibility(page);
+  await toggleSwitch(page, '增强焦点轮廓', true);
+  await page.waitForTimeout(300);
+  await expect(page.locator('html')).toHaveAttribute('data-enhance-focus', 'on');
+  const ring = await page.evaluate(() =>
+    getComputedStyle(document.documentElement)
+      .getPropertyValue('--spacing-focus-ring-width')
+      .trim(),
+  );
+  expect(ring).toBe('.25rem');
+});
+
+test('增强交互区域尺寸：开启写入 data-enhance-target 且控件 spacing 放大', async ({ page }) => {
+  await openAccessibility(page);
+  await toggleSwitch(page, '增强交互区域尺寸', true);
+  await page.waitForTimeout(300);
+  await expect(page.locator('html')).toHaveAttribute('data-enhance-target', 'on');
+  const spacing = await page.evaluate(() =>
+    getComputedStyle(document.documentElement).getPropertyValue('--spacing-control').trim(),
+  );
+  expect(spacing).toBe('3.25rem');
+});
+
+test('跟随系统辅助设置：开启写入 data-follow-system 并同步系统对比度', async ({ page }) => {
+  await openAccessibility(page);
+  await toggleSwitch(page, '跟随操作系统辅助功能设置', false); // 先确保关
+  await toggleSwitch(page, '跟随操作系统辅助功能设置', true);
+  await page.waitForTimeout(300);
+  await expect(page.locator('html')).toHaveAttribute('data-follow-system', 'on');
+  // Playwright 默认 prefers-contrast: no-preference → standard。
+  await expect(page.locator('html')).toHaveAttribute('data-system-contrast', 'standard');
+  // 关闭 → data-follow-system=off 且 system-contrast 清除。
+  await toggleSwitch(page, '跟随操作系统辅助功能设置', false);
+  await page.waitForTimeout(300);
+  await expect(page.locator('html')).toHaveAttribute('data-follow-system', 'off');
+  const attr = await page.locator('html').getAttribute('data-system-contrast');
+  expect(attr).toBeNull();
+});
