@@ -629,3 +629,73 @@ DOM测试误用了Playwright的exact参数。已改为固定三项tuple与DOM na
 另行类型检查通过。首轮全量结果不能宣称全绿，剩余14项视觉比较仍待人工验收。
 新增choice-tiles-focus-disabled.png实际图确认整卡焦点与禁用表现。R17-01（P2，信息层次
 优化）的实施及专项验证完成；无真实设备或读屏新增证据。
+
+## 18. 设置内容语义与比较预览（实施中）
+
+已通过桌面1440与手机390实际切换八个分类，并在手机长内容底部发起分类切换。
+证据保存在109的settings-semantic-inventory.txt及semantic-before-*截图。外观页约2280px，
+强调色四行约320px，其余三选项约252px；文字标签无法直观表达颜色、密度、字号与宽度。
+这是选择内容与呈现能力的缺口，不能用统一横排或统一卡片解决。
+
+| 分类/内容     | 决策                                                    | 优先级/状态 |
+| ------------- | ------------------------------------------------------- | ----------- |
+| 外观主题      | 保留图标卡片与即时生效                                  | 已完成§17   |
+| 强调色        | 真实预设色样＋文字；颜色数值继续由Design System唯一管理 | P1，已实施  |
+| 界面/表格密度 | 使用同源比较示意，说明示意与真实即时生效的边界          | P1，已实施  |
+| 字号/内容宽度 | 字样大小与容器比例示意，维持原偏好值                    | P1，已实施  |
+| 动效/对比度   | 简短选择＋手动效果/聚焦预览；不绕过Motion Policy        | P1，已实施  |
+| 导航          | 开关与关闭策略下拉保留；短选项紧凑组织，保留禁用原因    | P2，已实施  |
+| 数据展示      | 页数下拉/布尔开关保留；密度比较与截断换行示例           | P2，已实施  |
+| 操作偏好      | 快速二选紧凑；带说明/不可用原因的目的地选项保留行       | P2，已实施  |
+| 语言与地区    | 多时区/日期格式下拉保留；语言/小时制/周起点短选择       | P2，已实施  |
+| 通知          | 开关保留；时长选择紧凑，依真实值提供反馈                | P2，已实施  |
+| 可访问性      | 保留共享外观摘要、来源与跳转；增强项保留Switch          | 保留        |
+| 快捷键        | 两个布尔开关语义合理，短页不制造占位预览                | 保留        |
+
+组件路径：复用RadioGroupField的Selection/Keyboard/Disabled；扩展可换行inline和
+decorative preview内容，显式选择呈现，不修改既有cards/rows默认。不新增Tabs导航、
+万能设置渲染器或一次性基础组件。ToggleGroup适合短模式工具栏，复杂Field的说明和
+比较内容继续由RadioGroupField管理。静态图案归Feature composition，无独立状态库。
+外部TailAdmin Form Elements的普通/选中/禁用单选已重新实测，未复制源码或尺寸。
+
+通知与可访问性全页截图出现固定Header和焦点跳转链接，需重新实时验证以区分截图捕获
+与实际布局缺陷，不能据此直接声明运行时遮挡。已有视觉基线与失败记录继续保留。
+环境现已恢复：命令/项目读取/临时文件写读删除成功，浏览器连接正常。本节代码已实施，
+验证状态分开记录：不能把实施完成等同于完整验收通过。
+
+### 新确认的实现问题
+
+R18-01（P1，已修复、390实际交互通过）：从外观长页底部打开分类抽屉并进入通知页，
+开启滚顶偏好仍停在scrollY=93，h1 top=31、固定Header bottom=80，标题确实被遮挡。
+Next的默认滚动启发式与持久化layout、Overlay退出/恢复焦点时序不能保证明确的滚顶偏好。
+Host复用现有目的地协调：确认目标pathname/search已提交且模态浮层退出后，在下一帧
+执行显式滚顶；锚点仍居中定位、关闭滚顶仍保留滚动，不在Feature访问浏览器或加CSS补丁。
+相同场景修复后scrollY=0、h1 top=124，分类入口焦点保持。新增浏览器回归待环境恢复执行。
+
+R18-02（P1，已修复、浅/深色实际切换通过）：原高对比度只增强焦点环；跟随系统对比度
+受另一个辅助设置开关限制，系统边界增强还自引用--color-border-strong造成变量循环。
+显式high/系统more共享增强焦点、辅助文字与边界，标准模式不变；系统对比度查询在
+appearance.contrast=system或followSystemAssistive开启时生效。边界混色引用底层ds值，
+消除自引用。该语义偏好影响全产品消费方，属于已有全局偏好能力修复；没有改变标准默认。
+系统more自动化、所有共享控件高对比度矩阵与Axe尚待执行，不能宣称整体WCAG认证。
+
+### 实施与真实使用证据
+
+RadioGroupField新增inline/previews；颜色只显示色样、文字与选中表面，不重复加单选圆点。
+非图标inline保留圆点，cards/rows/tiles默认不变；所有模式仍由HeroUI生成input和选择状态。
+UI Elements同源示例和DOM测试同步更新。Density/Font/Width示意归Settings Feature，
+真实即时生效仍经原PreferencesPort。手动动效预览复用ContentSwapTransition，无自动播放。
+数据长文本示例使用真实truncate/wrap，实测46px单行与66px换行；地区示例调用现有
+formatDateOnly/formatTimeOfDay，12小时+秒切换为08:08:42 AM；通知示例使用真实
+FeedbackController及Host的3/5/8秒映射，不另建timer。可访问性配置摘要保留来源/跳转。
+
+1440/390英文外观无横向溢出；320大字号下无横向溢出，比较卡片宽度大于44px。
+颜色蓝色选择与刷新保存、密度方向键、减少动效时手动预览时长1e-05s已实测，测试偏好已
+恢复原值。实际截图semantic-appearance-en-*、semantic-high-contrast-dark-390、
+semantic-category-scroll-fixed-390、semantic-locale-en-390、semantic-notification-preview-390
+保存在109 evidence/review-2026-10-08。截图不是自动视觉基线，原失败记录保持。
+
+当前治理、架构、相关类型/lint、生成物freshness通过；专项DOM测试7项通过。
+完整pnpm check在包管理器用户目录锁访问处失败，直接Playwright在worker fork处spawn EPERM，
+均未进入断言。完整构建/产物预算、浏览器/Axe矩阵与历史视觉复核尚未完成；日志见109
+evidence/semantic-check-attempt.txt与semantic-browser-attempt.txt。本轮不能声明全绿或目标完成。

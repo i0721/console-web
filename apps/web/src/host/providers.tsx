@@ -113,7 +113,10 @@ function RuntimeProviders({ children }: Readonly<{ children: ReactNode }>) {
     const contrastQuery =
       typeof window !== 'undefined' ? window.matchMedia('(prefers-contrast: more)') : null;
     const applySystemContrast = () => {
-      if (!preferences.accessibility.followSystemAssistive) {
+      if (
+        preferences.appearance.contrast !== 'system' &&
+        !preferences.accessibility.followSystemAssistive
+      ) {
         delete html.dataset.systemContrast;
         return;
       }

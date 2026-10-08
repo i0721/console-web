@@ -7,6 +7,45 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 describe('Action Family', () => {
+  it('比较预览保持名称与整块点击，简短选项保留禁用单选语义', () => {
+    const onValueChange = vi.fn();
+    render(
+      <>
+        <RadioGroupField
+          label="比较"
+          presentation="previews"
+          value="a"
+          onValueChange={onValueChange}
+          options={[
+            { value: 'a', label: '紧凑' },
+            {
+              value: 'b',
+              label: '宽松',
+              preview: <span data-testid="spacing-preview">比较图</span>,
+            },
+          ]}
+        />
+        <RadioGroupField
+          label="快速选择"
+          presentation="inline"
+          value="a"
+          onValueChange={onValueChange}
+          options={[
+            { value: 'a', label: '开始' },
+            { value: 'b', label: '不可用', disabled: true },
+          ]}
+        />
+      </>,
+    );
+    expect(screen.getByRole('radio', { name: '宽松' })).toHaveAccessibleName('宽松');
+    expect(screen.getByTestId('spacing-preview').parentElement).toHaveAttribute(
+      'aria-hidden',
+      'true',
+    );
+    fireEvent.click(screen.getByTestId('spacing-preview'));
+    expect(onValueChange).toHaveBeenCalledWith('b');
+    expect(screen.getByRole('radio', { name: '不可用' })).toBeDisabled();
+  });
   it('Action 暴露项目 Variant、尺寸和真实命令行为', () => {
     const onPress = vi.fn();
     render(

@@ -157,7 +157,8 @@
 
 /* 受控强调色（四套预设）：html[data-accent] 覆盖 --ds-brand 语义角色。
  * purple = 默认组（与 :root/[data-theme] 一致，覆盖无副作用，仅作单一事实源输出）。 */
-html[data-accent='purple'] {
+html[data-accent='purple'],
+[data-accent-preview='purple'] {
   /* @ds-region:accent-purple-light:start */
   --ds-brand: #5d49d6;
   --ds-brand-strong: #4e3bc3;
@@ -166,7 +167,8 @@ html[data-accent='purple'] {
   --ds-focus-ring: #5d49d6;
   /* @ds-region:accent-purple-light:end */
 }
-html[data-theme='dark'][data-accent='purple'] {
+html[data-theme='dark'][data-accent='purple'],
+html[data-theme='dark'] [data-accent-preview='purple'] {
   /* @ds-region:accent-purple-dark:start */
   --ds-brand: #9b8cff;
   --ds-brand-strong: #b0a5ff;
@@ -175,7 +177,8 @@ html[data-theme='dark'][data-accent='purple'] {
   --ds-focus-ring: #b0a5ff;
   /* @ds-region:accent-purple-dark:end */
 }
-html[data-accent='blue'] {
+html[data-accent='blue'],
+[data-accent-preview='blue'] {
   /* @ds-region:accent-blue-light:start */
   --ds-brand: #2563eb;
   --ds-brand-strong: #1e40af;
@@ -184,7 +187,8 @@ html[data-accent='blue'] {
   --ds-focus-ring: #2563eb;
   /* @ds-region:accent-blue-light:end */
 }
-html[data-theme='dark'][data-accent='blue'] {
+html[data-theme='dark'][data-accent='blue'],
+html[data-theme='dark'] [data-accent-preview='blue'] {
   /* @ds-region:accent-blue-dark:start */
   --ds-brand: #8ab0ff;
   --ds-brand-strong: #a5c3ff;
@@ -193,7 +197,8 @@ html[data-theme='dark'][data-accent='blue'] {
   --ds-focus-ring: #8ab0ff;
   /* @ds-region:accent-blue-dark:end */
 }
-html[data-accent='green'] {
+html[data-accent='green'],
+[data-accent-preview='green'] {
   /* @ds-region:accent-green-light:start */
   --ds-brand: #047857;
   --ds-brand-strong: #065f46;
@@ -202,7 +207,8 @@ html[data-accent='green'] {
   --ds-focus-ring: #047857;
   /* @ds-region:accent-green-light:end */
 }
-html[data-theme='dark'][data-accent='green'] {
+html[data-theme='dark'][data-accent='green'],
+html[data-theme='dark'] [data-accent-preview='green'] {
   /* @ds-region:accent-green-dark:start */
   --ds-brand: #5fd0a8;
   --ds-brand-strong: #7de0ba;
@@ -211,7 +217,8 @@ html[data-theme='dark'][data-accent='green'] {
   --ds-focus-ring: #5fd0a8;
   /* @ds-region:accent-green-dark:end */
 }
-html[data-accent='orange'] {
+html[data-accent='orange'],
+[data-accent-preview='orange'] {
   /* @ds-region:accent-orange-light:start */
   --ds-brand: #c2410c;
   --ds-brand-strong: #9a3412;
@@ -220,7 +227,8 @@ html[data-accent='orange'] {
   --ds-focus-ring: #c2410c;
   /* @ds-region:accent-orange-light:end */
 }
-html[data-theme='dark'][data-accent='orange'] {
+html[data-theme='dark'][data-accent='orange'],
+html[data-theme='dark'] [data-accent-preview='orange'] {
   /* @ds-region:accent-orange-dark:start */
   --ds-brand: #fdab6d;
   --ds-brand-strong: #febf8f;
@@ -296,12 +304,16 @@ html[data-content-width='wide'] #main-content {
   /* @ds-region:appearance-content-wide:end */
 }
 
-/* 高对比度：增强焦点环可见性（标准 = 默认不做覆盖）。 */
-html[data-contrast='high'] {
+/* Explicit and system-requested contrast share focus, text and boundary treatment. */
+html[data-contrast='high'],
+html[data-contrast='system'][data-system-contrast='more'] {
   /* @ds-region:appearance-contrast-high:start */
   --spacing-focus-ring-width: 0.1875rem;
   --spacing-focus-ring-offset: 0.1875rem;
   /* @ds-region:appearance-contrast-high:end */
+  --color-ink-muted: var(--color-ink);
+  --color-border: color-mix(in srgb, var(--color-ink) 32%, var(--ds-border));
+  --color-border-strong: color-mix(in srgb, var(--color-ink) 32%, var(--ds-border-strong));
 }
 
 /* 可访问性增强（默认关；只增强不降低产品焦点/键盘底线）。 */
@@ -323,5 +335,10 @@ html[data-enhance-target='on'] {
 /* 跟随系统辅助设置：操作系统请求更高对比度时强化分隔（仅 followSystemAssistive=on
    且 data-system-contrast=more 时生效；系统强制颜色模式保留浏览器控制权）。 */
 html[data-follow-system='on'][data-system-contrast='more'] {
-  --color-border-strong: color-mix(in srgb, var(--color-ink) 32%, var(--color-border-strong));
+  --color-border-strong: color-mix(in srgb, var(--color-ink) 32%, var(--ds-border-strong));
+}
+
+/* Preview uses the same generated palette; no duplicated preset values. */
+.ds-accent-swatch {
+  background-color: var(--ds-brand);
 }

@@ -1,11 +1,11 @@
-/** Explicit field destinations are handled after the route and its overlay settle. */
+/** Route destinations settle after navigation overlays release focus and scroll locking. */
 let cancelPending: (() => void) | undefined;
 
-export function focusRouteAnchor(href: string): void {
+export function focusRouteAnchor(href: string, resetScroll = false): void {
   const target = new URL(href, location.href);
   cancelPending?.();
   cancelPending = undefined;
-  if (!target.hash) return;
+  if (!target.hash && !resetScroll) return;
   const id = decodeURIComponent(target.hash.slice(1));
   let frame = 0;
   const dispose = () => {
@@ -15,11 +15,16 @@ export function focusRouteAnchor(href: string): void {
     if (cancelPending === dispose) cancelPending = undefined;
   };
   const locate = () => {
-    if (location.pathname !== target.pathname) return;
-    const anchor = document.getElementById(id);
+    if (location.pathname !== target.pathname || location.search !== target.search) return;
+    const anchor = document.getElementById(id || 'main-content');
     if (!anchor || document.querySelector('[role="dialog"][aria-modal="true"]')) return;
     cancelAnimationFrame(frame);
     frame = requestAnimationFrame(() => {
+      if (!target.hash) {
+        window.scrollTo({ top: 0, behavior: 'instant' });
+        dispose();
+        return;
+      }
       anchor.scrollIntoView({ block: 'center', behavior: 'instant' });
       const control = anchor.querySelector<HTMLElement>(
         'input:not([type="hidden"]):not(:disabled), [role="radio"], [role="switch"], button:not(:disabled)',

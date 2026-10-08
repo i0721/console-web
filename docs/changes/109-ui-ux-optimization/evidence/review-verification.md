@@ -108,3 +108,19 @@ hover画面，先验证Space后清除键盘焦点，再以真实hover捕获。
 - 架构、依赖、生成物、lint、类型、构建与预算通过。maxRoute gzip432952B，原上限440320B。
 - 九张画面保存于review-2026-10-08/switch-row-hover-{width}-{density}.png；最终27组完整对照在review-2026-10-08/hover-visual-differences/index.html。
 - pnpm check因截图比较exit 1；原快照、阈值与预算未更新。用户指出一项缺陷不等于批准全部旧变化；原生zoom能力限制仍保留。
+
+## 环境恢复与设置语义续审
+
+2026-10-08已确认命令、读取、项目内临时文件写入/读取/删除及浏览器恢复。
+本轮保留既有代码、审查和快照，新增内容见108 §18、109任务账本。
+
+- Web单元测试采用Vitest官方native配置加载与threads池，24文件126项通过（7.77s）；其中公共交互专项7项。未调整断言、覆盖范围或超时。
+- apps/web与surfaces类型检查通过；新增Host/Feature/Adapter代码lint通过；架构505源文件、治理12工作区/11owner通过。
+- 设计生成物freshness、相关文件Prettier和文档入口检查通过，git diff --check通过。
+- 真实浏览器验证颜色刷新保存、方向键选择、320大字号、1440/390英文、减少动效、浅/深色高对比度、通知成功提示、日期时间即时格式与文本截断/换行。
+- 分类切换从外观页scrollY=1168进入通知页，修复后scrollY=0、标题top124、Header bottom80；焦点返回分类入口。
+- 新增settings-semantic.spec.ts含三视口语义/Axe及移动滚动偏好回归，已类型检查，尚未运行断言。
+- 再次pnpm check因用户目录pnpm锁拒绝访问失败；直接Playwright worker fork仍spawn EPERM。不是应用断言失败，不能使用历史构建/预算/浏览器成绩代替本轮全量验收。
+
+剩余：完整构建/产物预算、完整浏览器/Axe矩阵、所有共享控件高对比度状态组合、系统more模拟、关闭滚顶偏好分支自动化及旧视觉对照人工验收。
+next-env.d.ts由当前Next开发运行时生成了.next/dev类型引用，本轮没有手写该生成物；生产构建需重新核验生成路径。

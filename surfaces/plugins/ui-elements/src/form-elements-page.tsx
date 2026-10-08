@@ -1,7 +1,7 @@
 'use client';
 
 import type { DatePickerFieldProps } from '@community-go/ui-adapter/date-picker-field';
-import type { ComponentType } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 import {
   CheckboxField,
   ComboField,
@@ -37,6 +37,22 @@ const ownerOptions = [
   'Kai Müller',
   'Mei Tanaka',
 ] as const;
+function ExecutionSketch({ step, icon }: Readonly<{ step: number; icon: ReactNode }>) {
+  return (
+    <span className="grid min-h-16 w-full content-center gap-2 rounded-control bg-surface-muted p-2">
+      <span className="text-brand">{icon}</span>
+      <span className="flex gap-1">
+        {[0, 1, 2].map((index) => (
+          <span
+            key={index}
+            className={`h-2 flex-1 rounded-full ${index <= step ? 'bg-brand' : 'bg-border-strong'}`}
+          />
+        ))}
+      </span>
+    </span>
+  );
+}
+
 export function FormElementsPage({
   datePicker: DatePickerField,
 }: Readonly<{ datePicker: ComponentType<DatePickerFieldProps> }>) {
@@ -255,6 +271,64 @@ export function FormElementsPage({
                       value: 'automatic',
                       label: t('uiElements.formDemo.automatic'),
                       icon: <Sparkles className="size-5" />,
+                      disabled: true,
+                    },
+                  ]}
+                  value={selected}
+                  onValueChange={setSelected}
+                />
+                <RadioGroupField
+                  presentation="inline"
+                  label={t('uiElements.radioInline')}
+                  options={[
+                    {
+                      value: 'observe',
+                      label: longText
+                        ? t('uiElements.longChoice', { label: t('uiElements.formDemo.observe') })
+                        : t('uiElements.formDemo.observe'),
+                    },
+                    {
+                      value: 'guided',
+                      label: longText
+                        ? t('uiElements.longChoice', { label: t('uiElements.formDemo.guided') })
+                        : t('uiElements.formDemo.guided'),
+                    },
+                    {
+                      value: 'automatic',
+                      label: longText
+                        ? t('uiElements.longChoice', { label: t('uiElements.formDemo.automatic') })
+                        : t('uiElements.formDemo.automatic'),
+                      disabled: true,
+                    },
+                  ]}
+                  value={selected}
+                  onValueChange={setSelected}
+                />
+                <RadioGroupField
+                  presentation="previews"
+                  label={t('uiElements.radioPreviews')}
+                  hint={longText ? description : t('uiElements.catalog.radioDescription')}
+                  options={[
+                    {
+                      value: 'observe',
+                      label: longText
+                        ? t('uiElements.longChoice', { label: t('uiElements.formDemo.observe') })
+                        : t('uiElements.formDemo.observe'),
+                      preview: <ExecutionSketch step={0} icon={<Eye className="size-5" />} />,
+                    },
+                    {
+                      value: 'guided',
+                      label: longText
+                        ? t('uiElements.longChoice', { label: t('uiElements.formDemo.guided') })
+                        : t('uiElements.formDemo.guided'),
+                      preview: <ExecutionSketch step={1} icon={<Compass className="size-5" />} />,
+                    },
+                    {
+                      value: 'automatic',
+                      label: longText
+                        ? t('uiElements.longChoice', { label: t('uiElements.formDemo.automatic') })
+                        : t('uiElements.formDemo.automatic'),
+                      preview: <ExecutionSketch step={2} icon={<Sparkles className="size-5" />} />,
                       disabled: true,
                     },
                   ]}

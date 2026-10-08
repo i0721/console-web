@@ -10,6 +10,15 @@ import { Children, isValidElement, type ReactNode } from 'react';
 import { Section } from '@community-go/surface-foundation/layout';
 import { SETTINGS_INDEX } from './settings-index';
 import { Sun, Moon, MonitorCog, SunMoon } from 'lucide-react';
+import {
+  AppearanceFeedback,
+  DensityPreview,
+  FontPreview,
+  WidthPreview,
+  LongTextFeedback,
+  LocaleFeedback,
+  NotificationFeedback,
+} from './setting-previews';
 
 /**
  * 分类设置区段（settings 插件）—— 每个区段真实消费 preferences-model 的对应分类，
@@ -104,56 +113,116 @@ export function AppearanceSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         onValueChange={(value) => updateSetting(ctx, 'appearance', { themeMode: value })}
       />
       <RadioGroupField
-        presentation="rows"
+        presentation="inline"
         hint={t('settings.appearance.accentDescription')}
         label={t('settings.appearance.accent')}
         options={[
-          { label: t('settings.appearance.accentPurple'), value: 'purple' },
-          { label: t('settings.appearance.accentBlue'), value: 'blue' },
-          { label: t('settings.appearance.accentGreen'), value: 'green' },
-          { label: t('settings.appearance.accentOrange'), value: 'orange' },
+          {
+            label: t('settings.appearance.accentPurple'),
+            value: 'purple',
+            icon: (
+              <span className="ds-accent-swatch size-5 rounded-full" data-accent-preview="purple" />
+            ),
+          },
+          {
+            label: t('settings.appearance.accentBlue'),
+            value: 'blue',
+            icon: (
+              <span className="ds-accent-swatch size-5 rounded-full" data-accent-preview="blue" />
+            ),
+          },
+          {
+            label: t('settings.appearance.accentGreen'),
+            value: 'green',
+            icon: (
+              <span className="ds-accent-swatch size-5 rounded-full" data-accent-preview="green" />
+            ),
+          },
+          {
+            label: t('settings.appearance.accentOrange'),
+            value: 'orange',
+            icon: (
+              <span className="ds-accent-swatch size-5 rounded-full" data-accent-preview="orange" />
+            ),
+          },
         ]}
         value={appearance.accent}
         onValueChange={(value) => updateSetting(ctx, 'appearance', { accent: value })}
       />
       <RadioGroupField
-        presentation="rows"
+        presentation="previews"
         hint={t('settings.appearance.densityDescription')}
         label={t('settings.appearance.density')}
         options={[
-          { label: t('settings.appearance.densityCompact'), value: 'compact' },
-          { label: t('settings.appearance.densityStandard'), value: 'standard' },
-          { label: t('settings.appearance.densityComfortable'), value: 'comfortable' },
+          {
+            label: t('settings.appearance.densityCompact'),
+            value: 'compact',
+            preview: <DensityPreview density="compact" />,
+          },
+          {
+            label: t('settings.appearance.densityStandard'),
+            value: 'standard',
+            preview: <DensityPreview density="standard" />,
+          },
+          {
+            label: t('settings.appearance.densityComfortable'),
+            value: 'comfortable',
+            preview: <DensityPreview density="comfortable" />,
+          },
         ]}
         value={appearance.density}
         onValueChange={(value) => updateSetting(ctx, 'appearance', { density: value })}
       />
       <RadioGroupField
-        presentation="rows"
+        presentation="previews"
         hint={t('settings.appearance.fontScaleDescription')}
         label={t('settings.appearance.fontScale')}
         options={[
-          { label: t('settings.appearance.fontSmall'), value: 'small' },
-          { label: t('settings.appearance.fontStandard'), value: 'standard' },
-          { label: t('settings.appearance.fontLarge'), value: 'large' },
+          {
+            label: t('settings.appearance.fontSmall'),
+            value: 'small',
+            preview: <FontPreview scale="small" sample={t('settings.appearance.fontSample')} />,
+          },
+          {
+            label: t('settings.appearance.fontStandard'),
+            value: 'standard',
+            preview: <FontPreview scale="standard" sample={t('settings.appearance.fontSample')} />,
+          },
+          {
+            label: t('settings.appearance.fontLarge'),
+            value: 'large',
+            preview: <FontPreview scale="large" sample={t('settings.appearance.fontSample')} />,
+          },
         ]}
         value={appearance.fontScale}
         onValueChange={(value) => updateSetting(ctx, 'appearance', { fontScale: value })}
       />
       <RadioGroupField
-        presentation="rows"
+        presentation="previews"
         hint={t('settings.appearance.contentWidthDescription')}
         label={t('settings.appearance.contentWidth')}
         options={[
-          { label: t('settings.appearance.widthAuto'), value: 'auto' },
-          { label: t('settings.appearance.widthStandard'), value: 'standard' },
-          { label: t('settings.appearance.widthWide'), value: 'wide' },
+          {
+            label: t('settings.appearance.widthAuto'),
+            value: 'auto',
+            preview: <WidthPreview width="auto" />,
+          },
+          {
+            label: t('settings.appearance.widthStandard'),
+            value: 'standard',
+            preview: <WidthPreview width="standard" />,
+          },
+          {
+            label: t('settings.appearance.widthWide'),
+            value: 'wide',
+            preview: <WidthPreview width="wide" />,
+          },
         ]}
         value={appearance.contentWidth}
         onValueChange={(value) => updateSetting(ctx, 'appearance', { contentWidth: value })}
       />
       <RadioGroupField
-        presentation="rows"
+        presentation="inline"
         hint={t('settings.appearance.motionDescription')}
         label={t('settings.appearance.motion')}
         options={[
@@ -165,7 +234,7 @@ export function AppearanceSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         onValueChange={(value) => updateSetting(ctx, 'appearance', { motion: value })}
       />
       <RadioGroupField
-        presentation="rows"
+        presentation="inline"
         hint={t('settings.appearance.contrastDescription')}
         label={t('settings.appearance.contrast')}
         options={[
@@ -176,6 +245,7 @@ export function AppearanceSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         value={appearance.contrast}
         onValueChange={(value) => updateSetting(ctx, 'appearance', { contrast: value })}
       />
+      <AppearanceFeedback />
     </SectionShell>
   );
 }
@@ -296,7 +366,7 @@ export function NavigationSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         '',
       )}
       <RadioGroupField
-        presentation="rows"
+        presentation="inline"
         hint=""
         label={t('settings.navigation.sidebarBehavior')}
         options={[
@@ -308,7 +378,7 @@ export function NavigationSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         onValueChange={(value) => updateSetting(ctx, 'navigation', { sidebarBehavior: value })}
       />
       <RadioGroupField
-        presentation="rows"
+        presentation="inline"
         hint={t('settings.navigation.newPageOpenModeHint')}
         label={t('settings.navigation.newPageOpenMode')}
         options={[
@@ -340,13 +410,25 @@ export function DataDisplaySection({ ctx }: Readonly<{ ctx: Ctx }>) {
         onValueChange={(value) => updateSetting(ctx, 'dataDisplay', { pageSize: Number(value) })}
       />
       <RadioGroupField
-        presentation="rows"
-        hint=""
+        presentation="previews"
+        hint={t('settings.appearance.comparisonHint')}
         label={t('settings.dataDisplay.tableDensity')}
         options={[
-          { label: t('settings.appearance.densityCompact'), value: 'compact' },
-          { label: t('settings.appearance.densityStandard'), value: 'standard' },
-          { label: t('settings.appearance.densityComfortable'), value: 'comfortable' },
+          {
+            label: t('settings.appearance.densityCompact'),
+            value: 'compact',
+            preview: <DensityPreview density="compact" />,
+          },
+          {
+            label: t('settings.appearance.densityStandard'),
+            value: 'standard',
+            preview: <DensityPreview density="standard" />,
+          },
+          {
+            label: t('settings.appearance.densityComfortable'),
+            value: 'comfortable',
+            preview: <DensityPreview density="comfortable" />,
+          },
         ]}
         value={data.tableDensity}
         onValueChange={(value) => updateSetting(ctx, 'dataDisplay', { tableDensity: value })}
@@ -408,7 +490,7 @@ export function DataDisplaySection({ ctx }: Readonly<{ ctx: Ctx }>) {
         '',
       )}
       <RadioGroupField
-        presentation="rows"
+        presentation="inline"
         hint=""
         label={t('settings.dataDisplay.longText')}
         options={[
@@ -418,6 +500,7 @@ export function DataDisplaySection({ ctx }: Readonly<{ ctx: Ctx }>) {
         value={data.longText}
         onValueChange={(value) => updateSetting(ctx, 'dataDisplay', { longText: value })}
       />
+      <LongTextFeedback mode={data.longText} />
     </SectionShell>
   );
 }
@@ -432,7 +515,7 @@ export function LocaleRegionSection({ ctx }: Readonly<{ ctx: Ctx }>) {
   return (
     <SectionShell title={t('settings.categories.localeRegion')}>
       <RadioGroupField
-        presentation="rows"
+        presentation="inline"
         hint=""
         label={t('settings.localeRegion.language')}
         options={[
@@ -463,7 +546,7 @@ export function LocaleRegionSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         onValueChange={(value) => updateSetting(ctx, 'localeRegion', { timeZone: value })}
       />
       <RadioGroupField
-        presentation="rows"
+        presentation="inline"
         hint=""
         label={t('settings.localeRegion.hourCycle')}
         options={[
@@ -482,7 +565,7 @@ export function LocaleRegionSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         '',
       )}
       <RadioGroupField
-        presentation="rows"
+        presentation="inline"
         hint=""
         label={t('settings.localeRegion.relativeTime')}
         options={[
@@ -493,7 +576,7 @@ export function LocaleRegionSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         onValueChange={(value) => updateSetting(ctx, 'localeRegion', { relativeTime: value })}
       />
       <RadioGroupField
-        presentation="rows"
+        presentation="inline"
         hint=""
         label={t('settings.localeRegion.weekStart')}
         options={[
@@ -508,6 +591,7 @@ export function LocaleRegionSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         {t('settings.localeRegion.numbersFollowLocale')}：
         {t('settings.localeRegion.numbersFollowLocaleFixed')}
       </div>
+      <LocaleFeedback region={region} />
     </SectionShell>
   );
 }
@@ -563,7 +647,7 @@ export function NotificationsSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         '',
       )}
       <RadioGroupField
-        presentation="rows"
+        presentation="inline"
         hint=""
         label={t('settings.notifications.toastDuration')}
         options={[
@@ -574,6 +658,7 @@ export function NotificationsSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         value={n.toastDuration}
         onValueChange={(value) => updateSetting(ctx, 'notifications', { toastDuration: value })}
       />
+      <NotificationFeedback duration={n.toastDuration} />
     </SectionShell>
   );
 }
@@ -797,7 +882,7 @@ export function ActionPreferencesSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         '',
       )}
       <RadioGroupField
-        presentation="rows"
+        presentation="inline"
         hint={t('settings.actionPreferences.detailModeHint')}
         label={t('settings.actionPreferences.detailMode')}
         options={[
@@ -820,7 +905,7 @@ export function ActionPreferencesSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         onValueChange={(value) => updateSetting(ctx, 'actionPreferences', { refreshMode: value })}
       />
       <RadioGroupField
-        presentation="rows"
+        presentation="inline"
         hint=""
         label={t('settings.actionPreferences.searchTrigger')}
         options={[

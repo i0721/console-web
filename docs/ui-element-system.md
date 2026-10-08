@@ -93,7 +93,7 @@ Feedback 解释刚发生的结果、风险或可恢复问题；Status 描述对�
 - 复合控件只允许最外层 InputGroup 负责 Border、Background、Radius 和 Focus Surface；内部 `Input` 必须保持透明、无边框的 Primitive 形态。
 - `fullWidth` 是表单列中的稳定默认；局部宽度由布局容器控制，不由 Popup 内容反向决定。
 - `RadioGroupField` 负责单选表单值；`ToggleGroup` 负责即时互斥视图偏好。两者可以视觉相近，但不得交换提交时机和 ARIA 语义。
-- **内部 indicator / option 契约**：外层 option（Radio Choice Card、ToggleItem）拥有 surface/border/radius/selected/pressed；option 行必须保持 control 与 label 同行的 row 布局（覆盖 vendor 默认列堆叠），indicator（Radio 外圈 + 内 dot）只拥有几何/对齐/状态色。Radio indicator 的 selected/unselected/disabled 只改变内 dot 显隐与 ring 状态，不改变尺寸；unselected 保持空心 ring、不出现实心 dot；indicator 不创建独立 shadow/surface。ToggleGroup 的 ToggleItem 是唯一成形 owner，内部 icon/label 不得再次获得 border/background/radius/shadow/selected surface；内部 icon wrapper 保持透明、无边框、固定 semantic size。
+- **内部 indicator / option 契约**：外层 option（Radio Choice Card、ToggleItem）拥有 surface/border/radius/selected/pressed；带圆点的 option 行必须保持 control 与 label 同行的 row 布局（覆盖 vendor 默认列堆叠），indicator（Radio 外圈 + 内 dot）只拥有几何/对齐/状态色。Radio indicator 的 selected/unselected/disabled 只改变内 dot 显隐与 ring 状态，不改变尺寸；unselected 保持空心 ring、不出现实心 dot；indicator 不创建独立 shadow/surface。ToggleGroup 的 ToggleItem 是唯一成形 owner，内部 icon/label 不得再次获得 border/background/radius/shadow/selected surface；内部 icon wrapper 保持透明、无边框、固定 semantic size。
 - **ToggleGroup selection-mode composition**：single = coherent segmented mode switch（shared group container、items 连续组织、无 per-item gap、连续 segmented 几何）；multiple = independent toggle items（每个 item 独立拥有 surface/border/radius，四边边界不因 sibling position 被清零/合并，hover/selected/focus-visible 在自身 control boundary 内表达，focus ring 不被 sibling 裁剪/合并，items 之间使用稳定 semantic gap；group 只负责排列与 gap，不承担单个 item 的 selected/focus surface）。
 
 当前语义尺寸由 `--spacing-control` 管理，Option 触控高度由 `--spacing-option` 管理。业务页面不得复制对应数值。
@@ -187,6 +187,7 @@ Hover/Focus 与 Selected 不得合并为同一种状态；Selected 不能只依�
 - SearchBox 根、输入组与所在 Grid 必须允许收缩；清除和图标保留命中区。Field 的说明和错误占独立区域，不由父 Grid 拉长单行输入。
 - RadioGroupField 的 cards 默认保留解释型选项表面；rows 用于短配置选项。SwitchField 的 card 默认不变，row 适用于已有容器内的紧凑配置行。TextField 的 ref 指向输入控件，供 Form Foundation 注册、首错定位和显式用户偏好焦点使用。
 - RadioGroupField 的 tiles 用于少量互斥模式的图标选择卡片：分组可通过 labelIcon 提供装饰图标，标题与 hint 先于选项；选项 icon 在上、label 在下，三列等宽，长文字允许换行。保留 RadioGroup/Radio.Content 的原生单选、整卡点击、方向键、焦点与禁用语义，不使用 Tabs 内容切换替代表单值选择。内层图标透明且 aria-hidden，选中表面由外层卡片承担，沿用语义 brand Token。cards/rows 默认视觉与行为不变。权威示例为 /ui-elements/forms 的 RadioGroupField，真实消费者为 /settings 的主题模式。
+- RadioGroupField 的 inline 用于短选项：自然宽度、可换行，不压缩实际热区；可带装饰 icon，例如受控预设色样，此时选中表面与文字承担状态表达，不重复显示圆点。previews 为少量需要比较的选项提供预览卡：以Field自身容器宽度判断，空间充足时三列纵向卡片，窄容器使用单列“预览＋标题”的横向行，避免嵌套面板中逐字竖排。preview 是 aria-hidden 的非交互内容（不得嵌套按钮、链接、输入或 tabIndex），名称仍由 label 提供。卡片布局可省略圆点视觉，不能省略 HeroUI 原生 input、选择、键盘和焦点机制。真实比较图案由 Feature composition 提供，不将颜色/密度业务语义硬编码到公共单选组件。设置的颜色、密度、字号和宽度使用同源能力；UI Elements/forms提供两种呈现、真实装饰预览、长标签与禁用示例。
 - 单选 ToggleGroup 保持连续组并在内部横滚；多选保持独立项并换行。TabsView 选择、尺寸和文本变化时只调整自身列表，不持续抢回用户手动滚动；vertical 在 md 以下同时回退布局、ARIA 和键盘方向。溢出提示来自实际滚动范围。
 - DrawerSurface 的 placement 为 left/right，缺省 right；navigation composition 用于共享导航内容，缺省 standard。Overlay 的焦点、Escape、背景锁定和焦点返回均由 HeroUI 管理。
 - Dialog 正常采用正文滚动；短高度允许整个对话框滚动，操作必须处于可达滚动区域。异步确认阻止重复提交和提前关闭；重试先清除旧错误。

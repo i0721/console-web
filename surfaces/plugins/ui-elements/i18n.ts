@@ -330,6 +330,10 @@ export const pluginI18nResources = {
         disabledCheckbox: '禁用复选项',
         radioGroup: '反馈密度',
         radioTiles: '图标选择卡片',
+        radioInline: '简短选项',
+        longChoice:
+          '{{label}} · 需要保留上下文与操作说明的较长选项名称，用于检查自然换行和窄屏可用性',
+        radioPreviews: '比较预览',
         formDemo: {
           observe: '仅观察',
           guided: '引导执行',
@@ -704,6 +708,10 @@ export const pluginI18nResources = {
         disabledCheckbox: 'Disabled checkbox',
         radioGroup: 'Feedback density',
         radioTiles: 'Icon choice tiles',
+        radioInline: 'Quick choices',
+        longChoice:
+          '{{label}} · A longer option name that retains context and guidance to check natural wrapping and narrow-screen usability',
+        radioPreviews: 'Comparison previews',
         formDemo: {
           observe: 'Observe only',
           guided: 'Guided execution',

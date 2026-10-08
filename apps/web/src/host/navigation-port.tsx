@@ -55,7 +55,7 @@ export function HostNavigationPortProvider({ resolveHref, children }: HostNaviga
             return;
           }
           props.onNavigate?.();
-          focusRouteAnchor(props.href);
+          focusRouteAnchor(props.href, resolveScrollOption() === undefined);
           markForwardRouteIntent();
           void router.push(props.href, {
             transitionTypes: [pageTransitionTypes.forward],
@@ -76,7 +76,7 @@ export function HostNavigationPortProvider({ resolveHref, children }: HostNaviga
         navigate: (href) => {
           void proceedAfterLeaveConfirm(href, 'plugin navigation').then((proceed) => {
             if (!proceed) return;
-            focusRouteAnchor(href);
+            focusRouteAnchor(href, resolveScrollOption() === undefined);
             markForwardRouteIntent();
             void router.push(href, {
               transitionTypes: [pageTransitionTypes.forward],
@@ -88,7 +88,7 @@ export function HostNavigationPortProvider({ resolveHref, children }: HostNaviga
         replace: (href) => {
           void proceedAfterLeaveConfirm(href, 'plugin navigation').then((proceed) => {
             if (!proceed) return;
-            focusRouteAnchor(href);
+            focusRouteAnchor(href, resolveScrollOption() === undefined);
             markForwardRouteIntent();
             void router.replace(href, {
               transitionTypes: [pageTransitionTypes.forward],

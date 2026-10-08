@@ -12,13 +12,15 @@ export type RadioOption = Readonly<{
   description?: string;
   disabled?: boolean;
   icon?: ReactNode;
+  /** Decorative comparison only; interactive descendants are not supported. */
+  preview?: ReactNode;
 }>;
 
 export type RadioGroupFieldProps = FieldTextProps &
   Readonly<{
     value: string;
     options: readonly RadioOption[];
-    presentation?: 'cards' | 'rows' | 'tiles';
+    presentation?: 'cards' | 'rows' | 'tiles' | 'inline' | 'previews';
     labelIcon?: ReactNode;
     disabled?: boolean;
     onValueChange: (value: string) => void;
@@ -36,9 +38,12 @@ export function RadioGroupField({
   labelIcon,
 }: RadioGroupFieldProps) {
   const descriptionId = useId();
+  const comparison = presentation === 'previews';
+  const compact = presentation === 'inline';
+  const hintFirst = presentation === 'tiles' || comparison;
   return (
     <RadioGroup
-      className="ui-field"
+      className="ui-field @container"
       isDisabled={disabled}
       isInvalid={Boolean(error)}
       value={value}
@@ -55,7 +60,7 @@ export function RadioGroupField({
         ) : null}
         <div className="grid min-w-0 gap-1">
           <Label className="ui-field-label">{label}</Label>
-          {presentation === 'tiles' && hint && !error ? (
+          {hintFirst && hint && !error ? (
             <Description className="ui-field-hint">{hint}</Description>
           ) : null}
         </div>
@@ -64,23 +69,40 @@ export function RadioGroupField({
         className={
           presentation === 'rows'
             ? 'grid gap-2'
-            : presentation === 'tiles'
-              ? 'grid grid-cols-3 gap-3'
-              : 'surface-filter-grid'
+            : comparison
+              ? 'grid grid-cols-1 gap-3 @sm:grid-cols-3'
+              : presentation === 'tiles'
+                ? 'grid grid-cols-3 gap-3'
+                : compact
+                  ? 'flex flex-wrap gap-2'
+                  : 'surface-filter-grid'
         }
       >
         {options.map((option, index) => (
           <Radio
             aria-label={option.label}
             {...(option.description ? { 'aria-describedby': `${descriptionId}-${index}` } : {})}
-            className={`group min-w-0 w-full text-sm ${presentation === 'tiles' ? 'mt-0 h-full' : ''}`}
+            className={`group min-w-0 text-sm ${compact ? 'mt-0 max-w-full' : 'w-full'} ${presentation === 'tiles' || comparison ? 'mt-0 h-full' : ''}`}
             key={option.value}
             value={option.value}
             {...(option.disabled ? { isDisabled: true } : {})}
           >
             <Radio.Content
-              className={`ui-choice-content border border-border bg-surface group-data-[selected]:border-brand group-data-[selected]:bg-brand-soft ${presentation === 'rows' ? 'rounded-control px-3 py-2' : presentation === 'tiles' ? 'h-full flex-col justify-between gap-4 rounded-panel min-h-24 p-3 text-ink group-data-[selected]:text-brand sm:p-4' : 'rounded-panel min-h-20 p-4'}`}
+              className={`ui-choice-content border border-border bg-surface group-data-[selected]:border-brand group-data-[selected]:bg-brand-soft ${comparison ? 'h-full min-h-24 gap-3 rounded-control p-3 text-ink group-data-[selected]:text-brand @sm:flex-col @sm:justify-between @sm:gap-4 @sm:rounded-panel @sm:p-4' : presentation === 'rows' || compact ? 'rounded-control px-3 py-2' : presentation === 'tiles' ? 'h-full flex-col justify-between gap-4 rounded-panel min-h-24 p-3 text-ink group-data-[selected]:text-brand sm:p-4' : 'rounded-panel min-h-20 p-4'}`}
             >
+              {option.preview ? (
+                <span
+                  aria-hidden="true"
+                  className={`pointer-events-none block min-w-0 ${comparison ? 'w-20 shrink-0 @sm:w-full' : 'w-full'}`}
+                >
+                  {option.preview}
+                </span>
+              ) : null}
+              {compact && option.icon ? (
+                <span aria-hidden="true" className="grid size-5 shrink-0 place-items-center">
+                  {option.icon}
+                </span>
+              ) : null}
               {presentation === 'tiles' ? (
                 option.icon ? (
                   <span
@@ -90,7 +112,7 @@ export function RadioGroupField({
                     {option.icon}
                   </span>
                 ) : null
-              ) : (
+              ) : !comparison && !(compact && option.icon) ? (
                 <Radio.Control className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full border border-border-strong bg-surface group-data-[selected]:border-brand">
                   <Radio.Indicator className="pointer-events-none">
                     {/* 项目单选 dot：几何固定 10×10；仅 selected 时可见（group 根 data-selected）。
@@ -101,12 +123,12 @@ export function RadioGroupField({
                     />
                   </Radio.Indicator>
                 </Radio.Control>
-              )}
+              ) : null}
               <span
-                className={`flex min-w-0 flex-col items-start ${presentation === 'tiles' ? 'w-full' : ''}`}
+                className={`flex min-w-0 flex-col items-start ${comparison ? 'flex-1 @sm:w-full' : presentation === 'tiles' ? 'w-full' : ''}`}
               >
                 <span
-                  className={`block font-semibold ${presentation === 'tiles' ? 'max-w-full wrap-break-word text-current' : 'text-ink'}`}
+                  className={`block max-w-full wrap-break-word font-semibold ${presentation === 'tiles' || comparison ? 'text-current' : compact && option.icon ? 'text-ink group-data-[selected]:text-brand' : 'text-ink'}`}
                 >
                   {option.label}
                 </span>
@@ -125,7 +147,7 @@ export function RadioGroupField({
       </div>
       {error ? (
         <FieldError className="ui-field-error">{error}</FieldError>
-      ) : hint && presentation !== 'tiles' ? (
+      ) : hint && !hintFirst ? (
         <Description className="ui-field-hint">{hint}</Description>
       ) : null}
     </RadioGroup>
