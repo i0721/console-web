@@ -112,6 +112,8 @@ export type NavigationPreferences = Readonly<{
   breadcrumbs: boolean;
   /** 顶部页面标签开/关。 */
   pageTabsEnabled: boolean;
+  /** 标签与 Header 一起固定；缺失的旧记录默认补全为 true。 */
+  pageTabsPinned: boolean;
   /** 恢复上次打开的标签（跨启动）。 */
   restoreLastTabs: boolean;
   /** 关闭当前标签后跳转策略。 */
@@ -135,6 +137,7 @@ export const defaultNavigation: NavigationPreferences = {
   scrollToTopOnNavigate: true,
   breadcrumbs: true,
   pageTabsEnabled: false,
+  pageTabsPinned: true,
   restoreLastTabs: false,
   tabCloseBehavior: 'recent',
   newPageOpenMode: 'current',
@@ -540,6 +543,7 @@ export function validateCategory(
         'scrollToTopOnNavigate',
         'breadcrumbs',
         'pageTabsEnabled',
+        'pageTabsPinned',
         'restoreLastTabs',
         'menuMemory',
         'rememberRecents',

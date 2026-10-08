@@ -5,8 +5,9 @@ import type { PreferencesPort } from '@community-go/plugin-framework/preferences
 import type { Preferences } from '@community-go/surface/preferences-model';
 import { validatePreferences, TIME_ZONE_OPTIONS } from '@community-go/surface/preferences-model';
 import { RadioGroupField, SelectField, SwitchField } from '@community-go/ui-adapter/form-field';
-import { TextLink } from '@community-go/ui-adapter/navigation';
+import { route, RouteLink } from '@community-go/plugin-framework/plugin';
 import { Children, isValidElement, type ReactNode } from 'react';
+import { Section } from '@community-go/surface-foundation/layout';
 import { SETTINGS_INDEX } from './settings-index';
 
 /**
@@ -42,27 +43,28 @@ function updateSetting<C extends keyof Preferences>(
 function SectionShell({ title, children }: Readonly<{ title: string; children: ReactNode }>) {
   const { t } = useFrontendTranslation();
   return (
-    <div className="grid gap-6 p-5">
-      <h3 className="text-sm font-bold uppercase tracking-wider text-ink-muted">{title}</h3>
-      {Children.toArray(children).map((child) => {
-        if (!isValidElement<{ label?: string }>(child)) return child;
-        const entry = SETTINGS_INDEX.find(
-          (candidate) => t(candidate.nameKey) === child.props.label,
-        );
-        return entry ? (
-          <div
-            key={entry.category + entry.fieldId}
-            id={`settings-${entry.category}-${entry.fieldId}`}
-            tabIndex={-1}
-            className="min-w-0 outline-none"
-          >
-            {child}
-          </div>
-        ) : (
-          child
-        );
-      })}
-    </div>
+    <Section title={title} appearance="outlined" contentInset>
+      <div className="grid gap-4">
+        {Children.toArray(children).map((child) => {
+          if (!isValidElement<{ label?: string }>(child)) return child;
+          const entry = SETTINGS_INDEX.find(
+            (candidate) => t(candidate.nameKey) === child.props.label,
+          );
+          return entry ? (
+            <div
+              key={entry.category + entry.fieldId}
+              id={`settings-${entry.category}-${entry.fieldId}`}
+              tabIndex={-1}
+              className="min-w-0 outline-none"
+            >
+              {child}
+            </div>
+          ) : (
+            child
+          );
+        })}
+      </div>
+    </Section>
   );
 }
 
@@ -92,6 +94,7 @@ export function AppearanceSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         onValueChange={(value) => updateSetting(ctx, 'appearance', { themeMode: value })}
       />
       <RadioGroupField
+        presentation="rows"
         hint={t('settings.appearance.accentDescription')}
         label={t('settings.appearance.accent')}
         options={[
@@ -104,6 +107,7 @@ export function AppearanceSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         onValueChange={(value) => updateSetting(ctx, 'appearance', { accent: value })}
       />
       <RadioGroupField
+        presentation="rows"
         hint={t('settings.appearance.densityDescription')}
         label={t('settings.appearance.density')}
         options={[
@@ -115,6 +119,7 @@ export function AppearanceSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         onValueChange={(value) => updateSetting(ctx, 'appearance', { density: value })}
       />
       <RadioGroupField
+        presentation="rows"
         hint={t('settings.appearance.fontScaleDescription')}
         label={t('settings.appearance.fontScale')}
         options={[
@@ -126,6 +131,7 @@ export function AppearanceSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         onValueChange={(value) => updateSetting(ctx, 'appearance', { fontScale: value })}
       />
       <RadioGroupField
+        presentation="rows"
         hint={t('settings.appearance.contentWidthDescription')}
         label={t('settings.appearance.contentWidth')}
         options={[
@@ -137,6 +143,7 @@ export function AppearanceSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         onValueChange={(value) => updateSetting(ctx, 'appearance', { contentWidth: value })}
       />
       <RadioGroupField
+        presentation="rows"
         hint={t('settings.appearance.motionDescription')}
         label={t('settings.appearance.motion')}
         options={[
@@ -148,6 +155,7 @@ export function AppearanceSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         onValueChange={(value) => updateSetting(ctx, 'appearance', { motion: value })}
       />
       <RadioGroupField
+        presentation="rows"
         hint={t('settings.appearance.contrastDescription')}
         label={t('settings.appearance.contrast')}
         options={[
@@ -222,6 +230,18 @@ export function NavigationSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         t('settings.navigation.restoreLastTabs'),
         '',
       )}
+      <SwitchField
+        presentation="row"
+        checked={nav.pageTabsPinned}
+        disabled={!nav.pageTabsEnabled}
+        label={t('settings.navigation.pageTabsPinned')}
+        description={t(
+          nav.pageTabsEnabled
+            ? 'settings.navigation.pageTabsPinnedDescription'
+            : 'settings.navigation.pageTabsPinnedUnavailable',
+        )}
+        onCheckedChange={(pageTabsPinned) => updateSetting(ctx, 'navigation', { pageTabsPinned })}
+      />
       <SelectField
         hint={t('settings.navigation.tabCloseBehaviorHint')}
         label={t('settings.navigation.tabCloseBehavior')}
@@ -266,6 +286,7 @@ export function NavigationSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         '',
       )}
       <RadioGroupField
+        presentation="rows"
         hint=""
         label={t('settings.navigation.sidebarBehavior')}
         options={[
@@ -277,6 +298,7 @@ export function NavigationSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         onValueChange={(value) => updateSetting(ctx, 'navigation', { sidebarBehavior: value })}
       />
       <RadioGroupField
+        presentation="rows"
         hint={t('settings.navigation.newPageOpenModeHint')}
         label={t('settings.navigation.newPageOpenMode')}
         options={[
@@ -308,6 +330,7 @@ export function DataDisplaySection({ ctx }: Readonly<{ ctx: Ctx }>) {
         onValueChange={(value) => updateSetting(ctx, 'dataDisplay', { pageSize: Number(value) })}
       />
       <RadioGroupField
+        presentation="rows"
         hint=""
         label={t('settings.dataDisplay.tableDensity')}
         options={[
@@ -375,6 +398,7 @@ export function DataDisplaySection({ ctx }: Readonly<{ ctx: Ctx }>) {
         '',
       )}
       <RadioGroupField
+        presentation="rows"
         hint=""
         label={t('settings.dataDisplay.longText')}
         options={[
@@ -398,6 +422,7 @@ export function LocaleRegionSection({ ctx }: Readonly<{ ctx: Ctx }>) {
   return (
     <SectionShell title={t('settings.categories.localeRegion')}>
       <RadioGroupField
+        presentation="rows"
         hint=""
         label={t('settings.localeRegion.language')}
         options={[
@@ -428,6 +453,7 @@ export function LocaleRegionSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         onValueChange={(value) => updateSetting(ctx, 'localeRegion', { timeZone: value })}
       />
       <RadioGroupField
+        presentation="rows"
         hint=""
         label={t('settings.localeRegion.hourCycle')}
         options={[
@@ -446,6 +472,7 @@ export function LocaleRegionSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         '',
       )}
       <RadioGroupField
+        presentation="rows"
         hint=""
         label={t('settings.localeRegion.relativeTime')}
         options={[
@@ -456,6 +483,7 @@ export function LocaleRegionSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         onValueChange={(value) => updateSetting(ctx, 'localeRegion', { relativeTime: value })}
       />
       <RadioGroupField
+        presentation="rows"
         hint=""
         label={t('settings.localeRegion.weekStart')}
         options={[
@@ -525,6 +553,7 @@ export function NotificationsSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         '',
       )}
       <RadioGroupField
+        presentation="rows"
         hint=""
         label={t('settings.notifications.toastDuration')}
         options={[
@@ -584,7 +613,12 @@ export function AccessibilitySection({ ctx }: Readonly<{ ctx: Ctx }>) {
             <dd className="font-medium text-ink">{contrastLabel}</dd>
           </div>
         </dl>
-        <TextLink href="#appearance">{t('settings.accessibility.goToAppearance')}</TextLink>
+        <RouteLink
+          target={route('settings')}
+          className="mt-3 inline-flex min-h-control items-center font-semibold text-brand underline underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-focus-ring"
+        >
+          {t('settings.accessibility.goToAppearance')}
+        </RouteLink>
       </div>
       {switchRow(
         ctx,
@@ -647,6 +681,7 @@ export function ActionPreferencesSection({ ctx }: Readonly<{ ctx: Ctx }>) {
   return (
     <SectionShell title={t('settings.categories.actionPreferences')}>
       <RadioGroupField
+        presentation="rows"
         hint=""
         label={t('settings.actionPreferences.editSuccessDestination')}
         options={[
@@ -660,6 +695,7 @@ export function ActionPreferencesSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         }
       />
       <RadioGroupField
+        presentation="rows"
         hint=""
         label={t('settings.actionPreferences.createSuccessDestination')}
         options={[
@@ -751,6 +787,7 @@ export function ActionPreferencesSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         '',
       )}
       <RadioGroupField
+        presentation="rows"
         hint={t('settings.actionPreferences.detailModeHint')}
         label={t('settings.actionPreferences.detailMode')}
         options={[
@@ -761,6 +798,7 @@ export function ActionPreferencesSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         onValueChange={(value) => updateSetting(ctx, 'actionPreferences', { detailMode: value })}
       />
       <RadioGroupField
+        presentation="rows"
         hint=""
         label={t('settings.actionPreferences.refreshMode')}
         options={[
@@ -772,6 +810,7 @@ export function ActionPreferencesSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         onValueChange={(value) => updateSetting(ctx, 'actionPreferences', { refreshMode: value })}
       />
       <RadioGroupField
+        presentation="rows"
         hint=""
         label={t('settings.actionPreferences.searchTrigger')}
         options={[

@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { useFrontendTranslation } from '@community-go/i18n';
 import type { ReactNode } from 'react';
 
@@ -102,6 +102,23 @@ function NavigationContent({
 }
 
 export function AppShell({ children }: Readonly<{ children: ReactNode }>) {
+  const shellRef = useRef<HTMLDivElement>(null);
+  const chromeRef = useRef<HTMLDivElement>(null);
+  const pageTabsPinned = useShellStore((state) => state.preferences.navigation.pageTabsPinned);
+  useEffect(() => {
+    const chrome = chromeRef.current;
+    const shell = shellRef.current;
+    if (!chrome || !shell) return;
+    const measure = () =>
+      shell.style.setProperty(
+        '--shell-chrome-height',
+        `${chrome.getBoundingClientRect().height}px`,
+      );
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(chrome);
+    return () => observer.disconnect();
+  }, []);
   const { t } = useFrontendTranslation();
   const router = useRouter();
   const desktopTools = useSyncExternalStore(subscribeDesktop, desktopSnapshot, () => false);
@@ -215,123 +232,126 @@ export function AppShell({ children }: Readonly<{ children: ReactNode }>) {
         <NavigationContent onNavigate={() => setMobileNavigationOpen(false)} />
       </DrawerSurface>
 
-      <div className="min-w-0">
-        <header className="sticky top-0 z-sticky flex h-20 items-center gap-3 border-b border-border bg-canvas/90 px-4 backdrop-blur-xl sm:px-6 xl:px-8">
-          <div className="lg:hidden">
-            <IconAction label={t('shell.menu')} onPress={() => setMobileNavigationOpen(true)}>
-              <Menu className="size-5" />
-            </IconAction>
-          </div>
-          <div className="hidden lg:block">
-            <IconAction
-              label={sidebarCollapsed ? t('shell.expandSidebar') : t('shell.collapseSidebar')}
-              onPress={() => setSidebarCollapsed(!sidebarCollapsed)}
-            >
-              {sidebarCollapsed ? (
-                <PanelLeftOpen className="size-4.5" />
-              ) : (
-                <PanelLeftClose className="size-4.5" />
-              )}
-            </IconAction>
-          </div>
-          <div className="md:hidden">
-            <IconAction label={t('shell.search')} onPress={() => setCommandOpen(true)}>
-              <Search className="size-5" />
-            </IconAction>
-          </div>
-          <div className="min-w-0 md:flex-1">
-            <CommandMenu
-              hideTrigger={!desktopTools}
-              defaultOpen={false}
-              emptyLabel={t('shell.commandEmpty')}
-              isOpen={commandOpen}
-              items={commandItems}
-              searchLabel={t('shell.commandSearchLabel')}
-              searchPlaceholder={t('shell.search')}
-              title={t('shell.commandTitle')}
-              triggerLabel={t('shell.searchShortcut')}
-              onAction={(id) => {
-                setCommandOpen(false);
-                if (id.startsWith('command:')) {
-                  // 命令执行（同一执行函数与可用性；不可用不执行）。
-                  commandsPort.runCommand(id.slice('command:'.length));
-                  return;
-                }
-                void proceedAfterLeaveConfirm(id, t('shell.search')).then((proceed) => {
-                  if (!proceed) return;
-                  markForwardRouteIntent();
-                  void router.push(id, {
-                    transitionTypes: [pageTransitionTypes.forward],
-                    ...resolveScrollOption(),
-                  });
-                });
-              }}
-              onOpenChange={setCommandOpen}
-            />
-          </div>
-          <div className="ml-auto flex items-center gap-2">
-            <div className="hidden items-center gap-2 md:flex">
-              <IconAction
-                label={t('shell.locale')}
-                onPress={() => setLocale(locale === 'zh-CN' ? 'en' : 'zh-CN')}
-              >
-                <Languages className="size-4.5" />
-              </IconAction>
-              <IconAction
-                label={t('shell.theme')}
-                onPress={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-              >
-                {theme === 'light' ? <Moon className="size-4.5" /> : <Sun className="size-4.5" />}
+      <div className="min-w-0" ref={shellRef}>
+        <div className="sticky top-0 z-sticky" ref={chromeRef}>
+          <header className="flex h-20 items-center gap-3 border-b border-border bg-canvas/90 px-4 backdrop-blur-xl sm:px-6 xl:px-8">
+            <div className="lg:hidden">
+              <IconAction label={t('shell.menu')} onPress={() => setMobileNavigationOpen(true)}>
+                <Menu className="size-5" />
               </IconAction>
             </div>
-            <NotificationCenter />
-            <MenuButton
-              ariaLabel={t('shell.account')}
-              items={[
-                { id: 'locale', label: t('shell.locale') },
-                { id: 'theme', label: t('shell.theme') },
-                {
-                  id: routeTargetResolver.resolveHref({ routeId: 'settings', params: {} }),
-                  label: t('nav.settings'),
-                  description: t('shell.settingsDescription'),
-                },
-              ]}
-              label={
-                <>
-                  <span className="md:hidden">
-                    <Avatar name="Rin" size="sm" />
-                  </span>
-                  <span className="hidden md:inline-flex">
-                    <UserIdentity
-                      avatarSize="sm"
-                      description={t('shell.productOwner')}
-                      name="Rin"
-                    />
-                  </span>
-                </>
-              }
-              onAction={(href) => {
-                if (href === 'locale') {
-                  setLocale(locale === 'zh-CN' ? 'en' : 'zh-CN');
-                  return;
-                }
-                if (href === 'theme') {
-                  setTheme(theme === 'light' ? 'dark' : 'light');
-                  return;
-                }
-                void proceedAfterLeaveConfirm(href, t('shell.account')).then((proceed) => {
-                  if (!proceed) return;
-                  markForwardRouteIntent();
-                  void router.push(href, {
-                    transitionTypes: [pageTransitionTypes.forward],
-                    ...resolveScrollOption(),
+            <div className="hidden lg:block">
+              <IconAction
+                label={sidebarCollapsed ? t('shell.expandSidebar') : t('shell.collapseSidebar')}
+                onPress={() => setSidebarCollapsed(!sidebarCollapsed)}
+              >
+                {sidebarCollapsed ? (
+                  <PanelLeftOpen className="size-4.5" />
+                ) : (
+                  <PanelLeftClose className="size-4.5" />
+                )}
+              </IconAction>
+            </div>
+            <div className="md:hidden">
+              <IconAction label={t('shell.search')} onPress={() => setCommandOpen(true)}>
+                <Search className="size-5" />
+              </IconAction>
+            </div>
+            <div className="min-w-0 md:flex-1">
+              <CommandMenu
+                hideTrigger={!desktopTools}
+                defaultOpen={false}
+                emptyLabel={t('shell.commandEmpty')}
+                isOpen={commandOpen}
+                items={commandItems}
+                searchLabel={t('shell.commandSearchLabel')}
+                searchPlaceholder={t('shell.search')}
+                title={t('shell.commandTitle')}
+                triggerLabel={t('shell.searchShortcut')}
+                onAction={(id) => {
+                  setCommandOpen(false);
+                  if (id.startsWith('command:')) {
+                    // 命令执行（同一执行函数与可用性；不可用不执行）。
+                    commandsPort.runCommand(id.slice('command:'.length));
+                    return;
+                  }
+                  void proceedAfterLeaveConfirm(id, t('shell.search')).then((proceed) => {
+                    if (!proceed) return;
+                    markForwardRouteIntent();
+                    void router.push(id, {
+                      transitionTypes: [pageTransitionTypes.forward],
+                      ...resolveScrollOption(),
+                    });
                   });
-                });
-              }}
-            />
-          </div>
-        </header>
-        <PageTabs />
+                }}
+                onOpenChange={setCommandOpen}
+              />
+            </div>
+            <div className="ml-auto flex items-center gap-2">
+              <div className="hidden items-center gap-2 md:flex">
+                <IconAction
+                  label={t('shell.locale')}
+                  onPress={() => setLocale(locale === 'zh-CN' ? 'en' : 'zh-CN')}
+                >
+                  <Languages className="size-4.5" />
+                </IconAction>
+                <IconAction
+                  label={t('shell.theme')}
+                  onPress={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+                >
+                  {theme === 'light' ? <Moon className="size-4.5" /> : <Sun className="size-4.5" />}
+                </IconAction>
+              </div>
+              <NotificationCenter />
+              <MenuButton
+                ariaLabel={t('shell.account')}
+                items={[
+                  { id: 'locale', label: t('shell.locale') },
+                  { id: 'theme', label: t('shell.theme') },
+                  {
+                    id: routeTargetResolver.resolveHref({ routeId: 'settings', params: {} }),
+                    label: t('nav.settings'),
+                    description: t('shell.settingsDescription'),
+                  },
+                ]}
+                label={
+                  <>
+                    <span className="md:hidden">
+                      <Avatar name="Rin" size="sm" />
+                    </span>
+                    <span className="hidden md:inline-flex">
+                      <UserIdentity
+                        avatarSize="sm"
+                        description={t('shell.productOwner')}
+                        name="Rin"
+                      />
+                    </span>
+                  </>
+                }
+                onAction={(href) => {
+                  if (href === 'locale') {
+                    setLocale(locale === 'zh-CN' ? 'en' : 'zh-CN');
+                    return;
+                  }
+                  if (href === 'theme') {
+                    setTheme(theme === 'light' ? 'dark' : 'light');
+                    return;
+                  }
+                  void proceedAfterLeaveConfirm(href, t('shell.account')).then((proceed) => {
+                    if (!proceed) return;
+                    markForwardRouteIntent();
+                    void router.push(href, {
+                      transitionTypes: [pageTransitionTypes.forward],
+                      ...resolveScrollOption(),
+                    });
+                  });
+                }}
+              />
+            </div>
+          </header>
+          {pageTabsPinned ? <PageTabs /> : null}
+        </div>
+        {pageTabsPinned ? null : <PageTabs />}
         <main className="mx-auto max-w-screen-2xl p-4 sm:p-6 xl:p-8" id="main-content">
           <RouteTransition>
             <PluginLocaleProvider

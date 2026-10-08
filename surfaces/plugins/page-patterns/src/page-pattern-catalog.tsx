@@ -275,6 +275,7 @@ export function PagePatternCatalog({ kind }: Readonly<{ kind: PagePatternKind }>
         </div>
       ) : (
         <SettingsLayout
+          persistentNavigation
           navigation={
             <Panel className="p-4 text-sm text-ink-muted">
               {t('pagePatterns.content.example32')}

@@ -1,9 +1,9 @@
 'use client';
 
 import { X } from 'lucide-react';
-import { IconAction } from '@community-go/ui-adapter/icon-action';
+import { Action } from '@community-go/ui-adapter/action';
 import { MenuButton } from '@community-go/ui-adapter/menu-button';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
 import { useFrontendTranslation } from '@community-go/i18n';
@@ -31,6 +31,30 @@ export function PageTabs() {
   const router = useRouter();
   const pageTabsEnabled = useShellStore((state) => state.preferences.navigation.pageTabsEnabled);
   const tabs = usePageTabsStore((state) => state.tabs);
+  const stripRef = useRef<HTMLDivElement>(null);
+  const focusAfterClose = useRef(false);
+  useEffect(() => {
+    const strip = stripRef.current;
+    const current = strip?.querySelector<HTMLElement>('[aria-current="page"]');
+    if (!strip || !current) return;
+    const reveal = () => {
+      const bounds = current.getBoundingClientRect();
+      const viewport = strip.getBoundingClientRect();
+      if (bounds.left < viewport.left) strip.scrollLeft += bounds.left - viewport.left;
+      else if (bounds.right > viewport.right) strip.scrollLeft += bounds.right - viewport.right;
+    };
+    reveal();
+    const observer = new ResizeObserver(reveal);
+    observer.observe(strip);
+    return () => observer.disconnect();
+  }, [pathname, tabs, pageTabsEnabled]);
+  useEffect(() => {
+    if (!focusAfterClose.current) return;
+    const current = stripRef.current?.querySelector<HTMLButtonElement>('[aria-current="page"]');
+    if (!current) return;
+    focusAfterClose.current = false;
+    current.focus({ preventScroll: true });
+  }, [pathname]);
 
   // 显式 hydration（skipHydration store）；restoreLastTabs=false 的会话清空由
   // usePageTabsRecorder 首个启用帧处理（避免与打开当前页竞态）。
@@ -53,10 +77,10 @@ export function PageTabs() {
         return other?.href ?? other?.pathname ?? '/';
       }
       if (tabCloseBehavior === 'right') {
-        const right = tabs[closingIndex + 1]; // 屏幕右邻（更早访问）
+        const right = tabs[closingIndex + 1] ?? tabs[closingIndex - 1];
         return right ? (right.href ?? right.pathname) : '/';
       }
-      const left = tabs[closingIndex - 1]; // 屏幕左邻（更新访问）
+      const left = tabs[closingIndex - 1] ?? tabs[closingIndex + 1];
       return left ? (left.href ?? left.pathname) : '/';
     })();
     if (
@@ -66,9 +90,15 @@ export function PageTabs() {
       !(await proceedAfterLeaveConfirm(target, t('shell.pageTabs')))
     )
       return;
+    if (closingActive) focusAfterClose.current = true;
+    else
+      stripRef.current
+        ?.querySelector<HTMLButtonElement>('[aria-current="page"]')
+        ?.focus({ preventScroll: true });
     usePageTabsStore.getState().closeTab(closedPathname);
     if (closingActive) {
       if (target && target !== pathname) {
+        markForwardRouteIntent();
         void router.push(target, {
           transitionTypes: [pageTransitionTypes.forward],
           ...resolveScrollOption(),
@@ -87,66 +117,88 @@ export function PageTabs() {
   return (
     <nav
       aria-label={t('shell.pageTabs')}
-      className="flex min-w-0 items-center gap-0.5 overflow-x-auto border-b border-border bg-surface px-3"
+      className="flex min-w-0 items-center gap-2 border-b border-border bg-surface px-3"
     >
-      {tabs.length === 0 ? (
-        <span className="px-2 py-2 text-xs text-ink-muted">{t('shell.noPageTabs')}</span>
-      ) : (
-        tabs.map((tab) => {
-          const active = tab.pathname === pathname;
-          return (
-            <div
-              className={`${active ? 'inline-flex' : 'hidden md:inline-flex'} shrink-0 items-center gap-1 border-b-2 px-2 py-1.5 text-sm ${
-                active
-                  ? 'border-brand font-semibold text-brand'
-                  : 'border-transparent text-ink-muted hover:text-ink'
-              }`}
-              key={tab.pathname}
-            >
-              <button
-                aria-current={active ? 'page' : undefined}
-                title={tab.title}
-                className="min-h-control max-w-40 truncate rounded-control px-1 outline-none focus-visible:ring-2 focus-visible:ring-brand"
-                onClick={() => {
-                  if (tab.pathname === pathname) return;
-                  void proceedAfterLeaveConfirm(tab.href ?? tab.pathname, t('shell.pageTabs')).then(
-                    (proceed) => {
+      <div className="flex min-w-0 flex-1 items-center gap-0.5 overflow-x-auto" ref={stripRef}>
+        {tabs.length === 0 ? (
+          <span className="px-2 py-2 text-xs text-ink-muted">{t('shell.noPageTabs')}</span>
+        ) : (
+          tabs.map((tab) => {
+            const active = tab.pathname === pathname;
+            return (
+              <div
+                className={`group ${active ? 'inline-flex' : 'hidden md:inline-flex'} min-w-0 max-w-full shrink-0 items-center gap-1 border-b-2 px-2 py-1.5 text-sm ${
+                  active
+                    ? 'border-brand font-semibold text-brand'
+                    : 'border-transparent text-ink-muted hover:text-ink'
+                }`}
+                key={tab.pathname}
+              >
+                <button
+                  aria-current={active ? 'page' : undefined}
+                  title={tab.title}
+                  className="min-h-control min-w-0 max-w-40 truncate rounded-control px-1 outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                  onClick={() => {
+                    if (tab.pathname === pathname) return;
+                    void proceedAfterLeaveConfirm(
+                      tab.href ?? tab.pathname,
+                      t('shell.pageTabs'),
+                    ).then((proceed) => {
                       if (!proceed) return;
                       markForwardRouteIntent();
                       void router.push(tab.href ?? tab.pathname, {
                         transitionTypes: [pageTransitionTypes.forward],
                         ...resolveScrollOption(),
                       });
-                    },
-                  );
-                }}
-                type="button"
-              >
-                {tab.title}
-              </button>
-              <IconAction
-                label={t('shell.closeTab', { title: tab.title })}
-                onPress={() => {
-                  void closeTabAt(tab.pathname);
-                }}
-              >
-                <X aria-hidden="true" className="size-4" />
-              </IconAction>
-            </div>
-          );
-        })
-      )}
+                    });
+                  }}
+                  type="button"
+                >
+                  {tab.title}
+                </button>
+                <span
+                  className={
+                    active
+                      ? 'text-ink-muted'
+                      : 'opacity-60 group-hover:opacity-100 group-focus-within:opacity-100'
+                  }
+                >
+                  <Action
+                    variant="quiet"
+                    size="md"
+                    onPress={() => {
+                      void closeTabAt(tab.pathname);
+                    }}
+                  >
+                    <span className="sr-only">{t('shell.closeTab', { title: tab.title })}</span>
+                    <X aria-hidden="true" className="size-4" />
+                  </Action>
+                </span>
+              </div>
+            );
+          })
+        )}
+      </div>
       {tabs.length > 0 ? (
-        <div className="ml-auto shrink-0 md:hidden">
+        <div className="ml-auto shrink-0">
           <MenuButton
             label={t('shell.morePages', { count: tabs.length })}
             ariaLabel={t('shell.pageTabs')}
-            items={tabs.map((tab) => ({
-              id: tab.pathname,
-              label: tab.title,
-              ...(tab.pathname === pathname ? { description: t('shell.currentPage') } : {}),
-            }))}
+            items={[
+              ...tabs.map((tab) => ({
+                id: tab.pathname,
+                label: tab.title,
+                ...(tab.pathname === pathname ? { description: t('shell.currentPage') } : {}),
+              })),
+              { id: 'close-others', label: t('shell.closeOtherTabs'), disabled: tabs.length < 2 },
+            ]}
             onAction={(id) => {
+              if (id === 'close-others') {
+                for (const tab of tabs) {
+                  if (tab.pathname !== pathname) usePageTabsStore.getState().closeTab(tab.pathname);
+                }
+                return;
+              }
               const tab = tabs.find((tab) => tab.pathname === id);
               const href = tab?.href ?? id;
               void proceedAfterLeaveConfirm(href, t('shell.pageTabs')).then((proceed) => {

@@ -109,6 +109,7 @@
       "evidence": [
         "apps/web/src/test/ui-element-foundations.test.tsx",
         "apps/web/e2e/overlays.spec.ts",
+        "apps/web/e2e/settings-ux-review.spec.ts",
         "apps/web/e2e/data-display.spec.ts",
         "apps/web/e2e/ui-ux-109.spec.ts",
         "docs/changes/109-ui-ux-optimization/README.md"
@@ -146,6 +147,7 @@
       "authorityRoutes": ["/page-patterns", "/page-archetypes"],
       "evidence": [
         "packages/surface-foundation/src/contracts.test.tsx",
+        "apps/web/e2e/settings-ux-review.spec.ts",
         "apps/web/e2e/design-contract.spec.ts",
         "apps/web/e2e/ui-ux-109.spec.ts",
         "docs/changes/109-ui-ux-optimization/README.md"

@@ -1,4 +1,5 @@
 import { Checkbox } from '@heroui/react/checkbox';
+import { useId } from 'react';
 
 type CheckboxChangeProps =
   | Readonly<{ disabled: true; onCheckedChange?: never }>
@@ -19,21 +20,28 @@ export function CheckboxField({
   disabled = false,
   onCheckedChange,
 }: CheckboxFieldProps) {
+  const descriptionId = useId();
   return (
     <Checkbox
-      className="flex flex-row items-start gap-3 text-sm"
+      aria-label={label}
+      {...(description ? { 'aria-describedby': descriptionId } : {})}
+      className="ui-checkbox-field w-full min-w-0 text-sm"
       isDisabled={disabled}
       isSelected={checked}
       {...(onCheckedChange ? { onChange: onCheckedChange } : {})}
     >
-      <Checkbox.Control className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-md border border-border-strong bg-surface text-white data-[selected]:border-brand data-[selected]:bg-brand">
-        <Checkbox.Indicator className="pointer-events-none">✓</Checkbox.Indicator>
-      </Checkbox.Control>
-      <Checkbox.Content className="flex min-w-0 flex-col items-start">
-        <span className="block font-semibold text-ink">{label}</span>
-        {description ? (
-          <span className="mt-1 block text-xs leading-5 text-ink-muted">{description}</span>
-        ) : null}
+      <Checkbox.Content className="ui-choice-content">
+        <Checkbox.Control className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-control border border-border-strong bg-surface text-on-brand">
+          <Checkbox.Indicator className="pointer-events-none">✓</Checkbox.Indicator>
+        </Checkbox.Control>
+        <span className="flex min-w-0 flex-col items-start">
+          <span className="block font-semibold text-ink">{label}</span>
+          {description ? (
+            <span id={descriptionId} className="mt-1 block text-xs leading-5 text-ink-muted">
+              {description}
+            </span>
+          ) : null}
+        </span>
       </Checkbox.Content>
     </Checkbox>
   );

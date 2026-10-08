@@ -23,14 +23,14 @@ describe('RadioGroupField 内部控件视觉职责', () => {
     );
   }
 
-  it('option 行是 flex-row（control 与 label 同行，不被 vendor flex-col 堆叠）', () => {
+  it('option 的原生点击标签同时包含 input、指示器与文字，不产生嵌套 label', () => {
     renderRadios();
     const radios = screen.getAllByRole('radio');
     for (const radio of radios) {
-      const row = radio.closest('[class*="radio "]') ?? radio.closest('[class*="rounded-panel"]');
-      const cls = (row?.getAttribute('class') ?? '').split(' ');
-      expect(cls).toContain('flex-row');
-      expect(cls).not.toContain('flex-col');
+      const row = radio.closest('label');
+      expect(row?.querySelector('.radio__control')).not.toBeNull();
+      expect(row?.textContent).toContain(radio.getAttribute('aria-label'));
+      expect(row?.querySelector('label')).toBeNull();
     }
   });
 
@@ -52,11 +52,13 @@ describe('RadioGroupField 内部控件视觉职责', () => {
     unmount();
   });
 
-  it('CheckboxField option 行 flex-row', () => {
+  it('CheckboxField 的点击标签包含指示器和文字，不产生嵌套 label', () => {
     render(<CheckboxField checked label="复选框" onCheckedChange={() => undefined} />);
     const box = screen.getByRole('checkbox');
-    const row = box.closest('[class*="checkbox "]');
-    expect((row?.getAttribute('class') ?? '').split(' ')).toContain('flex-row');
+    const row = box.closest('label');
+    expect(row?.querySelector('.checkbox__control')).not.toBeNull();
+    expect(row?.textContent).toContain('复选框');
+    expect(row?.querySelector('label')).toBeNull();
   });
 });
 

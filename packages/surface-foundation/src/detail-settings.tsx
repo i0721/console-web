@@ -41,9 +41,12 @@ export function EntitySummary({
 export function SettingsLayout({
   navigation,
   children,
-}: Readonly<{ navigation: ReactNode; children: ReactNode }>) {
+  persistentNavigation = false,
+}: Readonly<{ navigation: ReactNode; children: ReactNode; persistentNavigation?: boolean }>) {
   return (
-    <div className="surface-settings-layout">
+    <div
+      className={`surface-settings-layout ${persistentNavigation ? 'surface-settings-layout-persistent' : ''}`}
+    >
       <aside className="surface-settings-nav">{navigation}</aside>
       <div className="min-w-0 space-y-5">{children}</div>
     </div>

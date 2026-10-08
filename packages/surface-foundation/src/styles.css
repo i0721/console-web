@@ -3,7 +3,6 @@
   --surface-section-gap: 1.5rem;
   --surface-control-gap: 0.75rem;
   --surface-filter-min: 14rem;
-  --surface-sticky-top: 6rem;
   --surface-detail-min: 18rem;
   --surface-settings-nav: 14rem;
   --surface-timeline-marker-size: 0.75rem;
@@ -47,6 +46,11 @@
     margin-block-end: var(--surface-section-gap);
   }
 
+  /* Region enter displacement must not grow page width. Clip adds no scroll owner. */
+  .surface-route-content {
+    overflow-x: clip;
+  }
+
   .surface-filter-grid {
     display: grid;
     gap: var(--surface-control-gap);
@@ -67,12 +71,29 @@
 
   .surface-split-detail,
   .surface-settings-nav {
+    /* Resolve at the consumer: the Host supplies chrome height below :root. */
+    --surface-sticky-top: calc(var(--shell-chrome-height, 5rem) + var(--spacing) * 4);
     min-width: 0;
   }
 
   .surface-settings-layout {
     display: grid;
     gap: var(--surface-section-gap);
+  }
+
+  @media (width < 80rem) {
+    .surface-settings-layout-persistent {
+      display: block;
+    }
+    .surface-settings-layout-persistent > .surface-settings-nav {
+      position: sticky;
+      top: var(--shell-chrome-height, 5rem);
+      z-index: var(--z-index-shell);
+      padding-block: calc(var(--spacing) * 2);
+      background: var(--color-canvas);
+      border-bottom: 1px solid var(--color-border);
+      margin-bottom: var(--surface-section-gap);
+    }
   }
 
   .surface-timeline-marker {
@@ -223,6 +244,11 @@
 
     .surface-settings-layout {
       grid-template-columns: minmax(var(--surface-settings-nav), 0.3fr) minmax(0, 1fr);
+    }
+
+    .surface-settings-nav {
+      max-height: calc(100dvh - var(--surface-sticky-top) - var(--spacing) * 4);
+      overflow-y: auto;
     }
   }
 

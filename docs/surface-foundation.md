@@ -5,7 +5,7 @@
 - `layout`：Page、Header、Toolbar、Filter、Section、Split View、Sticky Actions。`Section` 是 Panel 类 Section 容器（header + children）；需要「章节导航 + 内容共享父容器内容边界」的组合（如 `TabsView variant="section"` 作章节导航）时使用 `contentInset`（children 包进统一 horizontal inset）或 `SectionBody`（自定义 header 的 Panel body 复用同一 inset）。父容器负责区域分隔（divider/boundary）；Tabs 等子组件不自建 Surface。
 - `shell-navigation`：Router Port 上的 Shell Grid、Sidebar Navigation 与响应式表现；不依赖 Next。展开态使用 **Active Path Anchored Accordion**（Shell Navigation UX/State Policy）：visual group 只是分类标题、不等于 Accordion parent——顶层所有 Branch 共享单一 `root` scope，真实嵌套 Branch 的下一层以该 Branch 的 navigationId 为 scope，规则递归；每个 scope 同时至多展开「1 个 active branch + 1 个 exploration branch」。active 状态与展开/探索状态是独立状态模型：active ancestor chain 由当前 Route 运行时推导并始终展开，不允许被普通 toggle 收起到隐藏当前 Route；`exploration` 是瞬时用户意图（绑定产生它的 routeKey），真实 Route Commit 后立即失效并清空、由新 Active Path 重算必要展开链，same-route no-op 保留；收起或替换 exploration branch 时同步清理其子树内全部 exploration scope（不残留历史展开）。展开状态由 Navigation Tree 统一管理（scope -> exploration branch），Menu Item 不各自维护 `isOpen`。Branch 使用整行 Disclosure Button，只有 Leaf 触发路由。Compact Sidebar 使用非模态 Submenu Flyout：Flyout 的打开（`openBranchId`）与 Expanded Tree 的 Accordion exploration 分离，hover/open Flyout 不写入 exploration；Pointer Hover 不转移焦点，Trigger/Content 共享关闭走廊，Keyboard Press 与 Escape 继续由 Overlay Contract 管理。
 - `collection`：Collection 区域、筛选、结果、分页与 Bulk Action。
-- `detail-settings`：Entity Summary、Settings Layout、Timeline。
+- `detail-settings`：Entity Summary、Settings Layout、Timeline。SettingsLayout 的 `persistentNavigation` 为可选空间策略：小于 xl 时分类区域在同一文档滚动流中 sticky，xl 起保持侧栏；默认关闭，不改变不需要持续导航的消费者。设置业务、Pattern 与 Archetype 共享此实现。
 - `form-actions`：Create/Edit/Settings 的 lifecycle 与 sticky action composition。
 - `states-operations`：与 Universal 一致的 loading/refreshing/background readiness、产品级 partial/readonly/denied/pending、四类结构化 Page Loading 与 Operation 恢复语义；不实现后端任务。
 - `styles.css`：Surface-owned spacing/layout token 与 screen/content/bulk/state Motion Recipe。
@@ -20,3 +20,31 @@
 - Host（`apps/web`）是唯一把 foundation/framework/surface 装配成可运行应用的地方。
 
 Foundation 不得依赖 Framework 的生成物，也不得反向要求 Host 提供实现；运行时差异通过 Host Port 注入。
+
+## 固定导航与滚动层级
+
+Web Host 的 Header 与启用且固定的页面标签共享一个 sticky chrome。`pageTabsPinned` 缺省 true，
+关闭时标签位于 chrome 之外并随文档滚动；页面标签本身的启用偏好维持原默认值。
+Host 用 ResizeObserver 测量真实 chrome 高度，向其内容子树提供 `--shell-chrome-height`。
+SettingsLayout 的持续分类导航和桌面侧栏只消费此运行时空间变量，不读取 DOM 或 Router。
+动态字号、标签开关与视口变化不依赖固定像素叠加。浮层继续由 HeroUI Portal 管理。
+
+派生的 `--surface-sticky-top` 必须在 SettingsLayout / SplitView 的 sticky 消费节点计算，
+不能在 `:root` 提前计算：自定义属性继承的是已替换变量的值，根节点无法读取下层 Host
+提供的 chrome 高度。移动入口直接贴合 chrome，桌面侧栏额外保留现有 spacing 间距。
+顶层设置正文使用 outlined Section 与 contentInset；embedded 仅用于已有外壳内的组合。
+桌面SettingsLayout分类区域以动态viewport减实际sticky偏移与既有spacing限制最大高度，
+仅超出时内部滚动，保留原生滚动条与键盘focus reveal；手机入口不增加内部滚动层。
+
+分类入口显示当前分类并打开正式 Drawer；搜索仍属于持久 settings layout 状态，具体分类由
+Next route 决定。相同分类关闭抽屉而不跳页，字段搜索走明确 fragment / Host focus，浏览器
+Back 使用 Next 原生恢复。没有第二个 Router 或公共滚动 Store。路由进入位移在
+surface-route-content 使用 overflow-x:clip 收敛绘制范围，该属性不创建滚动容器。
+
+页面标签保持访问顺序，水平溢出只在标签列表内发生；管理入口固定在列表外，桌面/手机均可
+定位全部标签与关闭其他标签。选中使用标题和下划线，关闭属于 quiet 辅助操作：非当前标签
+降低权重，hover/focus 加强，触屏仍可发现。关闭当前标签后优先邻居、无邻居才回首页，焦点回
+新当前标签；不增加拖拽重排或额外动效系统。
+
+验证见 [设置与导航回归](../apps/web/e2e/settings-ux-review.spec.ts)，审查理由见
+[108 报告](changes/108-ui-ux-audit/README.md)。

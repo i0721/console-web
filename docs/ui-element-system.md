@@ -193,3 +193,19 @@ Hover/Focus 与 Selected 不得合并为同一种状态；Selected 不能只依�
 - 默认单行控件使用 min-h-control 并响应 density；small/embedded 的用途尺寸允许受控例外，不把普通控件的旧固定高度当作默认。外观 profile 的 fontScale/density/contentWidth/contrast 数值由 design-system schema 的 appearanceProfiles 及生成绑定管理，不手改生成区域。
 
 当前行为证据见 [109 实施记录](changes/109-ui-ux-optimization/README.md)；人工视觉和真实设备限制单独保留。
+
+## 选择控件的可点击边界
+
+HeroUI 3.2.4 的 Switch / Radio / Checkbox 根为 Field，`Content` 为带隐藏 input 的可点击标签。
+Control、Indicator、文字及可选择表面的留白必须位于同一个 Content 内。Field 根不重复绑定点击，
+普通展示 Panel、配置来源摘要及外围分组容器不扩大为可点击区域。说明与名称分离，Adapter 在
+Field 层提供 accessible name 与 description，避免嵌套原生 label；禁用、键盘、焦点与选择继续由
+HeroUI 管理。现行官网示意与已安装版本不一致时，以安装包类型、实现及实际 DOM 一同核验。
+
+短设置项采用 row，标题/说明左侧、开关右侧；空说明不保留占位。解释型选项可以保留 cards，
+row 的悬停/聚焦表面必须包含左右内容留白（复用现有 px-3 与 py-2），文字及开关不得贴边；
+留白属于原生 Content 点击热区，不加事件处理器，也不以负边距扩大到宿主容器之外。
+可选择卡片的完整表面归 Content；卡片内不嵌入第二个独立操作。密度改变使用既有 min-h-control，
+不得以缩小指示器替代触控热区。回归须真实点击指示器、文字、留白，并验证 Space / 方向键及 Disabled。
+
+本次证据：[共享控件与设置任务回归](../apps/web/e2e/settings-ux-review.spec.ts)。

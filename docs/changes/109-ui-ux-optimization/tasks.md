@@ -149,3 +149,58 @@ toHaveScreenshot，未出现其它行为断言失败。源码在最后详情组�
 勾选项表示其职责的代码与自动化要求已闭合，不表示整体变更全部验收。涉及当前
 视觉差异的工作包继续未勾；107 列宽整体视觉验收和外部全状态人工门仍保留。
 真实设备/原生 zoom 无证据，不声称通过。
+
+## 2026-10-08 第二轮设置与导航审查
+
+- 原108报告第12节补充当前确认问题、方案比较、P1/P2排序和实施状态，没有建立重复报告。
+- 公共Switch/Radio/Checkbox按安装版本Content点击边界纠正；说明/名称分离且不嵌套label。
+- 设置rows/row、正式Section、同源配置摘要链接、持续分类导航已实现。
+- Host测量实际chrome高度；页签默认固定偏好补入旧记录的默认补全，不换persist key/version。
+- quiet关闭、所有尺寸管理入口、活动项定位、邻居回退及关闭后焦点已实现。
+- 方向路由位移的横向绘制溢出已收口，不增加滚动容器。
+- 设置专项14项与公共选择排列检查共15项独立补跑通过，日志为 evidence/review-browser-final.txt；早期失败证据保留。
+- Checkbox的vendor accent在Adapter根局部映射到项目brand/brand-strong/on-brand，完整回归验证与Radio同源。
+- 最终完整check：370项单元通过，233项浏览器219通过/14视觉失败，27个错误均为截图。所有行为断言通过。
+- 原预算、截图阈值与基线均未改变；最新27组对照保存于 evidence/review-2026-10-08/visual-differences/index.html。
+- 中断恢复已核对命令终态，无悬挂测试；剩余为人工视觉确认，原历史结论不自动升级。
+
+## 设置容器与动态空间续审
+
+- R13-01：派生sticky变量从root移至实际消费者，修复SettingsLayout与SplitView读取Host高度；没有新增测量或固定offset分支。
+- R13-02：设置正文使用outlined Section与contentInset，导航保留紧凑Panel，Drawer内继续embedded，未改共享默认。
+- 既有14项设置功能专项通过；新增两项动态布局专项通过，覆盖5种宽度×3种Tabs状态及详情侧栏。
+- 日志：evidence/layout-browser.txt保留初次测试定位失败，evidence/layout-browser-dynamic.txt为修正后的两项通过结果。
+- 截图：evidence/review-2026-10-08/layout-{width}-{state}.png。原108报告第13节记录根因、方案比较与证据边界。
+- 补查R13-03：短桌面窗口分类末项不可见；桌面导航消费同一动态top限制max-height并按需滚动，1440×500键盘末项选择专项通过。
+- 最终代码完整check（layout-check-final.txt）：370单元通过；236浏览器中222通过/14视觉失败，27个失败断言均为截图。治理、lint、类型、构建与原预算通过，整体exit 1。
+- 新的27组完整对照在review-2026-10-08/layout-visual-differences/index.html，原快照与前轮对照均保留。人工视觉确认仍未完成。
+- 短窗口截图补充等待目标Section真正显示，避免过渡中截图缺失内容；17项专项追加补跑结果在layout-browser-final.txt，不改变生产实现。
+
+## 验收反馈：开关行hover留白
+
+- R14-01（P2）：共享SwitchField row仅py-2，左右padding为0；补充已有px-3，使hover/focus背景包住内容留白，不改Card模式。
+- UI Elements表单权威补充真实row示例；UI Element System记录内容与hover表面的空间约束。
+- 桌面1440/手机390×三密度专项已通过；追加320窄屏进入最终完整检查。新增留白点击与Space仍切换同一开关。
+- 初次专项：evidence/hover-spacing-browser.txt。最终检查启动前源码收敛，不沿用上一轮全量结果作为本轮证据。
+- 最终完整hover-spacing-check.txt：370单元通过、237浏览器223通过/14视觉失败；27个错误全部截图，无其它功能失败。18项设置专项全部通过。
+- 新hover专项覆盖1440/390/320×三密度，测量左右边距并验证留白点击、Space恢复；实际浏览器确认左右12px。九张hover画面与新的27组对照均保存。
+- maxRoute gzip432952B，原预算440320B未改。原快照未更新，本项修复不代表此前全部视觉变化已获批准。
+
+## 验收反馈 R15-01：开关内部几何
+
+轨道与圆点尺寸已定制，但原vendor margin位移仍被继承，导致关闭左侧4px、开启右侧6px，
+上下2px。Switch.Thumb使用逻辑ms-0与selected ms-5，实测两种端点留白均2px。
+此次修复适用于全部SwitchField row/card消费者，不改变外壳、状态或点击边界。
+已增加圆点端点/上下留白一致性与Space切换回归，三视口与明暗模式覆盖；三密度原专项也
+加入几何验证。详见108 §15及evidence/switch-geometry-browser.txt，完整检查记录在
+evidence/switch-geometry-check.txt；未更新历史视觉基线。
+
+## 验收反馈 R16-01：总览普通区块阴影
+
+总览五个Section采用已有outlined外观，移除普通区块继承的shadow-panel，保留边框与布局。
+公共默认值和Token不变。桌面1440及手机390实际滚动检查、截图和阴影测量完成，未出现
+横向溢出。证据见overview-shadow-browser.txt及review-2026-10-08/overview-outlined-*.png。
+完整检查记录overview-shadow-check.txt；历史视觉基线保留。
+
+最终overview-shadow-check.txt：370单元通过，238浏览器224通过/14视觉失败；27个错误均为
+截图比较，没有其它功能失败。19项设置专项通过，独立格式与文档检查通过，原基线未更新。

@@ -69,6 +69,13 @@ describe('preferences-model migrateShellV0Preferences（旧用户保真）', () 
 });
 
 describe('preferences-model validatePreferences（不可信持久化守卫）', () => {
+  it('旧记录补全固定标签默认值，显式关闭保真，非法字段拒绝', () => {
+    const legacy = validatePreferences({ navigation: { pageTabsEnabled: true } });
+    expect(legacy.ok && legacy.value.navigation.pageTabsPinned).toBe(true);
+    const explicit = validatePreferences({ navigation: { pageTabsPinned: false } });
+    expect(explicit.ok && explicit.value.navigation.pageTabsPinned).toBe(false);
+    expect(validatePreferences({ navigation: { pageTabsPinned: 'yes' } }).ok).toBe(false);
+  });
   it('完整合法输入通过并保真', () => {
     const input = {
       appearance: { themeMode: 'dark', accent: 'blue' },

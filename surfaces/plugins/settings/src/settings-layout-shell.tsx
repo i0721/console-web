@@ -225,7 +225,7 @@ export function SettingsResponsiveNavigation({ meta }: Readonly<{ meta: Settings
         <SettingsSidebar active={meta.categoryKey} query={query} onQueryChange={setQuery} />
       </div>
       <div className="xl:hidden">
-        <Action variant="secondary" onPress={() => setOpen(true)}>
+        <Action fullWidth variant="secondary" onPress={() => setOpen(true)}>
           {t(meta.labelKey)} · {t('settings.switchCategory')}
         </Action>
         <DrawerSurface

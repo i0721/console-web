@@ -140,7 +140,7 @@ export default function OverviewPage() {
       {(showWorkbench || showFavorites) && (
         <div className={`grid gap-4 ${showWorkbench && showFavorites ? 'sm:grid-cols-2' : ''}`}>
           {showFavorites ? (
-            <Section title={t('overview.favoritesTitle')}>
+            <Section appearance="outlined" title={t('overview.favoritesTitle')}>
               <ul className="flex flex-col gap-1 p-5">
                 {favorites.map((favorite) => (
                   <li key={favorite.pathname}>
@@ -151,7 +151,7 @@ export default function OverviewPage() {
             </Section>
           ) : null}
           {showWorkbench ? (
-            <Section title={t('overview.recentsTitle')}>
+            <Section appearance="outlined" title={t('overview.recentsTitle')}>
               <ul className="flex flex-col gap-1 p-5">
                 {recents.slice(0, 6).map((recent) => (
                   <li key={recent.pathname}>
@@ -166,6 +166,7 @@ export default function OverviewPage() {
 
       <ViewportReveal>
         <Section
+          appearance="outlined"
           id="overview-progress"
           title={t('overview.progressTitle')}
           description={t('overview.progressDescription')}
@@ -198,6 +199,7 @@ export default function OverviewPage() {
 
       <div className="grid gap-6 xl:grid-cols-2">
         <Section
+          appearance="outlined"
           id="overview-quality"
           title={t('overview.qualityTitle')}
           description={t('overview.qualityDescription')}
@@ -221,6 +223,7 @@ export default function OverviewPage() {
         </Section>
 
         <Section
+          appearance="outlined"
           id="overview-activity"
           title={t('overview.activityTitle')}
           description={t('overview.activityDescription')}

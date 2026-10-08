@@ -54,7 +54,10 @@ export default function SettingsShellLayout({ children }: Readonly<{ children: R
     <Page>
       {/* 壳：PageHeader 与 SettingsLayout 均不在 data-route-content 内 → route-enter 不命中、静止。 */}
       <SettingsCategoryHeader meta={activeMeta} />
-      <SettingsLayout navigation={<SettingsResponsiveNavigation meta={activeMeta} />}>
+      <SettingsLayout
+        persistentNavigation
+        navigation={<SettingsResponsiveNavigation meta={activeMeta} />}
+      >
         <SettingsContentFrame banner={banner}>
           {/* 路由内容容器（SET-012）：随分类路由替换的内容区，走主 Shell 同源进入编排。 */}
           <div data-route-content>

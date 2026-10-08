@@ -416,11 +416,11 @@ test('Radio/Checkbox 内部 indicator 与 label 同行且无双重成形', async
   const radioPanel = page
     .getByRole('heading', { level: 3, name: 'RadioGroupField' })
     .locator('xpath=ancestor::section[1]');
-  const radioRows = radioPanel.locator('[class*="radio "]');
+  const radioRows = radioPanel.locator('.ui-choice-content');
   await expect(radioRows.first()).toHaveCSS('flex-direction', 'row');
   const radioGeom = await radioRows.first().evaluate((row) => {
     const ctrl = row.querySelector('.radio__control');
-    const content = row.querySelector('.radio__content');
+    const content = row.querySelector('span.flex');
     if (!ctrl || !content) return null;
     const rr = row.getBoundingClientRect();
     return {
@@ -454,10 +454,19 @@ test('Radio/Checkbox 内部 indicator 与 label 同行且无双重成形', async
   const checkboxPanel = page
     .getByRole('heading', { level: 3, name: 'CheckboxField' })
     .locator('xpath=ancestor::section[1]');
-  await expect(checkboxPanel.locator('[class*="checkbox "]').first()).toHaveCSS(
+  await expect(checkboxPanel.locator('.ui-choice-content').first()).toHaveCSS(
     'flex-direction',
     'row',
   );
+  const checkboxFill = await checkboxPanel
+    .locator('.checkbox__control')
+    .first()
+    .evaluate((control) => getComputedStyle(control, '::before').backgroundColor);
+  const radioFill = await radioPanel
+    .locator('.radio__indicator span')
+    .first()
+    .evaluate((dot) => getComputedStyle(dot).backgroundColor);
+  expect(checkboxFill).toBe(radioFill);
 });
 
 test('Action 与 ToggleGroup 内部 icon wrapper 不二次成形', async ({ page }) => {

@@ -123,6 +123,14 @@ export const SETTINGS_INDEX: readonly SettingsEntry[] = [
   },
   {
     category: 'navigation',
+    fieldId: 'pageTabsPinned',
+    nameKey: 'settings.navigation.pageTabsPinned',
+    categoryLabelKey: 'settings.categories.navigation',
+    descriptionKey: 'settings.navigation.pageTabsPinnedDescription',
+    synonyms: ['固定', 'pin', 'sticky'],
+  },
+  {
+    category: 'navigation',
     fieldId: 'menuMemory',
     nameKey: 'settings.navigation.menuMemory',
     categoryLabelKey: 'settings.categories.navigation',

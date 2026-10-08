@@ -1,6 +1,21 @@
 @import '@heroui/styles';
 
 @layer components {
+  .ui-checkbox-field {
+    --accent: var(--color-brand);
+    --accent-hover: var(--color-brand-strong);
+    --accent-foreground: var(--color-on-brand);
+  }
+
+  /* Public HeroUI Content parts own the press boundary (3.2.4 field anatomy). */
+  .ui-switch-content {
+    @apply flex w-full min-w-0 min-h-control flex-row items-center justify-between gap-4 rounded-control outline-none data-[focus-visible]:ring-2 data-[focus-visible]:ring-focus-ring data-[hovered]:bg-surface-muted;
+  }
+
+  .ui-choice-content {
+    @apply flex w-full min-w-0 min-h-control flex-row items-start gap-3 outline-none data-[focus-visible]:ring-2 data-[focus-visible]:ring-focus-ring data-[hovered]:bg-surface-muted;
+  }
+
   .ui-field {
     @apply grid min-w-0 w-full content-start gap-2 text-sm;
   }

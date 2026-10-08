@@ -345,3 +345,238 @@
 进一步检查38个路由在320/390/430px下的114个组合、八个设置分类、10个内容Tabs、七个ToggleGroup和可选PageTabs。完整设置模式比较、A/B/C/D策略、统一适配契约与合并优先级见 [移动端设置、Tabs与导航切换体验审查](mobile-review.md)。
 
 普通横向Tabs已有实际滚动能力；本轮新增问题是ToggleGroup裁切且不能横滚、缩窄后当前Tab不可见、vertical手机回退与说明不符，以及PageTabs访问前移后的选中项裁切。设置搜索已有字段索引，但结果只到分类，尚未定位字段。推荐保留设置路由，手机采用当前分类入口加正式Drawer，并完善字段目标与焦点定位。
+
+## 12 2026-10-08 二次审查：设置任务、选择热区与页面标签
+
+本节在同一报告内更新当前证据，不另建重复审查报告。第1～11节保留历史基线，109 已实现的
+修正不再次计为新缺陷。此次实际进入设置八分类、共享表单 authority、首页与 Reference 路径，
+结合 UI 点击、滚动、键盘、视口变化、DOM 结构与源码核验；自动化扩展覆盖由项目完整回归提供。
+浏览器移动模拟不能证明真实设备单手舒适度、软键盘、安全区、原生缩放或屏幕阅读器朗读。
+
+### 12.1 确认的问题、原因与优先级
+
+| ID     | 级别 | 实际问题及根因                                                                                                                                         | 影响范围                                                            | 优化与状态                                                                                                    |
+| ------ | ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| R12-01 | P1   | 页面标签在 Header 外为 static；移动长页滚动后顶部只剩 Header，页面切换入口消失                                                                         | 全部启用标签的路由                                                  | 默认固定、可关闭固定；Header/Tabs 同一 sticky owner。代码完成，专项回归通过                                   |
+| R12-02 | P1   | Switch.Field 根为纵向 flex，Content 才是隐藏 input 的标签；Control 错放为 Content 的兄弟。导航设置行实测高约96px，点击可视开关不改变值、点击文字会改变 | settings、UI Elements、Overlay、Archetype 等全部 SwitchField 消费者 | Control/文字合入同一 Content；空说明不占位，row 标题左/开关右；真实点击和 Space 通过                          |
+| R12-03 | P1   | Radio/Checkbox 同样误把 Control 放在 Field 与 Content 之间；外层卡片有 selected 表面但大部分不是标签热区                                               | 共享表单、列设置、Pattern/Archetype、设置选项                       | 用 Content 承担可选择表面，指示器/文字/留白同一边界；不把普通展示容器变成按钮；鼠标、键盘与禁用回归通过       |
+| R12-04 | P1   | 已有 mobile Drawer 能正确开关，但其唯一入口是随页面滚动的普通 Action；长分类底部要回顶部才能发起其他任务                                               | 小于1280px的设置页，操作偏好尤其明显                                | SettingsLayout opt-in 持续分类导航；不增加内层正文滚动。650/1600/3000px位置及连续分类切换通过                 |
+| R12-05 | P1   | 可访问性中的“引用外观设置”是有价值的同源配置摘要；其 TextLink 指向不存在的 #appearance，既不定位也不进入设置来源                                       | 可访问性分类                                                        | 保留标题、来源说明和三个实时值，改为正式 RouteLink 到 /settings；真实往返通过                                 |
+| R12-06 | P2   | 所有短单选值默认使用解释型高卡片，手机一组选项占用明显大于内容需要的空间                                                                               | 八个设置分类                                                        | 设置 composition 选择已有 rows；共享 cards 默认保留。区段改用正式 Section，统一标题层级和紧凑组间距           |
+| R12-07 | P2   | 每个标签的 X 使用有背景/边框的独立 IconAction，与名称/当前状态争夺注意力；更多页面只在手机显示                                                         | Shell PageTabs                                                      | quiet 操作保留语义控制热区，未激活减弱、hover/focus加强；全尺寸提供管理菜单，关闭其他标签、关闭后焦点恢复通过 |
+| R12-08 | P1   | forward 路由 choreography 的正向位移会短暂增大文档宽度；430px连续任务实测 scrollWidth=438px                                                            | 路由内容层，非单一设置页                                            | Surface route 绘制范围用 overflow-x:clip，保留同一文档滚动和 sticky；连续导航窄屏宽度回归通过                 |
+
+本次未确认新的 P0。R12-02 的指示器失效属于实现错误；R12-04 是“功能可用但任务效率低”的
+交互架构缺口；R12-06/07 是信息与操作权重问题。跨分类摘要不是第二套设置，不应仅因视觉不同
+而删除；数字跟随地区等只读约束也保留为说明，不渲染假开关。
+
+补充 R12-09（P2）：表单 authority 视觉复核确认 Checkbox 的选中填充仍使用 vendor 蓝色，
+与 Radio 和项目当前紫色强调色不同；原因是 vendor 的 control 伪元素消费自己的 accent。
+在 Checkbox Adapter 根局部映射公开主题变量到项目 brand / brand-strong / on-brand，
+不修改全局 vendor 主题；共享消费者一并修正，浏览器比较两类选中填充证明语义一致。
+
+### 12.2 移动设置方案比较与决策
+
+| 设计思路                           | 优点                                                                         | 限制 / 合适场景                                                                   | 当前结论                             |
+| ---------------------------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ------------------------------------ |
+| 分类索引 → 独立详情页              | 首次信息架构容易理解，大量多级设置扩展自然                                   | 高频跨分类至少多一次返回，重做现有路由壳；适合低频深层设置                        | 保留为未来多级信息架构候选           |
+| 八分类横向 Tabs                    | 邻近分类一触切换                                                             | 窄屏/英文隐藏大部分分类，分类组织与搜索需另占空间；横滚与长页纵滚竞争             | 当前八分类不采用                     |
+| 底部类别栏 / 全部类别 Bottom Sheet | 拇指接近，任意滚动位置可访问                                                 | 八项不能全放，增加底部占用，与恢复默认/系统安全区协调成本高；缺少对应正式导航模式 | 不为本轮新增公共 Bottom Sheet        |
+| 持续当前分类栏 + 正式 Drawer/搜索  | 顶部当前上下文明确，长页任意位置两次操作直达；复用既有分组、搜索、焦点和路由 | 顶部单手触达仍弱于底部；启用页签时三层导航占用较多，极短视口需继续复核            | 采用；减少滚回成本且不引入第二套导航 |
+
+桌面 xl 起继续同时展示分类侧栏与正文；手机/平板只展示当前分类入口，抽屉保留三组八分类。
+首入能从入口文字理解“当前分类 + 切换/搜索”；反复任务不再因页面位置增加回顶成本。
+搜索词属于原有 settings layout 的瞬态状态，跨分类保留；偏好仍经 PreferencesPort 即时生效和
+持久化。当前分类选择只关闭抽屉而不重置位置；浏览器返回恢复原分类和位置；新分类遵从既有
+导航滚动偏好，字段搜索单独用 fragment 定位。没有持久化 scrollY 或新增跨Plugin私有Store。
+
+Header/Tabs 高度由 Host 测量；分类导航只消费空间变量。固定标签关掉后 Header 继续固定、标签
+随文档滚动，分类栏自动改到 Header 下。选项布局通过 rows/row composition 优化，密度继续
+消费已有控制高度；解释复杂且有独立选择意义的卡片保留 cards，不全局修改组件默认值。
+
+### 12.3 标签行为与反馈决策
+
+页面标签是访问过的路由入口而不是内容 Tabs；不缓存页面树，不复制 History。保留稳定访问顺序，
+激活只更新最近使用时间，不把标签移到最前。Desktop 横滚列表与固定管理入口分离，当前项在
+导航和视口变化时自动进入可见范围；手机显示当前标签并通过管理入口选择其它页面。
+未激活关闭按钮保持低权重可发现，不以 hover 作为唯一入口；当前/键盘 focus/hover加强辨识。
+关闭辅助操作取消独立凸起边框，控制尺寸继续使用标准语义高度。
+
+右邻/左邻优先在边界回退另一邻居，只有无邻居才回首页；最近使用保持原策略。关闭当前标签
+后焦点回到新当前标签，关闭其它标签不改变路由；批量关闭其它页经现有菜单完成。
+切换/关闭用当前状态、菜单收敛和焦点提供即时反馈，不新增每次操作的 Toast 或动画。
+拖拽重排不是已存在能力，本轮未增加：若后续有真实任务价值，应同时定义键盘重排、触摸与
+持久化顺序，再使用正式 Collection 交互，而不是只加 pointer drag。
+
+### 12.4 工程与外部校准证据
+
+修正前检查全部 SwitchField/RadioGroupField/CheckboxField 和 SettingsLayout 消费者；前者的
+交互根因是公共问题，后者新增 opt-in，未改变其默认消费。Pattern/Archetype 展示同一
+persistentNavigation；公共exports未增加，证据登记补入 foundation-contracts。
+没有改默认主题/色彩Token、复制legacy或TailAdmin源码、研究后端接口或创建万能Wrapper。
+
+实际进入 [TailAdmin Form Elements](https://react-demo.tailadmin.com/form-elements) 的 Checkbox/
+Radio/Toggle 状态区，检查 normal/selected/disabled，真实点击 Radio 指示器观察互斥选中。
+其短选项使用轻量行、控制与文字共轴的规律用于校准。官方
+[Switch](https://heroui.com/en/docs/react/components/switch)、
+[RadioGroup](https://heroui.com/en/docs/react/components/radio-group)、
+[Checkbox](https://heroui.com/en/docs/react/components/checkbox) 公开示意存在版本差异；本项目安装
+HeroUI 3.2.4 的实现明确说明 Content 是可点击的 SwitchButton/RadioButton/CheckboxButton，
+结合实际 DOM 确定结构，未照搬官网不同版本的示例。
+
+当前长期规则补入 [UI Element System](../../ui-element-system.md) 与
+[Surface Foundation](../../surface-foundation.md)，任务执行与截图保存在
+[109](../109-ui-ux-optimization/README.md)。
+
+### 12.5 回归状态
+
+新增 [14项专项回归](../../../apps/web/e2e/settings-ux-review.spec.ts) 已全部通过（37.8s）：
+真实Control/文字/留白点击、Space/方向键/禁用、320×568与390/430/768/1024/1279×844连续任务、
+固定/非固定持久化、八分类桌面连续切换、标签管理/焦点、深色英文WCAG AA、触摸模拟、同分类
+位置、Back恢复、搜索词与字段定位。过程中发现并修正 label 嵌套与ARIA名称/说明混合，
+不把最初测试失败藏起来；早期日志在109 evidence保留。
+
+最终完整 `pnpm check` 已执行，详见 [本轮完整日志](../109-ui-ux-optimization/evidence/review-check-final.txt)：
+治理、依赖、生成物 freshness、lint、类型、370项单元测试、生产构建与原产物预算通过。
+浏览器233项中219通过、14失败；27个失败断言全部是 `toHaveScreenshot`，没有其它行为失败。
+Radio/Checkbox的旧外层排列断言已调整为真实 Content 内的排列与选中语义色，完整回归通过。
+此前14项设置专项与该公共控件检查共15项独立补跑也通过。
+
+剩余视觉差异包含109前轮尚未批准的版式变化，以及本轮设置密度、选择热区与Checkbox语义色
+变化；[27组原尺寸对照](../109-ui-ux-optimization/evidence/review-2026-10-08/visual-differences/index.html)
+保存现有基线、最终实际画面和diff。代码/行为修正完成，整体视觉验收仍待人工确认。
+完整命令因此exit 1；不自动更新快照、不提高diff阈值、不把历史219项结果当作本轮证据。
+格式与文档门独立补跑，最终结果在109本轮收尾记录登记。
+
+## 13. 设置容器与动态 Sticky 偏移复核
+
+本节续接第12节已实现代码，未重做前轮审查。恢复时开发服务仍监听4173，原检查已经结束，
+无悬挂的 Playwright/Vitest 命令；所有未提交修改与历史证据保留。
+
+| 编号   | 优先级 | 确认问题与根因                                                                                                                     | 范围与决策                                                                                                               | 状态                 |
+| ------ | ------ | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------- |
+| R13-01 | P1     | Header+固定Tabs实际139px，桌面分类导航仍为96px。派生CSS变量在:root计算时使用5rem fallback，继承后不会用后代的Host高度重新计算      | 在sticky消费者上计算派生变量，继续复用Host现有ResizeObserver；同时修复SplitView详情侧栏，不增加测量器或硬编码分支        | 代码与专项验证完成   |
+| R13-02 | P2     | 分类导航是outlined Panel，而独立正文使用embedded Section，移除了应有的容器边界与圆角；embedded用于已有外壳中的内容，此处没有父外壳 | 正文采用已有outlined Section与contentInset，删除手写内容padding；导航保留紧凑搜索/分类布局，正文保留标题/分隔/设置行层级 | 代码与浏览器复核完成 |
+
+### 13.1 容器方案与主次关系
+
+复核Panel的appearance/tone、Section标题与SectionBody，以及SettingsLayout、SplitView的全部
+真实调用方。Card承担内容卡片语义，Panel承担空间外壳，Section提供带标题的区段；本场景
+不需要新增Card、公共Variant或Token。独立导航和配置区采用现有无阴影容器语言，避免给
+页面平面上的区块新增浮层阴影。导航用较紧凑的搜索、分类标题和选中链接；正文用Section
+标题、分隔与统一内容inset，视觉语言一致但信息组织不相同。
+
+比较过单一大Panel包住导航和正文：可以提供统一边界，但会造成移动sticky入口与内容
+共享受限的外壳、增加嵌套和响应式分隔职责；也比较过全部embedded平面分组，其代价是
+长设置区段失去清晰边界。选择已有outlined Section的正确composition，保持两列独立的
+导航/内容角色，不改变Panel/Section全局默认。移动Drawer内部仍使用embedded导航，因为
+Drawer已经拥有外壳；页面正文保持独立Section。不是给两块区域手写同一套装饰。
+
+### 13.2 动态空间关系与扩展范围
+
+Header与固定Tabs继续共同占据一个sticky chrome；非固定Tabs位于其外并随文档滚动。
+原生sticky无法跨兄弟自动引用实际高度，所以保留Host已有的单一ResizeObserver；本轮
+修复的是CSS变量作用域，不新增监听或JS定位。消费者根据继承的实际高度计算top，desktop
+加现有spacing间距，mobile分类入口贴合chrome。调整Tabs显示/固定偏好或resize后自然
+更新。正文与手机分类入口继续共享文档滚动，没有第二个Router或滚动状态Store。
+
+额外确认R13-03（P1）：1440×500窗口中导航内容高482px，fixed chrome下剩余空间不足，
+长页中段的末尾分类不可见。桌面SettingsLayout导航以动态viewport减实际top和既有spacing
+作为max-height，只有内容超出时内部滚动；浏览器原生滚动条保留，键盘聚焦可自动显露末项。
+这是分类区域有明确边界的滚动职责，不向主内容或手机入口增加滚动容器，也未改变SplitView
+正文阅读方式。修复后导航可用高329px，实际滚动显露全部分类；新增键盘到末项并Enter切换
+专项通过。此项随SettingsLayout共享消费者生效，默认高度充足时不产生额外滚动。
+
+受影响共享消费者为SettingsLayout和SplitView；包含设置业务、Pattern/Archetype示例、
+创建编辑和资源详情组合。底部StickyActions按底边定位，不消费顶部变量，无需修改。
+源码修改集中在surface-foundation样式、settings Section composition与现有专项回归；
+没有修改公共组件默认、设计Token或已有快照。
+
+另外定向进入TailAdmin的[Cards页面](https://react-demo.tailadmin.com/cards)，实际查看图片、
+横向内容、链接与Icon卡片，以及分组标题和分隔边界。其内容Card与章节外壳分工用于校准
+层次；没有复制源码、DOM、CSS、资产或尺寸，也不把外部示例的Card嵌套照搬到设置页面。
+
+### 13.3 实际验证与边界
+
+修复前浏览器1440宽读取chrome=139px、top=96px；修复后top=155px，操作偏好长页滚动
+1489px时导航实际y=155px。实际点击跨分类、手机390宽长页底部打开分类Drawer均完成。
+新增自动化覆盖1440/2560/390/768/1280宽，在同一页面依次开启固定、非固定、关闭Tabs，
+检查实时偏移、顶部/中段/底部滚动与横向溢出，保存15张实际画面；SplitView独立专项验证
+同一动态契约。两项新增专项通过，前轮14项功能专项也完成本轮补跑。
+
+第一次新增测试定位到了两个header，随后隐藏input自动点击被遮挡；测试改为明确banner
+与实际label点击后通过，保留早期失败日志。浏览器原生zoom、真实设备与读屏仍无实际
+证据，不以viewport或触摸模拟冒充。完整检查结果登记在109本轮账本；旧视觉基线继续保留，
+不通过提高阈值或自动更新截图隐藏差异。
+
+最终代码完整 `pnpm check` 已执行：370项单元测试、治理、依赖、生成物、lint、类型、
+生产构建与原产物预算全部通过；浏览器236项中222通过、14项视觉比较失败，27个失败
+断言全部为截图，没有其它功能断言失败。maxRoute gzip为432922B（原上限440320B）。
+完整命令因视觉比较exit 1，不能宣称全绿。见[最终日志](../109-ui-ux-optimization/evidence/layout-check-final.txt)
+与[最终27组视觉对照](../109-ui-ux-optimization/evidence/review-2026-10-08/layout-visual-differences/index.html)。
+原AGENTS第10节要求人工确认合理后才能更新视觉基线，本轮保持该门禁与待确认状态。
+
+## 14. 验收反馈：开关行悬停背景的内容留白
+
+用户截图指出开关行hover背景与文字/控件两侧齐平。实际测量row的padding-left/right均为0，
+右侧control距Content边缘为0；不是Section外壳留白不足，而是公共SwitchField的row模式
+仅设置py-2，hover surface与内容缺乏内部空间。此项记为R14-01（P2）。
+
+SwitchField的row复用现有px-3/py-2，与Radio rows现有的内容留白规则一致；保留min-h-control
+随密度调整的行高、同一原生Content点击边界及现有hover/focus状态。没有增加外层容器、
+负边距、页面覆盖样式、新Token或事件处理器。默认card的p-4不变。真实row消费者为设置
+插件的各分类开关；其他Card消费者不随变。UI Elements表单权威补充同源row带说明示例。
+
+修改前定向进入TailAdmin Form Elements，实际查看Checkbox/Radio/Toggle的正常、选中、
+禁用与分组内容区域，并点击Radio确认状态；只校准控件与外壳留白关系，未复制外部实现。
+新增回归以真实hover测量左右内容边距，并点击新增左侧留白、以Space恢复选择；覆盖桌面
+与手机、三种密度，截图保存在109现有evidence。完整最终检查结果继续登记在109账本，
+旧视觉基线和人工确认要求保留，不把本次缺陷反馈视为对全部历史视觉变化的批准。
+
+最终完整检查见[hover-spacing-check.txt](../109-ui-ux-optimization/evidence/hover-spacing-check.txt)：
+370项单元测试、治理、lint、类型、构建与原预算通过；237项浏览器223通过、14视觉失败，
+27个错误均为截图比较。包含新增hover专项在内的18项设置回归全部通过，新增专项覆盖
+1440/390/320宽×三密度（15.4s）。实际页面左右padding与control距背景右边缘均为12px。
+原基线未更新，最终[27组对照](../109-ui-ux-optimization/evidence/review-2026-10-08/hover-visual-differences/index.html)
+与九张hover画面单独保存。R14-01的代码与行为修复完成，整体视觉验收仍待确认。
+
+## 15. 验收反馈：Switch 轨道与圆点端点不对称
+
+R15-01（P2）为公共组件的几何实现缺陷，非设置行 UX 问题。实际浏览器测量轨道44×24、
+圆点20×20、轨道padding为2px，但关闭端点左侧4px、开启端点右侧6px，上下均2px。
+根因是Adapter修改了vendor轨道/圆点尺寸并添加padding，却保留HeroUI原来的margin定位：
+未选中ms-0.5、选中calc(100% - 1.5rem)，不再适合项目的圆形圆点尺寸。
+
+修复在公开Switch.Thumb className收口：ms-0，selected时ms-5。由现有spacing尺度表达
+20px行程，使两种状态靠近轨道端点时都与上下留白相等（实测2px）。采用逻辑margin，
+保留HeroUI的选择、键盘、焦点、禁用与margin过渡机制；没有页面CSS、内部DOM穿透或
+自研选择状态。所有SwitchField消费者（设置、UI Elements、Page Archetypes）统一随变，
+row/card的外壳与交互边界不变。修改前再次进入TailAdmin Form Elements查看开关完整状态。
+
+新增几何回归验证圆点为圆、活动端点与上下间距相等，覆盖1440/390/320宽、系统明暗模式、
+card/row/禁用及Space切换；原三密度hover专项加入开启/关闭几何断言。原视觉基线继续保留。
+本轮检查记录见109 evidence/switch-geometry-browser.txt及switch-geometry-check.txt。
+
+最终完整检查已结束：238项浏览器测试224通过、14项视觉比较失败；19项设置专项全部通过。
+治理、类型、lint、370项单元测试、构建、原产物预算通过；独立format:check与docs:check通过。
+失败断言仍为截图比较，未更新基线。R15-01内部几何修复及行为验证完成，整体视觉验收仍待确认。
+
+## 16. 验收反馈：总览内容区块不应呈现悬浮阴影
+
+R16-01（P2）：用户指出最近访问与基础能力区块下方出现灰色阴影带。来源是总览的Section
+未显式指定appearance，默认elevated传给Panel，继承shadow-panel。属于页面composition
+选择不当，而非滚动层遮罩；普通内容不需要脱离页面平面的层级。
+
+总览的收藏、最近访问、基础能力、质量门禁、最近建设轨迹五个Section明确采用现有
+appearance="outlined"，保留语义边框、背景、圆角、间距与交互。原本outlined指标卡及flat
+能力卡不变；不修改公共Section/Panel默认行为或全局阴影Token，避免影响其它真实消费者。
+
+实际浏览器滚动到基础能力核对，区块的box-shadow全部为透明零偏移，边框仍1px。
+1440与390视口截图及无横向溢出验证见109 evidence/overview-shadow-browser.txt，
+截图overview-outlined-1440.png与overview-outlined-390.png。完整检查记录在
+109 evidence/overview-shadow-check.txt，视觉基线不自动更新。
+
+最终完整pnpm check已结束：治理、lint、类型、370项单元测试、生产构建及原产物预算通过；
+238项浏览器测试224通过、14项视觉比较失败，27个失败断言均为toHaveScreenshot，无其它
+功能断言失败。19项设置专项全部通过。独立format:check和docs:check通过。R16-01修复与
+桌面/移动检查完成；整体视觉基线仍未更新，完整命令因此exit 1。

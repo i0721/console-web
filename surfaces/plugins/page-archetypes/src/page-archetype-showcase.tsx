@@ -146,6 +146,7 @@ export function PageArchetypeShowcase({ kind }: Readonly<{ kind: PageArchetypeKi
         </>
       ) : kind === 'settings' ? (
         <SettingsLayout
+          persistentNavigation
           navigation={
             <Panel appearance="outlined" className="grid gap-2 p-3">
               <TextLink href="#general">{text('general')}</TextLink>

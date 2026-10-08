@@ -254,6 +254,13 @@ export function FormElementsPage({
                     checked={false}
                     onCheckedChange={() => undefined}
                   />
+                  <SwitchField
+                    presentation="row"
+                    label={t('uiElements.formDemo.switchRow')}
+                    description={t('uiElements.longTextDescription')}
+                    checked={longText}
+                    onCheckedChange={setLongText}
+                  />
                 </div>
               </ComponentPreview>
               <ComponentPreview
