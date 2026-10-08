@@ -1,6 +1,7 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
-async function resetAll(page: import('@playwright/test').Page) {
+async function resetAll(page: Page) {
   await page.goto('/settings/navigation');
   await page.evaluate(() => {
     window.localStorage.removeItem('community-go.shell');
@@ -10,7 +11,7 @@ async function resetAll(page: import('@playwright/test').Page) {
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
 }
 
-async function enableAutoRestore(page: import('@playwright/test').Page) {
+async function enableAutoRestore(page: Page) {
   await page.goto('/settings/navigation');
   await page.getByRole('heading', { name: '导航' }).first().scrollIntoViewIfNeeded();
   const sw = page.getByRole('switch', { name: '自动恢复未完成工作' });
@@ -20,7 +21,7 @@ async function enableAutoRestore(page: import('@playwright/test').Page) {
   await page.waitForTimeout(300);
 }
 
-async function enableAutosave(page: import('@playwright/test').Page) {
+async function enableAutosave(page: Page) {
   await page.goto('/settings/actions');
   await page.getByRole('heading', { name: '操作偏好' }).first().scrollIntoViewIfNeeded();
   const sw = page.getByRole('switch', { name: '本地草稿自动保存' });

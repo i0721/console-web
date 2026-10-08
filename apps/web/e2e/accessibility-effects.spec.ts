@@ -1,12 +1,13 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
-async function openAccessibility(page: import('@playwright/test').Page) {
+async function openAccessibility(page: Page) {
   await page.goto('/settings/accessibility');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   await page.getByRole('heading', { name: '可访问性' }).first().scrollIntoViewIfNeeded();
 }
 
-async function toggleSwitch(page: import('@playwright/test').Page, name: string, on: boolean) {
+async function toggleSwitch(page: Page, name: string, on: boolean) {
   const sw = page.getByRole('switch', { name });
   await sw.focus();
   await page.keyboard.press('Space');

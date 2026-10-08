@@ -142,8 +142,13 @@ export function resolveRouteTarget(
     }
   }
 
+  const query = Object.entries(target.query ?? {})
+    .map(([key, value]) => encodeURIComponent(key) + '=' + encodeURIComponent(value))
+    .join('&');
+  const fragment = target.fragment ? '#' + encodeURIComponent(target.fragment) : '';
   return {
-    href: resolveTargetHref(descriptor.pattern, target.params),
+    href:
+      resolveTargetHref(descriptor.pattern, target.params) + (query ? '?' + query : '') + fragment,
     diagnostics: errors,
   };
 }

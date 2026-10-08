@@ -32,7 +32,7 @@ export type OverlayTriggerActionProps = Readonly<{
   OverlayTriggerBehavior;
 
 const overlayTriggerStyles = tv({
-  base: 'inline-flex h-10 items-center justify-center gap-2 rounded-control px-3.5 text-sm font-semibold shadow-sm outline-none transition-colors',
+  base: 'inline-flex min-h-control items-center justify-center gap-2 rounded-control px-3.5 text-sm font-semibold shadow-sm outline-none transition-colors',
   defaultVariants: {
     fullWidth: false,
     tone: 'default',

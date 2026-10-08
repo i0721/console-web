@@ -62,8 +62,8 @@ type ShellPersisted = { preferences: Preferences };
 function projectPreferences(preferences: Preferences) {
   const themeMode = preferences.appearance.themeMode;
   return {
-    theme: (themeMode === 'system' ? 'light' : themeMode) as 'light' | 'dark',
-    locale: preferences.localeRegion.language as AppLocale,
+    theme: themeMode === 'system' ? 'light' : themeMode,
+    locale: preferences.localeRegion.language,
     sidebarCollapsed: preferences.navigation.sidebarBehavior === 'collapsed',
   };
 }

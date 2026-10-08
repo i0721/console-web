@@ -18,7 +18,14 @@
 /* Library entry同时导出 Provider、Hook，不是应用 Fast Refresh 边界。 */
 /* eslint-disable react-refresh/only-export-components */
 
-import { createContext, useContext, useEffect, useRef, type ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  type ReactNode,
+} from 'react';
 
 /** 页面上报的 dirty source（语义与 Host 端一致）。 */
 export type PluginDirtySource = Readonly<{
@@ -68,7 +75,9 @@ export function useLeaveConfirmPort(): LeaveConfirmPort {
 export function useRegisterDirtySource(source: PluginDirtySource): void {
   const port = useLeaveConfirmPort();
   const latestRef = useRef(source);
-  latestRef.current = source;
+  useLayoutEffect(() => {
+    latestRef.current = source;
+  });
   useEffect(() => {
     return port.registerDirtySource({
       pageId: latestRef.current.pageId,
@@ -79,6 +88,5 @@ export function useRegisterDirtySource(source: PluginDirtySource): void {
         : {}),
     });
     // 只按 pageId 绑定一次；dirty 判定经 latestRef 读取最新状态。
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [port, source.pageId]);
 }

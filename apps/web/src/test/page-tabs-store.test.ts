@@ -15,7 +15,7 @@ describe('页面标签 store（page-tabs，SET-005-002）', () => {
     usePageTabsStore.setState({ tabs: [] });
   });
 
-  it('pushPageTab：同 pathname 去重前移（不重复标签）', () => {
+  it('pushPageTab：同 pathname 更新标题并保持访问顺序', () => {
     const next = pushPageTab([base, { pathname: '/b', title: 'B', activatedAt: 2_000 }], {
       pathname: '/a',
       title: 'A 更新',
@@ -32,7 +32,8 @@ describe('页面标签 store（page-tabs，SET-005-002）', () => {
       tabs = pushPageTab(tabs, { pathname: `/p-${i}`, title: `P${i}` }, PAGE_TABS_LIMIT);
     }
     expect(tabs).toHaveLength(PAGE_TABS_LIMIT);
-    expect(tabs[0]?.pathname).toBe(`/p-${PAGE_TABS_LIMIT + 2}`);
+    expect(tabs.at(-1)?.pathname).toBe(`/p-${PAGE_TABS_LIMIT + 2}`);
+    expect(tabs[0]?.pathname).toBe('/p-3');
   });
 
   it('openTab/closeTab/closeAllTabs 行为', () => {

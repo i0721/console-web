@@ -1,28 +1,49 @@
 'use client';
-
 import { usePathname } from 'next/navigation';
-import { useEffect, useRef } from 'react';
-
+import { useEffect } from 'react';
+import { generatedSurfaceRegistry } from '@community-go/surface/generated/composition';
 import { useWorkbenchStore } from '../state/use-workbench-store';
 
-/**
- * Host —— 最近访问记录（SET-005-004 消费方）。
- *
- * pathname 实际变化（页面入口级提交）时，把 pathname + 页面入口展示标题记入
- * Workbench recents（LRU 去重由 store 保证）。只记录能被导航入口解析的
- * pathname（href→标题映射），不记录 404/纯 search 变化。
- */
+/** Record committed catalog pages. Only entity identity is retained from search parameters. */
 export function useRecentVisitRecorder(
   entries: ReadonlyArray<{ href: string; label: string }>,
 ): void {
   const pathname = usePathname();
-  const previousPathnameRef = useRef<string | null>(null);
-
   useEffect(() => {
-    if (pathname === previousPathnameRef.current) return;
-    previousPathnameRef.current = pathname;
-    const entry = entries.find((candidate) => candidate.href === pathname);
-    if (!entry) return; // 非导航入口（404 等）不记录
-    useWorkbenchStore.getState().recordVisit({ pathname, title: entry.label });
+    if (
+      pathname !== '/' &&
+      !Object.values(generatedSurfaceRegistry.routes).some((route) => route.pattern === pathname)
+    )
+      return;
+    let frame = 0;
+    let previous = '';
+    const record = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const content = document.querySelector('.surface-route-content');
+        const title =
+          content?.querySelector('h1')?.textContent?.trim() ||
+          entries.find((entry) => entry.href === pathname)?.label;
+        if (!title || location.pathname !== pathname) return;
+        const id = new URLSearchParams(location.search).get('id');
+        const href =
+          pathname +
+          (id && ['/reference-resources/detail', '/reference-resources/edit'].includes(pathname)
+            ? '?id=' + encodeURIComponent(id)
+            : '');
+        const signature = href + ':' + title;
+        if (signature === previous) return;
+        previous = signature;
+        useWorkbenchStore.getState().recordVisit({ pathname: href, title });
+      });
+    };
+    const observer = new MutationObserver(record);
+    const content = document.querySelector('.surface-route-content');
+    if (content) observer.observe(content, { childList: true, subtree: true, characterData: true });
+    record();
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+    };
   }, [pathname, entries]);
 }

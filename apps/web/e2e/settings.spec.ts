@@ -1,8 +1,9 @@
+import type { Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 /** 清空偏好（community-go.shell），保证每次测试从默认开始。 */
-async function resetPreferences(page: import('@playwright/test').Page) {
+async function resetPreferences(page: Page) {
   await page.goto('/settings');
   await page.evaluate(() => window.localStorage.removeItem('community-go.shell'));
   await page.reload();

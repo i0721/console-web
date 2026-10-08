@@ -10,6 +10,7 @@ import {
 
 import { proceedAfterLeaveConfirm } from './leave-confirm';
 import { markForwardRouteIntent, pageTransitionTypes } from './route-transition-constants';
+import { focusRouteAnchor } from './anchor-focus';
 import { resolveScrollOption } from './scroll-preference';
 
 /**
@@ -41,14 +42,25 @@ export function HostNavigationPortProvider({ resolveHref, children }: HostNaviga
       {...(props.ariaLabel ? { 'aria-label': props.ariaLabel } : {})}
       {...(props.title ? { title: props.title } : {})}
       onClick={(event) => {
+        if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
+          return;
         event.preventDefault();
-        if (props.onNavigate) queueMicrotask(props.onNavigate);
+
         void proceedAfterLeaveConfirm(props.href, 'plugin navigation').then((proceed) => {
-          if (!proceed) return;
+          if (!proceed) {
+            if (props.href === location.pathname + location.search + location.hash) {
+              props.onNavigate?.();
+              focusRouteAnchor(props.href);
+            }
+            return;
+          }
+          props.onNavigate?.();
+          focusRouteAnchor(props.href);
           markForwardRouteIntent();
           void router.push(props.href, {
             transitionTypes: [pageTransitionTypes.forward],
             ...resolveScrollOption(),
+            ...(props.target.fragment ? { scroll: false } : {}),
           });
         });
       }}
@@ -64,20 +76,24 @@ export function HostNavigationPortProvider({ resolveHref, children }: HostNaviga
         navigate: (href) => {
           void proceedAfterLeaveConfirm(href, 'plugin navigation').then((proceed) => {
             if (!proceed) return;
+            focusRouteAnchor(href);
             markForwardRouteIntent();
             void router.push(href, {
               transitionTypes: [pageTransitionTypes.forward],
               ...resolveScrollOption(),
+              ...(href.includes('#') ? { scroll: false } : {}),
             });
           });
         },
         replace: (href) => {
           void proceedAfterLeaveConfirm(href, 'plugin navigation').then((proceed) => {
             if (!proceed) return;
+            focusRouteAnchor(href);
             markForwardRouteIntent();
             void router.replace(href, {
               transitionTypes: [pageTransitionTypes.forward],
               ...resolveScrollOption(),
+              ...(href.includes('#') ? { scroll: false } : {}),
             });
           });
         },

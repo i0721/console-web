@@ -1,7 +1,8 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
 /** 清空偏好。 */
-async function resetPreferences(page: import('@playwright/test').Page) {
+async function resetPreferences(page: Page) {
   await page.goto('/settings/navigation');
   await page.evaluate(() => window.localStorage.removeItem('community-go.shell'));
   await page.reload();

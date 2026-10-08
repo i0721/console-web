@@ -9,6 +9,7 @@ export type ReferenceResourceKind = 'sample' | 'guide' | 'template';
 
 export type ReferenceResource = Readonly<{
   id: string;
+  fixture?: 'alpha' | 'beta' | 'gamma';
   name: string;
   kind: ReferenceResourceKind;
   status: 'active' | 'draft';
@@ -18,24 +19,27 @@ export type ReferenceResource = Readonly<{
 const resourceDefinitions: readonly ReferenceResource[] = [
   {
     id: 'resource-alpha',
-    name: 'Alpha 示例资源',
+    fixture: 'alpha',
+    name: '',
     kind: 'sample',
     status: 'active',
-    description: '第一个确定性参考资源，用于验证列表、详情与编辑的 File Route 拓扑。',
+    description: '',
   },
   {
     id: 'resource-beta',
-    name: 'Beta 引导指南',
+    fixture: 'beta',
+    name: '',
     kind: 'guide',
     status: 'active',
-    description: '展示 File Route 的静态 mount 与 symbolic Route Target 的确定性链路。',
+    description: '',
   },
   {
     id: 'resource-gamma',
-    name: 'Gamma 模板',
+    fixture: 'gamma',
+    name: '',
     kind: 'template',
     status: 'draft',
-    description: '草稿资源，用于验证状态展示与 editing 场景的继承关系。',
+    description: '',
   },
 ] as const;
 

@@ -65,13 +65,20 @@ column-layout.ts`（独立持久化 key `community-go.page-archetypes.column-lay
       重载回默认；开：工作流升序重载保持）；architecture 422 files + column-
       settings/reference 10 e2e 全过。
       **剩余**：ui-adapter DataTable ResizableContainer/ColumnResizer 列宽封装 +
-      /ui-elements Showcase 同步（HeroUI v3.2.4 无 resizable 导出，见下条）。
-- [ ] `SET-002-005`（剩余）DataTable 列宽 Resizable：**HeroUI v3.2.4 安装面无
-      `./resizable` 子路径导出**（`@heroui/react` exports 仅 table/styles 等；无
-      ResizableContainer/ColumnResizer 可用）——列宽能力依赖未来 HeroUI resizable
-      API 或 ui-adapter 自研（后者需 Showcase/accessibility 门禁）；列显隐/顺序已
-      插件层落地（见 SET-002-005 分片），rememberSort 消费待排序记忆接线；公共
-      组件化 + /ui-elements Showcase 同步随之待列宽能力一并评估。
+      /ui-elements Showcase 同步（历史判断已由 109 纠正，见下条）。
+- [ ] `SET-002-005`（由 109 接手）安装的 HeroUI 3.2.4 已提供
+      `Table.ResizableContainer` / `Table.ColumnResizer`，无需独立 resizable 子路径。
+      109 已实现 Adapter、Showcase、稳定 column id 宽度与 v1→v2 兼容迁移；
+      当前鼠标/键盘调整和刷新恢复回归通过。完整矩阵及人工视觉确认未完成，
+      不以旧阻塞描述或单项测试替代最终验收。见 [109 账本](../109-ui-ux-optimization/tasks.md)。
+- [x] `SET-002-004`（109 Schema 权威收尾）density/fontScale/contentWidth/contrast
+      原有七个 profile 已进入 `source.tokens.appearanceProfiles`，生成器统一输出
+      对应 data-* 区域，数值与优先级保持。Schema 单测、codegen freshness 和当前
+      生产构建通过；当前证据见 109 `evidence/check-final.txt`。
+- `SET-002-002` 当前补证：应用内浏览器成功打开五个具体页面，已保存 30 张
+  Light/Dark × 手机/桌面/超宽截图及选择/翻页/日期打开态；见
+  [109 外部矩阵](../109-ui-ux-optimization/evidence/tailadmin-review.html)。
+  不再以终端超时描述当前可达性；人工视觉门与未覆盖状态仍明确保留。
 
 ## 偏好契约、Host 装配与持久化（SET-003）
 
@@ -352,7 +359,7 @@ notifications,commands}.tsx`（Preferences Port 含 PersistResult 失败码；Wo
       3 个 visual 基线随新控件/时间 caption 再生成（reference-desktop/
       reference-multi-select/settings-desktop，待人工确认）。提交至 760deae8 共
       17 个（均未推送）。**剩余**：SET-002-002/008-004 人工视觉门 + SET-002-005
-      列宽（HeroUI 无 resizable）+ density schema 权威化 + 存储拒绝/容量不足呈现。
+      列宽（由 109 实施，历史导出判断已纠正）+ density schema 权威化 + 存储拒绝/容量不足呈现。
 - [x] SET-008（快照 6）**实现范围全部交付**：8 分类全部设置项真实消费（严格孤儿扫描全清——
       R62-77 落地 density/fontScale/contentWidth/contrast 运行时、列显隐/顺序/排序记忆、
       搜索建议/每页最近搜索、相对时间/时刻、首字段聚焦、未读提醒/收纳非关键通知/声音/
@@ -360,7 +367,7 @@ notifications,commands}.tsx`（Preferences Port 含 PersistResult 失败码；Wo
       3 张再生成 + reference/overview/navigation 基线，待人工确认）。~183 e2e + 297 单测
       全绿、全 gates 绿、codegen x2 fresh；24 个 Conventional Commits（至 a19a3b7d，
       均未推送）。**仅剩外部门控**：SET-002-002 TailAdmin 人工视觉复核（需图像输入/
-      人眼）、SET-002-005 列宽 Resizable（HeroUI v3.2.4 无 resizable 导出）、density
+      人眼）、SET-002-005 列宽 Resizable（由 109 接手验收）、density
       schema 单轨权威化。SET-002 依目标明示不得标记完成——目标保持 active 至外部条件满足。
 - [x] `SET-006-001`（搜索时机）resource-list 订阅 `actionPreferences.searchTrigger`：
       enter（默认）→ 键入不立即过滤（appliedQuery 回车/表单提交应用，clear 同步重置）；

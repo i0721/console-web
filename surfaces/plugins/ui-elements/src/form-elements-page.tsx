@@ -1,6 +1,7 @@
 'use client';
 
-import { DatePickerField } from '@community-go/ui-adapter/date-picker-field';
+import type { DatePickerFieldProps } from '@community-go/ui-adapter/date-picker-field';
+import type { ComponentType } from 'react';
 import {
   CheckboxField,
   ComboField,
@@ -35,7 +36,9 @@ const ownerOptions = [
   'Kai Müller',
   'Mei Tanaka',
 ] as const;
-export function FormElementsPage() {
+export function FormElementsPage({
+  datePicker: DatePickerField,
+}: Readonly<{ datePicker: ComponentType<DatePickerFieldProps> }>) {
   const { t } = useFrontendTranslation();
   const searchParams = useSearchParams();
   const overlay = searchParams.get('overlay');
@@ -62,7 +65,7 @@ export function FormElementsPage() {
                 description={t('uiElements.catalog.textFieldDescription')}
                 states={['Default', 'Hint', 'Invalid', 'Disabled', 'Placeholder', 'Long content']}
               >
-                <div className="grid gap-4 md:grid-cols-3">
+                <div className="surface-filter-grid">
                   <TextField
                     label={t('uiElements.textField')}
                     hint={t('uiElements.fieldHint')}
@@ -256,7 +259,7 @@ export function FormElementsPage() {
               <ComponentPreview
                 fullWidth
                 name="FormErrorSummary"
-                description="提交失败时汇总错误并恢复到对应字段；字段仍保留自己的 inline error。"
+                description={t('uiElements.additional.errorSummary')}
                 states={['Empty', 'Multiple errors', 'Focus recovery', 'Live alert']}
               >
                 <FormErrorSummary
@@ -272,7 +275,7 @@ export function FormElementsPage() {
                       message: t('uiElements.formDemo.ownerError'),
                     },
                   ]}
-                  title="请修正以下字段"
+                  title={t('uiElements.additional.correctFields')}
                 />
               </ComponentPreview>
             </div>

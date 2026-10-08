@@ -9,6 +9,7 @@ export function Page({ children }: Readonly<{ children: ReactNode }>) {
 export type BreadcrumbItem = Readonly<{
   label: string;
   current?: boolean;
+  content?: ReactNode;
 }>;
 
 export type PageHeaderProps = Readonly<{
@@ -35,7 +36,7 @@ export function PageHeader({
           items={breadcrumbs.map((item, index) => ({
             id: `breadcrumb-${index}`,
             label: item.label,
-            ...(item.current ? {} : { disabled: true }),
+            ...(item.content && !item.current ? { content: item.content } : {}),
           }))}
           label={breadcrumbLabel}
         />

@@ -1,6 +1,7 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
-async function resetPreferences(page: import('@playwright/test').Page) {
+async function resetPreferences(page: Page) {
   await page.goto('/settings');
   await page.evaluate(() => {
     window.localStorage.removeItem('community-go.shell');
@@ -10,11 +11,11 @@ async function resetPreferences(page: import('@playwright/test').Page) {
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
 }
 
-async function motionMode(page: import('@playwright/test').Page): Promise<string | null> {
+async function motionMode(page: Page): Promise<string | null> {
   return page.evaluate(() => document.documentElement.dataset.motionMode ?? null);
 }
 
-async function pickMotion(page: import('@playwright/test').Page, label: string) {
+async function pickMotion(page: Page, label: string) {
   await page.goto('/settings');
   await page.getByRole('heading', { name: '外观' }).first().scrollIntoViewIfNeeded();
   await page

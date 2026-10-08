@@ -2,4 +2,6 @@
 export type RouteTarget<RouteId extends string = string> = Readonly<{
   routeId: RouteId;
   params: Readonly<Record<string, string>>;
+  query?: Readonly<Record<string, string>>;
+  fragment?: string;
 }>;

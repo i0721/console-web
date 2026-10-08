@@ -441,3 +441,7 @@ Breadcrumb UI（route.meta 与 breadcrumb/command/permission 展示模型已删�
   目录级约束见 `surfaces/AGENTS.md`。
 - 修改 Framework 契约/Registry：见 `packages/plugin-framework/AGENTS.md`；
   公共导出登记在 `tooling/foundation-contracts.json`。
+
+### Route Target 定位信息
+
+RouteTarget 的 query 和 fragment 为可选结构化定位信息；Registry 负责编码解析，Host 委托 Next 执行导航及关闭浮层后的字段焦点交接。query 不参与页面标签 pathname 身份，实体 id 可作为已解析目标保留于通知、收藏、最近访问和标签恢复。Plugin 不读取 Host pathname/history，不自行接管 Router。

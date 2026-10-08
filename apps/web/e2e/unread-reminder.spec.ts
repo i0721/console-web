@@ -1,7 +1,8 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
-async function publishAndOpenCenter(page: import('@playwright/test').Page) {
-  await page.goto('/reference-resources/edit');
+async function publishAndOpenCenter(page: Page) {
+  await page.goto('/reference-resources/edit?id=resource-alpha');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   await page.getByRole('button', { name: /保存/ }).first().click();
   await page.waitForTimeout(500);

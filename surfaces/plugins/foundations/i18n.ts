@@ -15,13 +15,15 @@ export const pluginI18nResources = {
         layers: {
           hosts: 'Runtime Hosts',
           hostsDescription:
-            'Web 路由、App Shell、浏览器集成，以及未来 Desktop Runtime 的窗口与原生能力。',
-          application: 'Application / Feature',
-          applicationDescription: '页面功能、交互编排、View Model 与业务语义组合。',
+            '当前唯一 Web Host：Next 路由、浏览器生命周期与平台 Adapter 装配。Application = Product Surface × Runtime Host。',
+          application: 'Product Surface',
+          applicationDescription:
+            'Surface Foundation、Plugin Framework 与插件承载当前后台产品的页面与业务组合。',
           adapters: 'Adapters',
           adaptersDescription: 'UI Library、数据源、浏览器与 Desktop 能力的差异吸收层。',
-          stable: 'Core · Schema · Types',
-          stableDescription: '纯规则、运行时校验与真正跨模块稳定的类型。',
+          stable: 'Universal Frontend Foundation',
+          stableDescription:
+            'Design System、UI Adapter、Form、i18n、Core、Schema、Types 与 State 提供通用能力。',
         },
         rulesTitle: '依赖规则',
         rules: {
@@ -51,15 +53,16 @@ export const pluginI18nResources = {
         layers: {
           hosts: 'Runtime Hosts',
           hostsDescription:
-            'Web routing, App Shell, browser integration, and future Desktop windows and native capabilities.',
+            'The single Web Host owns Next routing, browser lifecycle and adapter composition. Application = Product Surface × Runtime Host.',
           application: 'Application / Feature',
           applicationDescription:
-            'Screen behavior, interaction orchestration, view models, and product semantics.',
+            'Surface Foundation, Plugin Framework and plugins compose the current administration product.',
           adapters: 'Adapters',
           adaptersDescription:
             'Absorb differences in UI libraries, data sources, browsers, and Desktop runtimes.',
           stable: 'Core · Schema · Types',
-          stableDescription: 'Pure rules, runtime validation, and truly stable cross-module types.',
+          stableDescription:
+            'Design System, UI Adapter, Form, i18n, Core, Schemas, Types and State provide universal capabilities.',
         },
         rulesTitle: 'Dependency rules',
         rules: {

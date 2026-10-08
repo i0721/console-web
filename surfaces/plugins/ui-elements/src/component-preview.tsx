@@ -1,6 +1,8 @@
+import { useFrontendTranslation } from '@community-go/i18n';
 import { Badge } from '@community-go/ui-adapter/feedback';
 import { Panel } from '@community-go/ui-adapter/panel';
 import type { ReactNode } from 'react';
+import { previewAnchor } from './preview-anchor';
 
 export type ComponentPreviewProps = Readonly<{
   name: string;
@@ -19,6 +21,7 @@ export function ComponentPreview({
   fullWidth = false,
   embedded = false,
 }: ComponentPreviewProps) {
+  const { t } = useFrontendTranslation();
   return (
     <Panel
       appearance={embedded ? 'embedded' : 'outlined'}
@@ -26,10 +29,15 @@ export function ComponentPreview({
     >
       <div className="border-b border-border px-4 py-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h3 className="font-bold text-ink">{name}</h3>
-          <div aria-label={`${name} states`} className="flex flex-wrap justify-end gap-1.5">
+          <h3 id={previewAnchor(name)} tabIndex={-1} className="scroll-mt-24 font-bold text-ink">
+            {name}
+          </h3>
+          <div
+            aria-label={t('uiElements.previewStates', { name })}
+            className="flex flex-wrap justify-end gap-1.5"
+          >
             {states.map((state) => (
-              <Badge key={state}>{state}</Badge>
+              <Badge key={state}>{t('uiElements.previewStateLabels.' + state)}</Badge>
             ))}
           </div>
         </div>

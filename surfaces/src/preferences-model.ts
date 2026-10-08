@@ -505,7 +505,7 @@ export function validateCategory(
     case 'appearance': {
       const base = defaultAppearance;
       const value: Mutable<AppearancePreferences> = { ...base };
-      const raw = input as Record<string, unknown>;
+      const raw = input;
       if (raw.themeMode !== undefined && !isOneOf(raw.themeMode, THEME_MODES))
         issues.push({ path: `${category}.themeMode`, message: '非法 themeMode' });
       else if (raw.themeMode !== undefined) value.themeMode = raw.themeMode;
@@ -532,7 +532,7 @@ export function validateCategory(
     case 'navigation': {
       const base = defaultNavigation;
       const value: Mutable<NavigationPreferences> = { ...base };
-      const raw = input as Record<string, unknown>;
+      const raw = input;
       if (raw.homeTarget !== undefined && typeof raw.homeTarget !== 'string')
         issues.push({ path: `${category}.homeTarget`, message: 'homeTarget 必须是字符串' });
       else if (raw.homeTarget !== undefined) value.homeTarget = raw.homeTarget;
@@ -548,7 +548,7 @@ export function validateCategory(
       ] as const) {
         if (raw[key] !== undefined && !isBoolean(raw[key]))
           issues.push({ path: `${category}.${key}`, message: `${key} 必须是布尔` });
-        else if (raw[key] !== undefined) value[key] = raw[key] as boolean;
+        else if (raw[key] !== undefined) value[key] = raw[key];
       }
       if (raw.tabCloseBehavior !== undefined && !isOneOf(raw.tabCloseBehavior, TAB_CLOSE_BEHAVIORS))
         issues.push({ path: `${category}.tabCloseBehavior`, message: '非法 tabCloseBehavior' });
@@ -564,7 +564,7 @@ export function validateCategory(
     case 'dataDisplay': {
       const base = defaultDataDisplay;
       const value: Mutable<DataDisplayPreferences> = { ...base };
-      const raw = input as Record<string, unknown>;
+      const raw = input;
       const pageSizeRaw = raw.pageSize;
       if (pageSizeRaw !== undefined && !PAGE_SIZES.includes(pageSizeRaw as PageSize))
         issues.push({ path: `${category}.pageSize`, message: '非法 pageSize' });
@@ -583,7 +583,7 @@ export function validateCategory(
       ] as const) {
         if (raw[key] !== undefined && !isBoolean(raw[key]))
           issues.push({ path: `${category}.${key}`, message: `${key} 必须是布尔` });
-        else if (raw[key] !== undefined) value[key] = raw[key] as boolean;
+        else if (raw[key] !== undefined) value[key] = raw[key];
       }
       if (raw.longText !== undefined && !isOneOf(raw.longText, LONG_TEXT_MODES))
         issues.push({ path: `${category}.longText`, message: '非法 longText' });
@@ -593,7 +593,7 @@ export function validateCategory(
     case 'actionPreferences': {
       const base = defaultActionPreferences;
       const value: Mutable<ActionPreferences> = { ...base };
-      const raw = input as Record<string, unknown>;
+      const raw = input;
       if (
         raw.editSuccessDestination !== undefined &&
         !isOneOf(raw.editSuccessDestination, EDIT_SUCCESS_DESTINATIONS)
@@ -634,14 +634,14 @@ export function validateCategory(
       ] as const) {
         if (raw[key] !== undefined && !isBoolean(raw[key]))
           issues.push({ path: `${category}.${key}`, message: `${key} 必须是布尔` });
-        else if (raw[key] !== undefined) value[key] = raw[key] as boolean;
+        else if (raw[key] !== undefined) value[key] = raw[key];
       }
       return issues.length > 0 ? { ok: false, issues } : { ok: true, value };
     }
     case 'localeRegion': {
       const base = defaultLocaleRegion;
       const value: Mutable<LocaleRegionPreferences> = { ...base };
-      const raw = input as Record<string, unknown>;
+      const raw = input;
       if (raw.language !== undefined && !isOneOf(raw.language, LANGUAGES))
         issues.push({ path: `${category}.language`, message: '非法 language' });
       else if (raw.language !== undefined) value.language = raw.language;
@@ -670,7 +670,7 @@ export function validateCategory(
     case 'notifications': {
       const base = defaultNotifications;
       const value: Mutable<NotificationsPreferences> = { ...base };
-      const raw = input as Record<string, unknown>;
+      const raw = input;
       if (raw.toastDuration !== undefined && !isOneOf(raw.toastDuration, TOAST_DURATIONS))
         issues.push({ path: `${category}.toastDuration`, message: '非法 toastDuration' });
       else if (raw.toastDuration !== undefined) value.toastDuration = raw.toastDuration;
@@ -684,14 +684,14 @@ export function validateCategory(
       ] as const) {
         if (raw[key] !== undefined && !isBoolean(raw[key]))
           issues.push({ path: `${category}.${key}`, message: `${key} 必须是布尔` });
-        else if (raw[key] !== undefined) value[key] = raw[key] as boolean;
+        else if (raw[key] !== undefined) value[key] = raw[key];
       }
       return issues.length > 0 ? { ok: false, issues } : { ok: true, value };
     }
     case 'accessibility': {
       const base = defaultAccessibility;
       const value: Mutable<AccessibilityPreferences> = { ...base };
-      const raw = input as Record<string, unknown>;
+      const raw = input;
       for (const key of [
         'enhanceFocus',
         'enhanceTargetSize',
@@ -700,18 +700,18 @@ export function validateCategory(
       ] as const) {
         if (raw[key] !== undefined && !isBoolean(raw[key]))
           issues.push({ path: `${category}.${key}`, message: `${key} 必须是布尔` });
-        else if (raw[key] !== undefined) value[key] = raw[key] as boolean;
+        else if (raw[key] !== undefined) value[key] = raw[key];
       }
       return issues.length > 0 ? { ok: false, issues } : { ok: true, value };
     }
     case 'shortcuts': {
       const base = defaultShortcuts;
       const value: Mutable<ShortcutsPreferences> = { ...base };
-      const raw = input as Record<string, unknown>;
+      const raw = input;
       for (const key of ['enabled', 'showHints'] as const) {
         if (raw[key] !== undefined && !isBoolean(raw[key]))
           issues.push({ path: `${category}.${key}`, message: `${key} 必须是布尔` });
-        else if (raw[key] !== undefined) value[key] = raw[key] as boolean;
+        else if (raw[key] !== undefined) value[key] = raw[key];
       }
       return issues.length > 0 ? { ok: false, issues } : { ok: true, value };
     }

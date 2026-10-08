@@ -2,6 +2,58 @@ export const pluginI18nResources = {
   'zh-CN': {
     translation: {
       pageArchetypes: {
+        scenario: {
+          eyebrow: '完整页面示例',
+          description: '可交互的本地演示。刷新后恢复初始状态。',
+          title: {
+            overview: '总览原型',
+            detail: '详情页',
+            settings: '设置页',
+            'master-detail': '主从视图',
+            operation: '操作任务',
+          },
+          general: '常规设置',
+          name: '名称',
+          required: '请输入名称',
+          notifications: '通知',
+          notificationsHint: '接收此本地示例的通知。',
+          save: '保存修改',
+          reset: '恢复已保存值',
+          saved: '已保存',
+          unsaved: '未保存',
+          saving: '保存中',
+          review: '策略审查',
+          queue: '待审查队列',
+          queueDescription: '两项本地审查内容待处理。',
+          reviewContent: 'REF-028：核对负责人；REF-029：核对发布区域。',
+          complete: '完成审查',
+          edit: '编辑',
+          entityDescription: 'REF-028 · 本地实体示例',
+          activity: '活动记录',
+          activityContent: '已完成策略审查，等待发布。',
+          resources: '资源',
+          release: '发布准备',
+          audit: '审计队列',
+          detail: {
+            review: '核对策略负责人及批准条件。',
+            release: '检查发布区域与时间窗口。',
+            audit: '查看本地审计记录。',
+          },
+          fail: '模拟失败',
+          failDescription: '运行结束时返回可重试错误。',
+          operation: {
+            queued: '等待运行',
+            running: '生成报告中',
+            succeeded: '报告已生成',
+            failed: '报告生成失败',
+            cancelled: '已取消生成',
+          },
+          operationDescription: '确定性本地任务，离开页面会清理计时器。',
+          progress: '任务进度',
+          cancel: '取消',
+          run: '运行',
+          retry: '重试',
+        },
         nav: {
           root: 'Page Archetypes',
           overview: '总览原型',
@@ -15,6 +67,12 @@ export const pluginI18nResources = {
       },
 
       reference: {
+        columnRestoreFailed: '未能恢复列布局',
+        columnRestoreFailedDescription:
+          '保存记录无效或存储不可用。当前使用默认列布局；原记录保留，可重试读取。',
+        mobileDetailHint: '详情与列表共享同一选中记录。关闭后继续浏览列表。',
+        closeDetail: '关闭详情',
+        submitSearch: '搜索',
         breadcrumbRoot: '基座验证',
         breadcrumbCurrent: '数据工作台',
         eyebrow: 'Reference · Workspace',
@@ -24,6 +82,8 @@ export const pluginI18nResources = {
         openDrawer: '打开活动侧栏',
         openDialog: '打开确认对话框',
         drawerTitle: '活动详情',
+        recordDescription:
+          '本地参考数据用于验证长内容、状态组合、响应式布局和浏览器交互，不依赖后端。',
         drawerDescription: 'Drawer 只承载补充内容，内部滚动不传播到页面。',
         dialogTitle: '确认 Reference 操作',
         dialogDescription: '验证焦点圈、键盘导航、Backdrop 与 Footer Action 的完整组合。',
@@ -112,6 +172,8 @@ export const pluginI18nResources = {
       },
 
       formReference: {
+        initialName: '区域发布准备',
+        initialDescription: '此参考草稿组合校验、浮层、长内容、嵌套区段和固定操作栏。',
         breadcrumbCurrent: '复杂表单',
         eyebrow: 'Reference · Form',
         title: '复杂设置与审批表单',
@@ -179,6 +241,58 @@ export const pluginI18nResources = {
   en: {
     translation: {
       pageArchetypes: {
+        scenario: {
+          eyebrow: 'Complete page example',
+          description: 'Interactive local demo. Refresh restores the initial state.',
+          title: {
+            overview: 'Overview',
+            detail: 'Entity detail',
+            settings: 'Settings',
+            'master-detail': 'Master-detail',
+            operation: 'Operation',
+          },
+          general: 'General settings',
+          name: 'Name',
+          required: 'Enter a name',
+          notifications: 'Notifications',
+          notificationsHint: 'Receive notifications for this local example.',
+          save: 'Save changes',
+          reset: 'Restore saved values',
+          saved: 'Saved',
+          unsaved: 'Unsaved',
+          saving: 'Saving',
+          review: 'Policy review',
+          queue: 'Review queue',
+          queueDescription: 'Two local review items need attention.',
+          reviewContent: 'REF-028: verify ownership. REF-029: verify release region.',
+          complete: 'Complete review',
+          edit: 'Edit',
+          entityDescription: 'REF-028 · Local entity example',
+          activity: 'Activity',
+          activityContent: 'Policy review completed; awaiting release.',
+          resources: 'Resources',
+          release: 'Release readiness',
+          audit: 'Audit queue',
+          detail: {
+            review: 'Verify ownership and approval conditions.',
+            release: 'Check release region and scheduling window.',
+            audit: 'Inspect the local audit record.',
+          },
+          fail: 'Simulate failure',
+          failDescription: 'Finish with a recoverable error.',
+          operation: {
+            queued: 'Ready to run',
+            running: 'Generating report',
+            succeeded: 'Report generated',
+            failed: 'Report generation failed',
+            cancelled: 'Generation cancelled',
+          },
+          operationDescription: 'Deterministic local task. Leaving the page clears timers.',
+          progress: 'Operation progress',
+          cancel: 'Cancel',
+          run: 'Run',
+          retry: 'Retry',
+        },
         nav: {
           root: 'Page Archetypes',
           overview: 'Overview archetype',
@@ -192,6 +306,12 @@ export const pluginI18nResources = {
       },
 
       reference: {
+        columnRestoreFailed: 'Column layout could not be restored',
+        columnRestoreFailedDescription:
+          'The saved record is invalid or storage is unavailable. Default columns are shown; the original record is retained for retry.',
+        mobileDetailHint: 'The detail shows the selected list record. Close to continue browsing.',
+        closeDetail: 'Close detail',
+        submitSearch: 'Search',
         breadcrumbRoot: 'Foundation validation',
         breadcrumbCurrent: 'Data workspace',
         eyebrow: 'Reference · Workspace',
@@ -201,6 +321,8 @@ export const pluginI18nResources = {
         openDrawer: 'Open activity drawer',
         openDialog: 'Open confirmation dialog',
         drawerTitle: 'Activity details',
+        recordDescription:
+          'Local reference data validates long content, state composition, responsive layouts and browser interactions without a backend.',
         drawerDescription: 'The drawer owns supplementary content and contains its own scrolling.',
         dialogTitle: 'Confirm reference action',
         dialogDescription:
@@ -303,6 +425,9 @@ export const pluginI18nResources = {
       },
 
       formReference: {
+        initialName: 'Regional release readiness',
+        initialDescription:
+          'This reference draft combines validation, overlays, long content, nested sections and sticky actions.',
         breadcrumbCurrent: 'Complex form',
         eyebrow: 'Reference · Form',
         title: 'Complex settings and approval form',

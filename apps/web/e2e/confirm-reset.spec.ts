@@ -1,6 +1,7 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
-async function resetPreferences(page: import('@playwright/test').Page) {
+async function resetPreferences(page: Page) {
   await page.goto('/settings/actions');
   await page.evaluate(() => window.localStorage.removeItem('community-go.shell'));
   await page.reload();
@@ -9,7 +10,7 @@ async function resetPreferences(page: import('@playwright/test').Page) {
 
 test('重置前确认默认开：点重置弹确认，取消保留修改，确认恢复初始', async ({ page }) => {
   await resetPreferences(page);
-  await page.goto('/reference-resources/edit');
+  await page.goto('/reference-resources/edit?id=resource-alpha');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   const nameInput = page.getByLabel('名称');
   const initial = await nameInput.inputValue();
@@ -39,7 +40,7 @@ test('关闭 重置前确认：点重置直接恢复初始', async ({ page }) =>
   await expect(confirmReset).not.toBeChecked();
   await page.waitForTimeout(300);
 
-  await page.goto('/reference-resources/edit');
+  await page.goto('/reference-resources/edit?id=resource-alpha');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   const nameInput = page.getByLabel('名称');
   const initial = await nameInput.inputValue();

@@ -1,6 +1,7 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
-async function resetPreferences(page: import('@playwright/test').Page) {
+async function resetPreferences(page: Page) {
   await page.goto('/settings/data-display');
   await page.evaluate(() => {
     window.localStorage.removeItem('community-go.shell');
@@ -10,7 +11,7 @@ async function resetPreferences(page: import('@playwright/test').Page) {
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
 }
 
-async function goToPage3(page: import('@playwright/test').Page) {
+async function goToPage3(page: Page) {
   await page.getByRole('button', { name: '第 3 页' }).click();
   await expect(page.getByRole('button', { name: '第 3 页' })).toHaveAttribute(
     'data-active',
@@ -18,7 +19,7 @@ async function goToPage3(page: import('@playwright/test').Page) {
   );
 }
 
-async function awayAndBack(page: import('@playwright/test').Page) {
+async function awayAndBack(page: Page) {
   // 离开列表（完整重载模拟跨页面往返）→ 返回列表。
   await page.goto('/settings/data-display');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');

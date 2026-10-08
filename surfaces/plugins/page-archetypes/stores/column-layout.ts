@@ -1,3 +1,4 @@
+import { parseColumnLayoutPersisted } from '../src/column-layout-schema';
 import { createPersistStore, createLocalStorage } from '@community-go/state-foundation';
 
 /**
@@ -13,6 +14,8 @@ import { createPersistStore, createLocalStorage } from '@community-go/state-foun
 type PageColumnLayout = {
   /** 当前可见列的显示顺序（其余 = 隐藏；不含已退役 id）。 */
   visibleOrder: readonly string[];
+  widths?: Readonly<Record<string, number>>;
+  customVisibility?: boolean;
   /** 排序记忆（数据展示 → rememberSort；缺省 = 页面默认排序）。 */
   sort?: Readonly<{ columnId: string; direction: 'ascending' | 'descending' }>;
 };
@@ -26,7 +29,7 @@ export type ColumnLayoutState = {
   restoreLayout: (pageId: string, layout: PageColumnLayout) => void;
 };
 
-type ColumnLayoutPersisted = {
+export type ColumnLayoutPersisted = {
   layouts: Readonly<Record<string, PageColumnLayout>>;
 };
 
@@ -41,7 +44,7 @@ export function normalizeColumnLayout(
 ): readonly string[] {
   if (!savedOrder || savedOrder.length === 0) return canonical;
   const known = new Set(canonical);
-  const kept = savedOrder.filter((id) => known.has(id) && !mandatory.has(id));
+  const kept = [...new Set(savedOrder)].filter((id) => known.has(id) && !mandatory.has(id));
   const head = canonical.filter((id) => mandatory.has(id));
   return [...head, ...kept];
 }
@@ -56,23 +59,12 @@ export const useColumnLayoutStore = createPersistStore<ColumnLayoutState, Column
   }),
   {
     name: 'community-go.page-archetypes.column-layout',
-    version: 1,
+    version: 2,
     skipHydration: true,
     storage: createLocalStorage(),
     partialize: ({ layouts }) => ({ layouts }),
-    migrate: (persisted) => {
-      if (typeof persisted !== 'object' || persisted === null) {
-        throw new Error('column-layout: 记录损坏');
-      }
-      const record = persisted as Partial<ColumnLayoutPersisted>;
-      const layouts: Record<string, PageColumnLayout> = {};
-      for (const [pageId, layout] of Object.entries(record.layouts ?? {})) {
-        const order = Array.isArray(layout?.visibleOrder)
-          ? layout.visibleOrder.filter((id) => typeof id === 'string')
-          : [];
-        layouts[pageId] = { visibleOrder: order };
-      }
-      return { layouts };
-    },
+    migrate: parseColumnLayoutPersisted,
+    merge: (persisted, current) =>
+      persisted === undefined ? current : { ...current, ...parseColumnLayoutPersisted(persisted) },
   },
 );

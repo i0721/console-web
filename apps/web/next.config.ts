@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next';
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants';
 
 /**
  * Host Deployment Mode（三档递增，属 Host 构建/部署配置，不属于 Plugin Contract）：
@@ -15,22 +16,22 @@ function resolveDeploymentMode(): 'static' | 'static-enumerated' | 'server' {
 
 const deploymentMode = resolveDeploymentMode();
 
-const nextConfig: NextConfig = {
-  // Playwright 的 dev server 使用独立目录，避免 production build 覆盖正在运行的开发缓存。
-  distDir: process.env.NEXT_DIST_DIR ?? 'dist',
-  // server Mode 不设 output（真实 Next Runtime Server）；static / static-enumerated 用静态导出。
-  ...(deploymentMode === 'server' ? {} : { output: 'export' as const }),
-  transpilePackages: [
-    '@community-go/core',
-    '@community-go/design-system',
-    '@community-go/surface-foundation',
-    '@community-go/plugin-framework',
-    '@community-go/surface',
-    '@community-go/form-foundation',
-    '@community-go/i18n',
-    '@community-go/types',
-    '@community-go/ui-adapter',
-  ],
-};
-
-export default nextConfig;
+export default function nextConfig(phase: string): NextConfig {
+  return {
+    // Playwright 的 dev server 使用独立目录，避免 production build 覆盖正在运行的开发缓存。
+    distDir: process.env.NEXT_DIST_DIR ?? (phase === PHASE_DEVELOPMENT_SERVER ? '.next' : 'dist'),
+    // server Mode 不设 output（真实 Next Runtime Server）；static / static-enumerated 用静态导出。
+    ...(deploymentMode === 'server' ? {} : { output: 'export' as const }),
+    transpilePackages: [
+      '@community-go/core',
+      '@community-go/design-system',
+      '@community-go/surface-foundation',
+      '@community-go/plugin-framework',
+      '@community-go/surface',
+      '@community-go/form-foundation',
+      '@community-go/i18n',
+      '@community-go/types',
+      '@community-go/ui-adapter',
+    ],
+  };
+}

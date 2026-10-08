@@ -1,6 +1,7 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
-async function resetAll(page: import('@playwright/test').Page) {
+async function resetAll(page: Page) {
   await page.goto('/reference-resources/create');
   await page.evaluate(() => {
     window.localStorage.removeItem('community-go.shell');
@@ -35,9 +36,16 @@ test('本地草稿自动保存并恢复（操作偏好 autosaveDrafts 开）：�
   await expect(page).toHaveURL(/\/reference-resources$/);
   const stored = await page.evaluate(() => {
     const raw = window.localStorage.getItem('community-go.workspace');
-    return raw ? JSON.parse(raw) : null;
+    const parsed: unknown = raw ? JSON.parse(raw) : null;
+    if (!parsed || typeof parsed !== 'object' || !('state' in parsed)) return false;
+    const state = parsed.state;
+    if (!state || typeof state !== 'object' || !('records' in state)) return false;
+    const records = state.records;
+    return Boolean(
+      records && typeof records === 'object' && 'reference-resources.create' in records,
+    );
   });
-  expect(stored?.state?.records?.['reference-resources.create']).toBeUndefined();
+  expect(stored).toBe(false);
 });
 
 test('autosaveDrafts 关（默认）：输入不写草稿', async ({ page }) => {
@@ -46,7 +54,14 @@ test('autosaveDrafts 关（默认）：输入不写草稿', async ({ page }) => 
   await page.waitForTimeout(500);
   const stored = await page.evaluate(() => {
     const raw = window.localStorage.getItem('community-go.workspace');
-    return raw ? JSON.parse(raw) : null;
+    const parsed: unknown = raw ? JSON.parse(raw) : null;
+    if (!parsed || typeof parsed !== 'object' || !('state' in parsed)) return false;
+    const state = parsed.state;
+    if (!state || typeof state !== 'object' || !('records' in state)) return false;
+    const records = state.records;
+    return Boolean(
+      records && typeof records === 'object' && 'reference-resources.create' in records,
+    );
   });
-  expect(stored?.state?.records?.['reference-resources.create']).toBeUndefined();
+  expect(stored).toBe(false);
 });

@@ -6,7 +6,9 @@
   "type": "object",
   "required": ["x-community-go"],
   "properties": {
-    "x-community-go": { "$ref": "#/$defs/authorityMeta" }
+    "x-community-go": {
+      "$ref": "#/$defs/authorityMeta"
+    }
   },
   "additionalProperties": true,
   "$defs": {
@@ -23,18 +25,31 @@
         "artifacts"
       ],
       "properties": {
-        "protocolVersion": { "const": 1 },
-        "authorityId": { "type": "string", "minLength": 1 },
+        "protocolVersion": {
+          "const": 1
+        },
+        "authorityId": {
+          "type": "string",
+          "minLength": 1
+        },
         "contractRef": {
           "type": "object",
           "additionalProperties": false,
           "required": ["file", "pointer"],
           "properties": {
-            "file": { "type": "string", "minLength": 1 },
-            "pointer": { "type": "string", "pattern": "^/" }
+            "file": {
+              "type": "string",
+              "minLength": 1
+            },
+            "pointer": {
+              "type": "string",
+              "pattern": "^/"
+            }
           }
         },
-        "source": { "$ref": "#/$defs/authoritySource" },
+        "source": {
+          "$ref": "#/$defs/authoritySource"
+        },
         "facts": {
           "type": "array",
           "items": {
@@ -42,11 +57,23 @@
             "additionalProperties": false,
             "required": ["id", "sourcePointer"],
             "properties": {
-              "id": { "type": "string", "minLength": 1 },
-              "description": { "type": "string" },
-              "sourcePointer": { "type": "string", "pattern": "^/x-community-go/source/" },
-              "implementation": { "type": "string" },
-              "evidence": { "type": "string" }
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "description": {
+                "type": "string"
+              },
+              "sourcePointer": {
+                "type": "string",
+                "pattern": "^/x-community-go/source/"
+              },
+              "implementation": {
+                "type": "string"
+              },
+              "evidence": {
+                "type": "string"
+              }
             }
           }
         },
@@ -57,7 +84,10 @@
           "properties": {
             "patchableSourcePointers": {
               "type": "array",
-              "items": { "type": "string", "pattern": "^/x-community-go/source/" }
+              "items": {
+                "type": "string",
+                "pattern": "^/x-community-go/source/"
+              }
             }
           }
         },
@@ -68,12 +98,17 @@
             "additionalProperties": false,
             "required": ["target", "generator", "options"],
             "properties": {
-              "target": { "type": "string", "minLength": 1 },
+              "target": {
+                "type": "string",
+                "minLength": 1
+              },
               "generator": {
                 "type": "string",
                 "enum": ["css-token-regions-v1", "css-motion-language-v1"]
               },
-              "options": { "type": "object" }
+              "options": {
+                "type": "object"
+              }
             }
           }
         }
@@ -84,19 +119,34 @@
       "additionalProperties": false,
       "required": ["tokens", "motionLanguage"],
       "properties": {
-        "tokens": { "$ref": "#/$defs/tokenSource" },
-        "motionLanguage": { "$ref": "#/$defs/motionLanguageSource" }
+        "tokens": {
+          "$ref": "#/$defs/tokenSource"
+        },
+        "motionLanguage": {
+          "$ref": "#/$defs/motionLanguageSource"
+        }
       }
     },
     "tokenSource": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["colors", "accents", "theme", "rootMotion"],
+      "required": ["colors", "accents", "theme", "rootMotion", "appearanceProfiles"],
       "properties": {
-        "colors": { "$ref": "#/$defs/colorSource" },
-        "accents": { "$ref": "#/$defs/accentSource" },
-        "theme": { "$ref": "#/$defs/themeSource" },
-        "rootMotion": { "$ref": "#/$defs/rootMotionSource" }
+        "colors": {
+          "$ref": "#/$defs/colorSource"
+        },
+        "accents": {
+          "$ref": "#/$defs/accentSource"
+        },
+        "theme": {
+          "$ref": "#/$defs/themeSource"
+        },
+        "rootMotion": {
+          "$ref": "#/$defs/rootMotionSource"
+        },
+        "appearanceProfiles": {
+          "$ref": "#/$defs/appearanceProfiles"
+        }
       }
     },
     "colorSource": {
@@ -106,11 +156,24 @@
       "properties": {
         "roleOrder": {
           "type": "array",
-          "items": { "type": "string", "minLength": 1 },
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
           "uniqueItems": true
         },
-        "light": { "type": "object", "additionalProperties": { "$ref": "#/$defs/cssValue" } },
-        "dark": { "type": "object", "additionalProperties": { "$ref": "#/$defs/cssValue" } }
+        "light": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/cssValue"
+          }
+        },
+        "dark": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/cssValue"
+          }
+        }
       }
     },
     "accentSource": {
@@ -120,12 +183,18 @@
       "properties": {
         "order": {
           "type": "array",
-          "items": { "type": "string", "minLength": 1 },
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
           "uniqueItems": true
         },
         "roles": {
           "type": "array",
-          "items": { "type": "string", "minLength": 1 },
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
           "uniqueItems": true
         },
         "palettes": {
@@ -137,11 +206,15 @@
             "properties": {
               "light": {
                 "type": "object",
-                "additionalProperties": { "$ref": "#/$defs/cssValue" }
+                "additionalProperties": {
+                  "$ref": "#/$defs/cssValue"
+                }
               },
               "dark": {
                 "type": "object",
-                "additionalProperties": { "$ref": "#/$defs/cssValue" }
+                "additionalProperties": {
+                  "$ref": "#/$defs/cssValue"
+                }
               }
             }
           }
@@ -162,17 +235,47 @@
         "zIndices"
       ],
       "properties": {
-        "fontSans": { "type": "string", "minLength": 1 },
-        "radii": { "type": "object", "additionalProperties": { "$ref": "#/$defs/cssValue" } },
-        "spacings": { "type": "object", "additionalProperties": { "$ref": "#/$defs/cssValue" } },
-        "shadows": { "type": "object", "additionalProperties": { "$ref": "#/$defs/cssValue" } },
-        "easeProduct": { "type": "string", "minLength": 1 },
-        "defaultTransitionDuration": { "$ref": "#/$defs/tokenNode" },
+        "fontSans": {
+          "type": "string",
+          "minLength": 1
+        },
+        "radii": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/cssValue"
+          }
+        },
+        "spacings": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/cssValue"
+          }
+        },
+        "shadows": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/cssValue"
+          }
+        },
+        "easeProduct": {
+          "type": "string",
+          "minLength": 1
+        },
+        "defaultTransitionDuration": {
+          "$ref": "#/$defs/tokenNode"
+        },
         "transitionDurations": {
           "type": "object",
-          "additionalProperties": { "$ref": "#/$defs/tokenNode" }
+          "additionalProperties": {
+            "$ref": "#/$defs/tokenNode"
+          }
         },
-        "zIndices": { "type": "object", "additionalProperties": { "$ref": "#/$defs/cssValue" } }
+        "zIndices": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/cssValue"
+          }
+        }
       }
     },
     "rootMotionSource": {
@@ -192,8 +295,13 @@
           "additionalProperties": false,
           "required": ["doc", "value"],
           "properties": {
-            "doc": { "$ref": "#/$defs/commentParagraphs" },
-            "value": { "type": "string", "minLength": 1 }
+            "doc": {
+              "$ref": "#/$defs/commentParagraphs"
+            },
+            "value": {
+              "type": "string",
+              "minLength": 1
+            }
           }
         },
         "delayRoute": {
@@ -201,23 +309,31 @@
           "additionalProperties": false,
           "required": ["doc", "values"],
           "properties": {
-            "doc": { "$ref": "#/$defs/commentParagraphs" },
+            "doc": {
+              "$ref": "#/$defs/commentParagraphs"
+            },
             "values": {
               "type": "object",
-              "additionalProperties": { "$ref": "#/$defs/tokenNode" }
+              "additionalProperties": {
+                "$ref": "#/$defs/tokenNode"
+              }
             }
           }
         },
         "durationBase": {
           "type": "object",
-          "additionalProperties": { "$ref": "#/$defs/cssValue" }
+          "additionalProperties": {
+            "$ref": "#/$defs/cssValue"
+          }
         },
         "durationPurpose": {
           "type": "object",
           "additionalProperties": false,
           "required": ["doc", "refs"],
           "properties": {
-            "doc": { "$ref": "#/$defs/commentParagraphs" },
+            "doc": {
+              "$ref": "#/$defs/commentParagraphs"
+            },
             "refs": {
               "type": "object",
               "additionalProperties": {
@@ -225,8 +341,12 @@
                 "additionalProperties": false,
                 "required": ["ref", "doc"],
                 "properties": {
-                  "ref": { "$ref": "#/$defs/sourceRef" },
-                  "doc": { "type": "string" }
+                  "ref": {
+                    "$ref": "#/$defs/sourceRef"
+                  },
+                  "doc": {
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -237,11 +357,20 @@
           "additionalProperties": false,
           "required": ["doc", "values"],
           "properties": {
-            "doc": { "$ref": "#/$defs/commentParagraphs" },
+            "doc": {
+              "$ref": "#/$defs/commentParagraphs"
+            },
             "values": {
               "type": "object",
               "additionalProperties": {
-                "anyOf": [{ "$ref": "#/$defs/cssValue" }, { "$ref": "#/$defs/tokenNode" }]
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/cssValue"
+                  },
+                  {
+                    "$ref": "#/$defs/tokenNode"
+                  }
+                ]
               }
             }
           }
@@ -258,8 +387,12 @@
                 "additionalProperties": false,
                 "required": ["value", "doc"],
                 "properties": {
-                  "value": { "$ref": "#/$defs/cssValue" },
-                  "doc": { "type": "string" }
+                  "value": {
+                    "$ref": "#/$defs/cssValue"
+                  },
+                  "doc": {
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -272,15 +405,27 @@
       "additionalProperties": false,
       "required": ["ref"],
       "properties": {
-        "ref": { "$ref": "#/$defs/sourceRef" },
-        "doc": { "type": "string" }
+        "ref": {
+          "$ref": "#/$defs/sourceRef"
+        },
+        "doc": {
+          "type": "string"
+        }
       }
     },
-    "cssValue": { "type": "string", "minLength": 1 },
-    "sourceRef": { "type": "string", "pattern": "^/x-community-go/source/" },
+    "cssValue": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceRef": {
+      "type": "string",
+      "pattern": "^/x-community-go/source/"
+    },
     "commentParagraphs": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "minItems": 1
     },
     "motionLanguageSource": {
@@ -288,14 +433,20 @@
       "additionalProperties": false,
       "required": ["doc", "recipes", "keyframes"],
       "properties": {
-        "doc": { "$ref": "#/$defs/commentParagraphs" },
+        "doc": {
+          "$ref": "#/$defs/commentParagraphs"
+        },
         "recipes": {
           "type": "array",
-          "items": { "$ref": "#/$defs/recipe" }
+          "items": {
+            "$ref": "#/$defs/recipe"
+          }
         },
         "keyframes": {
           "type": "array",
-          "items": { "$ref": "#/$defs/keyframe" }
+          "items": {
+            "$ref": "#/$defs/keyframe"
+          }
         }
       }
     },
@@ -304,10 +455,19 @@
       "additionalProperties": false,
       "required": ["id", "semantics", "consumer", "reducedMotion"],
       "properties": {
-        "id": { "type": "string", "minLength": 1 },
-        "semantics": { "type": "string" },
-        "consumer": { "type": "string" },
-        "reducedMotion": { "type": "string" }
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "semantics": {
+          "type": "string"
+        },
+        "consumer": {
+          "type": "string"
+        },
+        "reducedMotion": {
+          "type": "string"
+        }
       }
     },
     "keyframe": {
@@ -315,11 +475,18 @@
       "additionalProperties": false,
       "required": ["id", "frames"],
       "properties": {
-        "id": { "type": "string", "minLength": 1 },
-        "doc": { "$ref": "#/$defs/commentParagraphs" },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "doc": {
+          "$ref": "#/$defs/commentParagraphs"
+        },
         "frames": {
           "type": "array",
-          "items": { "$ref": "#/$defs/keyframeFrame" }
+          "items": {
+            "$ref": "#/$defs/keyframeFrame"
+          }
         }
       }
     },
@@ -328,10 +495,14 @@
       "additionalProperties": false,
       "required": ["stage", "ops"],
       "properties": {
-        "stage": { "enum": ["from", "to", "0%", "100%"] },
+        "stage": {
+          "enum": ["from", "to", "0%", "100%"]
+        },
         "ops": {
           "type": "array",
-          "items": { "$ref": "#/$defs/motionOperation" }
+          "items": {
+            "$ref": "#/$defs/motionOperation"
+          }
         }
       }
     },
@@ -340,11 +511,133 @@
       "additionalProperties": false,
       "required": ["op"],
       "properties": {
-        "op": { "enum": ["opacity", "width", "translate"] },
-        "value": { "type": "number" },
-        "axis": { "enum": ["x", "y"] },
-        "distanceRef": { "$ref": "#/$defs/sourceRef" },
-        "factor": { "type": "number" }
+        "op": {
+          "enum": ["opacity", "width", "translate"]
+        },
+        "value": {
+          "type": "number"
+        },
+        "axis": {
+          "enum": ["x", "y"]
+        },
+        "distanceRef": {
+          "$ref": "#/$defs/sourceRef"
+        },
+        "factor": {
+          "type": "number"
+        }
+      }
+    },
+    "appearanceProfiles": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fontSmall",
+        "fontLarge",
+        "densityCompact",
+        "densityComfortable",
+        "contentStandard",
+        "contentWide",
+        "contrastHigh"
+      ],
+      "properties": {
+        "fontSmall": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["font-size"],
+          "properties": {
+            "font-size": {
+              "$ref": "#/$defs/cssValue"
+            }
+          }
+        },
+        "fontLarge": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["font-size"],
+          "properties": {
+            "font-size": {
+              "$ref": "#/$defs/cssValue"
+            }
+          }
+        },
+        "densityCompact": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "--spacing-control-sm",
+            "--spacing-control",
+            "--spacing-control-lg",
+            "--radius-control",
+            "--radius-panel"
+          ],
+          "properties": {
+            "--spacing-control-sm": {
+              "$ref": "#/$defs/cssValue"
+            },
+            "--spacing-control": {
+              "$ref": "#/$defs/cssValue"
+            },
+            "--spacing-control-lg": {
+              "$ref": "#/$defs/cssValue"
+            },
+            "--radius-control": {
+              "$ref": "#/$defs/cssValue"
+            },
+            "--radius-panel": {
+              "$ref": "#/$defs/cssValue"
+            }
+          }
+        },
+        "densityComfortable": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["--spacing-control-sm", "--spacing-control", "--spacing-control-lg"],
+          "properties": {
+            "--spacing-control-sm": {
+              "$ref": "#/$defs/cssValue"
+            },
+            "--spacing-control": {
+              "$ref": "#/$defs/cssValue"
+            },
+            "--spacing-control-lg": {
+              "$ref": "#/$defs/cssValue"
+            }
+          }
+        },
+        "contentStandard": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["max-width"],
+          "properties": {
+            "max-width": {
+              "$ref": "#/$defs/cssValue"
+            }
+          }
+        },
+        "contentWide": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["max-width"],
+          "properties": {
+            "max-width": {
+              "$ref": "#/$defs/cssValue"
+            }
+          }
+        },
+        "contrastHigh": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["--spacing-focus-ring-width", "--spacing-focus-ring-offset"],
+          "properties": {
+            "--spacing-focus-ring-width": {
+              "$ref": "#/$defs/cssValue"
+            },
+            "--spacing-focus-ring-offset": {
+              "$ref": "#/$defs/cssValue"
+            }
+          }
+        }
       }
     }
   },
@@ -546,10 +839,18 @@
             "doc": "未显式 duration 的 transition-* 统一归 control 语义"
           },
           "transitionDurations": {
-            "fast": { "ref": "/x-community-go/source/tokens/rootMotion/durationBase/fast" },
-            "standard": { "ref": "/x-community-go/source/tokens/rootMotion/durationBase/standard" },
-            "slow": { "ref": "/x-community-go/source/tokens/rootMotion/durationBase/slow" },
-            "page": { "ref": "/x-community-go/source/tokens/rootMotion/durationPurpose/refs/page" }
+            "fast": {
+              "ref": "/x-community-go/source/tokens/rootMotion/durationBase/fast"
+            },
+            "standard": {
+              "ref": "/x-community-go/source/tokens/rootMotion/durationBase/standard"
+            },
+            "slow": {
+              "ref": "/x-community-go/source/tokens/rootMotion/durationBase/slow"
+            },
+            "page": {
+              "ref": "/x-community-go/source/tokens/rootMotion/durationPurpose/refs/page"
+            }
           },
           "zIndices": {
             "shell": "20",
@@ -628,6 +929,36 @@
               }
             }
           }
+        },
+        "appearanceProfiles": {
+          "fontSmall": {
+            "font-size": "93.75%"
+          },
+          "fontLarge": {
+            "font-size": "112.5%"
+          },
+          "densityCompact": {
+            "--spacing-control-sm": "1.875rem",
+            "--spacing-control": "2.25rem",
+            "--spacing-control-lg": "2.5rem",
+            "--radius-control": "0.625rem",
+            "--radius-panel": "0.875rem"
+          },
+          "densityComfortable": {
+            "--spacing-control-sm": "2.625rem",
+            "--spacing-control": "3.25rem",
+            "--spacing-control-lg": "3.5rem"
+          },
+          "contentStandard": {
+            "max-width": "72rem"
+          },
+          "contentWide": {
+            "max-width": "100rem"
+          },
+          "contrastHigh": {
+            "--spacing-focus-ring-width": "0.1875rem",
+            "--spacing-focus-ring-offset": "0.1875rem"
+          }
         }
       },
       "motionLanguage": {
@@ -687,7 +1018,12 @@
             "frames": [
               {
                 "stage": "from",
-                "ops": [{ "op": "opacity", "value": 0 }]
+                "ops": [
+                  {
+                    "op": "opacity",
+                    "value": 0
+                  }
+                ]
               }
             ]
           },
@@ -712,7 +1048,12 @@
             "frames": [
               {
                 "stage": "to",
-                "ops": [{ "op": "opacity", "value": 0 }]
+                "ops": [
+                  {
+                    "op": "opacity",
+                    "value": 0
+                  }
+                ]
               }
             ]
           },
@@ -722,7 +1063,10 @@
               {
                 "stage": "to",
                 "ops": [
-                  { "op": "opacity", "value": 0 },
+                  {
+                    "op": "opacity",
+                    "value": 0
+                  },
                   {
                     "op": "translate",
                     "axis": "y",
@@ -738,7 +1082,12 @@
             "frames": [
               {
                 "stage": "from",
-                "ops": [{ "op": "opacity", "value": 0 }]
+                "ops": [
+                  {
+                    "op": "opacity",
+                    "value": 0
+                  }
+                ]
               }
             ]
           },
@@ -754,11 +1103,21 @@
             "frames": [
               {
                 "stage": "0%",
-                "ops": [{ "op": "width", "value": 0 }]
+                "ops": [
+                  {
+                    "op": "width",
+                    "value": 0
+                  }
+                ]
               },
               {
                 "stage": "100%",
-                "ops": [{ "op": "width", "value": 85 }]
+                "ops": [
+                  {
+                    "op": "width",
+                    "value": 85
+                  }
+                ]
               }
             ]
           },
@@ -767,7 +1126,12 @@
             "frames": [
               {
                 "stage": "to",
-                "ops": [{ "op": "opacity", "value": 0 }]
+                "ops": [
+                  {
+                    "op": "opacity",
+                    "value": 0
+                  }
+                ]
               }
             ]
           }
@@ -809,6 +1173,13 @@
         "sourcePointer": "/x-community-go/source/motionLanguage",
         "implementation": "css-motion-language-v1",
         "evidence": "packages/design-system/src/motion.css"
+      },
+      {
+        "id": "appearance-profiles",
+        "sourcePointer": "/x-community-go/source/tokens/appearanceProfiles",
+        "description": "Density, font scale, content width and contrast presets",
+        "implementation": "packages/design-system/src/tokens.css",
+        "evidence": "docs/changes/109-ui-ux-optimization/README.md"
       }
     ],
     "authoring": {
@@ -1058,6 +1429,76 @@
                   "keysPointer": "/x-community-go/source/tokens/accents/roles",
                   "valuesPointer": "/x-community-go/source/tokens/accents/palettes/orange/dark",
                   "template": "  --ds-{key}: {value};"
+                }
+              ]
+            },
+            {
+              "regionId": "appearance-font-small",
+              "bindings": [
+                {
+                  "kind": "record",
+                  "sourcePointer": "/x-community-go/source/tokens/appearanceProfiles/fontSmall",
+                  "template": "  {key}: {value};"
+                }
+              ]
+            },
+            {
+              "regionId": "appearance-font-large",
+              "bindings": [
+                {
+                  "kind": "record",
+                  "sourcePointer": "/x-community-go/source/tokens/appearanceProfiles/fontLarge",
+                  "template": "  {key}: {value};"
+                }
+              ]
+            },
+            {
+              "regionId": "appearance-density-compact",
+              "bindings": [
+                {
+                  "kind": "record",
+                  "sourcePointer": "/x-community-go/source/tokens/appearanceProfiles/densityCompact",
+                  "template": "  {key}: {value};"
+                }
+              ]
+            },
+            {
+              "regionId": "appearance-density-comfortable",
+              "bindings": [
+                {
+                  "kind": "record",
+                  "sourcePointer": "/x-community-go/source/tokens/appearanceProfiles/densityComfortable",
+                  "template": "  {key}: {value};"
+                }
+              ]
+            },
+            {
+              "regionId": "appearance-content-standard",
+              "bindings": [
+                {
+                  "kind": "record",
+                  "sourcePointer": "/x-community-go/source/tokens/appearanceProfiles/contentStandard",
+                  "template": "  {key}: {value};"
+                }
+              ]
+            },
+            {
+              "regionId": "appearance-content-wide",
+              "bindings": [
+                {
+                  "kind": "record",
+                  "sourcePointer": "/x-community-go/source/tokens/appearanceProfiles/contentWide",
+                  "template": "  {key}: {value};"
+                }
+              ]
+            },
+            {
+              "regionId": "appearance-contrast-high",
+              "bindings": [
+                {
+                  "kind": "record",
+                  "sourcePointer": "/x-community-go/source/tokens/appearanceProfiles/contrastHigh",
+                  "template": "  {key}: {value};"
                 }
               ]
             }

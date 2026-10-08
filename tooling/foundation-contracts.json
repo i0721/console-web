@@ -14,7 +14,12 @@
       "maturity": "stable",
       "exports": ["./tokens.css", "./motion.css"],
       "authorityRoutes": ["/motion", "/ui-elements"],
-      "evidence": ["packages/design-system/src/tokens.css", "packages/design-system/src/motion.css"]
+      "evidence": [
+        "packages/design-system/src/tokens.css",
+        "packages/design-system/src/motion.css",
+        "apps/web/e2e/ui-ux-109.spec.ts",
+        "docs/changes/109-ui-ux-optimization/README.md"
+      ]
     },
     "@community-go/form-foundation": {
       "layer": "universal",
@@ -22,7 +27,11 @@
       "maturity": "stable",
       "exports": ["."],
       "authorityRoutes": ["/ui-elements/forms"],
-      "evidence": ["packages/form-foundation/src/index.test.tsx"]
+      "evidence": [
+        "packages/form-foundation/src/index.test.tsx",
+        "apps/web/e2e/ui-ux-109.spec.ts",
+        "docs/changes/109-ui-ux-optimization/tasks.md"
+      ]
     },
     "@community-go/i18n": {
       "layer": "universal",
@@ -100,7 +109,9 @@
       "evidence": [
         "apps/web/src/test/ui-element-foundations.test.tsx",
         "apps/web/e2e/overlays.spec.ts",
-        "apps/web/e2e/data-display.spec.ts"
+        "apps/web/e2e/data-display.spec.ts",
+        "apps/web/e2e/ui-ux-109.spec.ts",
+        "docs/changes/109-ui-ux-optimization/README.md"
       ]
     },
     "@community-go/state-foundation": {
@@ -135,7 +146,9 @@
       "authorityRoutes": ["/page-patterns", "/page-archetypes"],
       "evidence": [
         "packages/surface-foundation/src/contracts.test.tsx",
-        "apps/web/e2e/design-contract.spec.ts"
+        "apps/web/e2e/design-contract.spec.ts",
+        "apps/web/e2e/ui-ux-109.spec.ts",
+        "docs/changes/109-ui-ux-optimization/README.md"
       ]
     },
     "@community-go/plugin-framework": {
@@ -162,7 +175,9 @@
         "packages/plugin-framework/src/framework.test.ts",
         "packages/plugin-framework/src/plugin.test.tsx",
         "packages/plugin-framework/src/schemas.test.ts",
-        "packages/plugin-framework/src/schemas-runtime.test.ts"
+        "packages/plugin-framework/src/schemas-runtime.test.ts",
+        "apps/web/e2e/ui-ux-109.spec.ts",
+        "docs/changes/109-ui-ux-optimization/README.md"
       ]
     },
     "@community-go/surface": {

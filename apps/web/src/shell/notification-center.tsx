@@ -2,6 +2,9 @@
 
 import { Bell, CheckCheck } from 'lucide-react';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { proceedAfterLeaveConfirm } from '../host/leave-confirm';
+import { routeTargetResolver } from '../host/route-target-resolver';
 
 import { formatRelativeTime, formatTimeOfDay, useFrontendTranslation } from '@community-go/i18n';
 import { Action } from '@community-go/ui-adapter/action';
@@ -29,6 +32,7 @@ function relativeCaption(locale: string, createdAt: number): string {
  * 通知仍由发布方收纳进 store，本入口隐藏不代表丢失）；showBadge 关时不显示未读角标。
  */
 export function NotificationCenter() {
+  const router = useRouter();
   const { t, locale } = useFrontendTranslation();
   const [open, setOpen] = useState(false);
   const items = useNotificationsStore((state) => state.items);
@@ -104,13 +108,26 @@ export function NotificationCenter() {
                 <li key={item.id}>
                   <button
                     className={`w-full rounded-panel border border-border bg-surface px-3 py-2.5 text-left transition-colors hover:bg-surface-muted ${item.read || !unreadReminder ? '' : 'border-brand/40 bg-brand-soft/60'}`}
-                    onClick={() => useNotificationsStore.getState().markRead(item.id)}
+                    onClick={() => {
+                      useNotificationsStore.getState().markRead(item.id);
+                      if (!item.target) return;
+                      const href = routeTargetResolver.resolveHref({
+                        ...item.target,
+                        params: item.target.params ?? {},
+                      });
+                      void proceedAfterLeaveConfirm(href).then((proceed) => {
+                        if (proceed) {
+                          setOpen(false);
+                          router.push(href);
+                        }
+                      });
+                    }}
                     type="button"
                   >
                     <span className="flex items-start justify-between gap-2">
                       <span className="text-sm font-semibold text-ink">{item.title}</span>
                       <StatusPill tone={item.category === 'failure' ? 'danger' : 'neutral'}>
-                        {item.category}
+                        {t(`shell.notificationCategory.${item.category}`)}
                       </StatusPill>
                     </span>
                     {item.description ? (

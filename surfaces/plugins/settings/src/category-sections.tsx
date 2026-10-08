@@ -3,10 +3,11 @@
 import { useFrontendTranslation } from '@community-go/i18n';
 import type { PreferencesPort } from '@community-go/plugin-framework/preferences';
 import type { Preferences } from '@community-go/surface/preferences-model';
-import { TIME_ZONE_OPTIONS } from '@community-go/surface/preferences-model';
+import { validatePreferences, TIME_ZONE_OPTIONS } from '@community-go/surface/preferences-model';
 import { RadioGroupField, SelectField, SwitchField } from '@community-go/ui-adapter/form-field';
 import { TextLink } from '@community-go/ui-adapter/navigation';
-import type { ReactNode } from 'react';
+import { Children, isValidElement, type ReactNode } from 'react';
+import { SETTINGS_INDEX } from './settings-index';
 
 /**
  * 分类设置区段（settings 插件）—— 每个区段真实消费 preferences-model 的对应分类，
@@ -24,11 +25,43 @@ export type Ctx = {
   prefs: Preferences;
 };
 
+function updateSetting<C extends keyof Preferences>(
+  ctx: Ctx,
+  category: C,
+  patch: { [K in keyof Preferences[C]]?: unknown },
+) {
+  const candidate = validatePreferences({
+    ...ctx.prefs,
+    [category]: { ...ctx.prefs[category], ...patch },
+  });
+  if (!candidate.ok)
+    throw new Error(candidate.issues.map((issue) => issue.path + ': ' + issue.message).join('; '));
+  return ctx.port.updateCategory(category, candidate.value[category]);
+}
+
 function SectionShell({ title, children }: Readonly<{ title: string; children: ReactNode }>) {
+  const { t } = useFrontendTranslation();
   return (
     <div className="grid gap-6 p-5">
       <h3 className="text-sm font-bold uppercase tracking-wider text-ink-muted">{title}</h3>
-      {children}
+      {Children.toArray(children).map((child) => {
+        if (!isValidElement<{ label?: string }>(child)) return child;
+        const entry = SETTINGS_INDEX.find(
+          (candidate) => t(candidate.nameKey) === child.props.label,
+        );
+        return entry ? (
+          <div
+            key={entry.category + entry.fieldId}
+            id={`settings-${entry.category}-${entry.fieldId}`}
+            tabIndex={-1}
+            className="min-w-0 outline-none"
+          >
+            {child}
+          </div>
+        ) : (
+          child
+        );
+      })}
     </div>
   );
 }
@@ -43,6 +76,7 @@ export function AppearanceSection({ ctx }: Readonly<{ ctx: Ctx }>) {
   return (
     <SectionShell title={t('settings.categories.appearance')}>
       <RadioGroupField
+        presentation="rows"
         hint={t('settings.appearance.themeModeDescription')}
         label={t('settings.appearance.themeMode')}
         options={[
@@ -55,9 +89,7 @@ export function AppearanceSection({ ctx }: Readonly<{ ctx: Ctx }>) {
           { label: t('settings.appearance.themeDark'), value: 'dark' },
         ]}
         value={appearance.themeMode}
-        onValueChange={(value) =>
-          ctx.port.updateCategory('appearance', { themeMode: value } as never)
-        }
+        onValueChange={(value) => updateSetting(ctx, 'appearance', { themeMode: value })}
       />
       <RadioGroupField
         hint={t('settings.appearance.accentDescription')}
@@ -69,7 +101,7 @@ export function AppearanceSection({ ctx }: Readonly<{ ctx: Ctx }>) {
           { label: t('settings.appearance.accentOrange'), value: 'orange' },
         ]}
         value={appearance.accent}
-        onValueChange={(value) => ctx.port.updateCategory('appearance', { accent: value } as never)}
+        onValueChange={(value) => updateSetting(ctx, 'appearance', { accent: value })}
       />
       <RadioGroupField
         hint={t('settings.appearance.densityDescription')}
@@ -80,9 +112,7 @@ export function AppearanceSection({ ctx }: Readonly<{ ctx: Ctx }>) {
           { label: t('settings.appearance.densityComfortable'), value: 'comfortable' },
         ]}
         value={appearance.density}
-        onValueChange={(value) =>
-          ctx.port.updateCategory('appearance', { density: value } as never)
-        }
+        onValueChange={(value) => updateSetting(ctx, 'appearance', { density: value })}
       />
       <RadioGroupField
         hint={t('settings.appearance.fontScaleDescription')}
@@ -93,9 +123,7 @@ export function AppearanceSection({ ctx }: Readonly<{ ctx: Ctx }>) {
           { label: t('settings.appearance.fontLarge'), value: 'large' },
         ]}
         value={appearance.fontScale}
-        onValueChange={(value) =>
-          ctx.port.updateCategory('appearance', { fontScale: value } as never)
-        }
+        onValueChange={(value) => updateSetting(ctx, 'appearance', { fontScale: value })}
       />
       <RadioGroupField
         hint={t('settings.appearance.contentWidthDescription')}
@@ -106,9 +134,7 @@ export function AppearanceSection({ ctx }: Readonly<{ ctx: Ctx }>) {
           { label: t('settings.appearance.widthWide'), value: 'wide' },
         ]}
         value={appearance.contentWidth}
-        onValueChange={(value) =>
-          ctx.port.updateCategory('appearance', { contentWidth: value } as never)
-        }
+        onValueChange={(value) => updateSetting(ctx, 'appearance', { contentWidth: value })}
       />
       <RadioGroupField
         hint={t('settings.appearance.motionDescription')}
@@ -119,7 +145,7 @@ export function AppearanceSection({ ctx }: Readonly<{ ctx: Ctx }>) {
           { label: t('settings.appearance.motionReduced'), value: 'reduced' },
         ]}
         value={appearance.motion}
-        onValueChange={(value) => ctx.port.updateCategory('appearance', { motion: value } as never)}
+        onValueChange={(value) => updateSetting(ctx, 'appearance', { motion: value })}
       />
       <RadioGroupField
         hint={t('settings.appearance.contrastDescription')}
@@ -130,9 +156,7 @@ export function AppearanceSection({ ctx }: Readonly<{ ctx: Ctx }>) {
           { label: t('settings.appearance.contrastHigh'), value: 'high' },
         ]}
         value={appearance.contrast}
-        onValueChange={(value) =>
-          ctx.port.updateCategory('appearance', { contrast: value } as never)
-        }
+        onValueChange={(value) => updateSetting(ctx, 'appearance', { contrast: value })}
       />
     </SectionShell>
   );
@@ -152,10 +176,11 @@ function switchRow(
 ) {
   return (
     <SwitchField
+      presentation="row"
       checked={checked}
       description={description}
       label={label}
-      onCheckedChange={(next) => ctx.port.updateCategory(category, { [field]: next } as never)}
+      onCheckedChange={(next) => updateSetting(ctx, category, { [field]: next })}
     />
   );
 }
@@ -206,9 +231,7 @@ export function NavigationSection({ ctx }: Readonly<{ ctx: Ctx }>) {
           { label: t('settings.navigation.tabCloseLeft'), value: 'left' },
         ]}
         value={nav.tabCloseBehavior}
-        onValueChange={(value) =>
-          ctx.port.updateCategory('navigation', { tabCloseBehavior: value } as never)
-        }
+        onValueChange={(value) => updateSetting(ctx, 'navigation', { tabCloseBehavior: value })}
       />
       {switchRow(
         ctx,
@@ -251,9 +274,7 @@ export function NavigationSection({ ctx }: Readonly<{ ctx: Ctx }>) {
           { label: t('settings.appearance.sidebarRemember'), value: 'remember' },
         ]}
         value={nav.sidebarBehavior}
-        onValueChange={(value) =>
-          ctx.port.updateCategory('navigation', { sidebarBehavior: value } as never)
-        }
+        onValueChange={(value) => updateSetting(ctx, 'navigation', { sidebarBehavior: value })}
       />
       <RadioGroupField
         hint={t('settings.navigation.newPageOpenModeHint')}
@@ -264,9 +285,7 @@ export function NavigationSection({ ctx }: Readonly<{ ctx: Ctx }>) {
           { label: t('settings.navigation.newPagePageTab'), value: 'page-tab' },
         ]}
         value={nav.newPageOpenMode}
-        onValueChange={(value) =>
-          ctx.port.updateCategory('navigation', { newPageOpenMode: value } as never)
-        }
+        onValueChange={(value) => updateSetting(ctx, 'navigation', { newPageOpenMode: value })}
       />
     </SectionShell>
   );
@@ -286,9 +305,7 @@ export function DataDisplaySection({ ctx }: Readonly<{ ctx: Ctx }>) {
         label={t('settings.dataDisplay.pageSize')}
         options={[10, 20, 50, 100].map((size) => ({ label: String(size), value: String(size) }))}
         value={String(data.pageSize)}
-        onValueChange={(value) =>
-          ctx.port.updateCategory('dataDisplay', { pageSize: Number(value) } as never)
-        }
+        onValueChange={(value) => updateSetting(ctx, 'dataDisplay', { pageSize: Number(value) })}
       />
       <RadioGroupField
         hint=""
@@ -299,9 +316,7 @@ export function DataDisplaySection({ ctx }: Readonly<{ ctx: Ctx }>) {
           { label: t('settings.appearance.densityComfortable'), value: 'comfortable' },
         ]}
         value={data.tableDensity}
-        onValueChange={(value) =>
-          ctx.port.updateCategory('dataDisplay', { tableDensity: value } as never)
-        }
+        onValueChange={(value) => updateSetting(ctx, 'dataDisplay', { tableDensity: value })}
       />
       {switchRow(
         ctx,
@@ -367,9 +382,7 @@ export function DataDisplaySection({ ctx }: Readonly<{ ctx: Ctx }>) {
           { label: t('settings.dataDisplay.wrap'), value: 'wrap' },
         ]}
         value={data.longText}
-        onValueChange={(value) =>
-          ctx.port.updateCategory('dataDisplay', { longText: value } as never)
-        }
+        onValueChange={(value) => updateSetting(ctx, 'dataDisplay', { longText: value })}
       />
     </SectionShell>
   );
@@ -392,9 +405,7 @@ export function LocaleRegionSection({ ctx }: Readonly<{ ctx: Ctx }>) {
           { label: 'English', value: 'en' },
         ]}
         value={region.language}
-        onValueChange={(value) =>
-          ctx.port.updateCategory('localeRegion', { language: value } as never)
-        }
+        onValueChange={(value) => updateSetting(ctx, 'localeRegion', { language: value })}
       />
       <SelectField
         hint=""
@@ -404,9 +415,7 @@ export function LocaleRegionSection({ ctx }: Readonly<{ ctx: Ctx }>) {
           value: format,
         }))}
         value={region.dateFormat}
-        onValueChange={(value) =>
-          ctx.port.updateCategory('localeRegion', { dateFormat: value } as never)
-        }
+        onValueChange={(value) => updateSetting(ctx, 'localeRegion', { dateFormat: value })}
       />
       <SelectField
         hint={t('settings.localeRegion.timeZoneHint')}
@@ -416,9 +425,7 @@ export function LocaleRegionSection({ ctx }: Readonly<{ ctx: Ctx }>) {
           value: zone,
         }))}
         value={region.timeZone}
-        onValueChange={(value) =>
-          ctx.port.updateCategory('localeRegion', { timeZone: value } as never)
-        }
+        onValueChange={(value) => updateSetting(ctx, 'localeRegion', { timeZone: value })}
       />
       <RadioGroupField
         hint=""
@@ -428,9 +435,7 @@ export function LocaleRegionSection({ ctx }: Readonly<{ ctx: Ctx }>) {
           { label: t('settings.localeRegion.h12'), value: 'h12' },
         ]}
         value={region.hourCycle}
-        onValueChange={(value) =>
-          ctx.port.updateCategory('localeRegion', { hourCycle: value } as never)
-        }
+        onValueChange={(value) => updateSetting(ctx, 'localeRegion', { hourCycle: value })}
       />
       {switchRow(
         ctx,
@@ -448,9 +453,7 @@ export function LocaleRegionSection({ ctx }: Readonly<{ ctx: Ctx }>) {
           { label: t('settings.localeRegion.exact'), value: 'exact' },
         ]}
         value={region.relativeTime}
-        onValueChange={(value) =>
-          ctx.port.updateCategory('localeRegion', { relativeTime: value } as never)
-        }
+        onValueChange={(value) => updateSetting(ctx, 'localeRegion', { relativeTime: value })}
       />
       <RadioGroupField
         hint=""
@@ -460,9 +463,7 @@ export function LocaleRegionSection({ ctx }: Readonly<{ ctx: Ctx }>) {
           { label: t('settings.localeRegion.sunday'), value: 'sunday' },
         ]}
         value={region.weekStart}
-        onValueChange={(value) =>
-          ctx.port.updateCategory('localeRegion', { weekStart: value } as never)
-        }
+        onValueChange={(value) => updateSetting(ctx, 'localeRegion', { weekStart: value })}
       />
       {/* numbersFollowLocale 产品固定：说明 + disabled（不渲染可关开关）。 */}
       <div className="rounded-panel border border-border bg-surface-muted p-4 text-sm text-ink-muted">
@@ -532,9 +533,7 @@ export function NotificationsSection({ ctx }: Readonly<{ ctx: Ctx }>) {
           { label: t('settings.notifications.toastLong'), value: 'long' },
         ]}
         value={n.toastDuration}
-        onValueChange={(value) =>
-          ctx.port.updateCategory('notifications', { toastDuration: value } as never)
-        }
+        onValueChange={(value) => updateSetting(ctx, 'notifications', { toastDuration: value })}
       />
     </SectionShell>
   );
@@ -657,7 +656,7 @@ export function ActionPreferencesSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         ]}
         value={p.editSuccessDestination}
         onValueChange={(value) =>
-          ctx.port.updateCategory('actionPreferences', { editSuccessDestination: value } as never)
+          updateSetting(ctx, 'actionPreferences', { editSuccessDestination: value })
         }
       />
       <RadioGroupField
@@ -674,9 +673,9 @@ export function ActionPreferencesSection({ ctx }: Readonly<{ ctx: Ctx }>) {
         ]}
         value={p.createSuccessDestination}
         onValueChange={(value) =>
-          ctx.port.updateCategory('actionPreferences', {
+          updateSetting(ctx, 'actionPreferences', {
             createSuccessDestination: value,
-          } as never)
+          })
         }
       />
       {switchRow(
@@ -759,9 +758,7 @@ export function ActionPreferencesSection({ ctx }: Readonly<{ ctx: Ctx }>) {
           { label: t('settings.actionPreferences.detailFull'), value: 'full' },
         ]}
         value={p.detailMode}
-        onValueChange={(value) =>
-          ctx.port.updateCategory('actionPreferences', { detailMode: value } as never)
-        }
+        onValueChange={(value) => updateSetting(ctx, 'actionPreferences', { detailMode: value })}
       />
       <RadioGroupField
         hint=""
@@ -772,9 +769,7 @@ export function ActionPreferencesSection({ ctx }: Readonly<{ ctx: Ctx }>) {
           { label: t('settings.actionPreferences.refreshPeriodic'), value: 'periodic' },
         ]}
         value={p.refreshMode}
-        onValueChange={(value) =>
-          ctx.port.updateCategory('actionPreferences', { refreshMode: value } as never)
-        }
+        onValueChange={(value) => updateSetting(ctx, 'actionPreferences', { refreshMode: value })}
       />
       <RadioGroupField
         hint=""
@@ -784,9 +779,7 @@ export function ActionPreferencesSection({ ctx }: Readonly<{ ctx: Ctx }>) {
           { label: t('settings.actionPreferences.searchEnter'), value: 'enter' },
         ]}
         value={p.searchTrigger}
-        onValueChange={(value) =>
-          ctx.port.updateCategory('actionPreferences', { searchTrigger: value } as never)
-        }
+        onValueChange={(value) => updateSetting(ctx, 'actionPreferences', { searchTrigger: value })}
       />
       {switchRow(
         ctx,

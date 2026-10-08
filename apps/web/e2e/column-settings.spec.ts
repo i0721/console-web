@@ -1,6 +1,7 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
-async function resetAll(page: import('@playwright/test').Page) {
+async function resetAll(page: Page) {
   await page.goto('/settings/data-display');
   await page.evaluate(() => {
     window.localStorage.removeItem('community-go.shell');

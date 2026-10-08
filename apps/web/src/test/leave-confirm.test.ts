@@ -30,7 +30,7 @@ describe('leave-confirm 注册表与统一询问', () => {
   });
 
   it('dirty source 存在且 dirty → 先询问；取消返回 false 且不 begin', async () => {
-    setLeaveConfirmResolver(async () => false); // 用户取消
+    setLeaveConfirmResolver(() => Promise.resolve(false)); // 用户取消
     const unregister = registerDirtySource({
       pageId: 'edit',
       message: () => '有未保存的更改',
@@ -41,7 +41,7 @@ describe('leave-confirm 注册表与统一询问', () => {
   });
 
   it('dirty source 存在且 dirty → 确认后放行', async () => {
-    setLeaveConfirmResolver(async () => true);
+    setLeaveConfirmResolver(() => Promise.resolve(true));
     const unregister = registerDirtySource({
       pageId: 'edit',
       message: () => '有未保存的更改',
@@ -76,7 +76,7 @@ describe('leave-confirm 注册表与统一询问', () => {
 
   it('beforeunload 仅 dirty 时设置 returnValue（事件可取消）', () => {
     const unregisterGuard = installBeforeUnloadGuard();
-    const event = new Event('beforeunload', { cancelable: true }) as BeforeUnloadEvent;
+    const event = new Event('beforeunload', { cancelable: true });
     // 无 dirty：不 preventDefault。
     const dispatched = window.dispatchEvent(event);
     // jsdom 无法断言 returnValue 传播，但 preventDefault 使 dispatched=false。
@@ -86,7 +86,7 @@ describe('leave-confirm 注册表与统一询问', () => {
       message: () => 'x',
       isDirty: () => true,
     });
-    const dirtyEvent = new Event('beforeunload', { cancelable: true }) as BeforeUnloadEvent;
+    const dirtyEvent = new Event('beforeunload', { cancelable: true });
     const dispatchedDirty = window.dispatchEvent(dirtyEvent);
     expect(dispatchedDirty).toBe(false); // preventDefault 被调用
     dirty();
@@ -106,7 +106,7 @@ describe('leave-confirm 注册表与统一询问', () => {
 
   it('confirmLeave 偏好关闭 → 不询问直接 proceed（即使 dirty）', async () => {
     setLeaveConfirmEnabled(false);
-    const resolver = vi.fn(async () => true);
+    const resolver = vi.fn(() => Promise.resolve(true));
     setLeaveConfirmResolver(resolver);
     const unregister = registerDirtySource({
       pageId: 'edit',
@@ -123,7 +123,7 @@ describe('leave-confirm 注册表与统一询问', () => {
     setLeaveConfirmEnabled(false);
     expect(isLeaveConfirmEnabled()).toBe(false);
     setLeaveConfirmEnabled(true);
-    const resolver = vi.fn(async () => true);
+    const resolver = vi.fn(() => Promise.resolve(true));
     setLeaveConfirmResolver(resolver);
     const unregister = registerDirtySource({
       pageId: 'edit',

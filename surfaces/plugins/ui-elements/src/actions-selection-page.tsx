@@ -93,28 +93,28 @@ export function ActionsSelectionPage() {
                 <div className="flex flex-wrap items-center gap-3">
                   <IconAction
                     label={t('uiElements.catalog.search')}
-                    onPress={() => setLastAction('Search')}
+                    onPress={() => setLastAction(t('uiElements.catalog.search'))}
                   >
                     <Search className="size-icon-sm" />
                   </IconAction>
                   <IconAction
                     active
                     label={t('uiElements.catalog.refresh')}
-                    onPress={() => setLastAction('Refresh')}
+                    onPress={() => setLastAction(t('uiElements.catalog.refresh'))}
                   >
                     <RefreshCw className="size-icon-sm" />
                   </IconAction>
                   <IconAction
                     label={t('uiElements.catalog.delete')}
                     tone="danger"
-                    onPress={() => setLastAction('Delete')}
+                    onPress={() => setLastAction(t('uiElements.catalog.delete'))}
                   >
                     <Trash2 className="size-icon-sm" />
                   </IconAction>
                   <IconAction
                     label={t('uiElements.catalog.more')}
                     size="sm"
-                    onPress={() => setLastAction('More')}
+                    onPress={() => setLastAction(t('uiElements.catalog.more'))}
                   >
                     <MoreHorizontal className="size-icon-sm" />
                   </IconAction>

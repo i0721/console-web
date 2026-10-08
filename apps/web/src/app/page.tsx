@@ -1,20 +1,18 @@
 'use client';
 
 import { Card, CardContent } from '@community-go/ui-adapter/card';
-import { ProgressMeter } from '@community-go/ui-adapter/progress-meter';
+import { generatedSurfaceRegistry } from '@community-go/surface/generated/composition';
 import { StatusPill } from '@community-go/ui-adapter/status-pill';
 import {
   ArrowRight,
   Boxes,
   CheckCircle2,
-  CircleGauge,
   Layers3,
   MonitorSmartphone,
   ShieldCheck,
-  Sparkles,
   Workflow,
 } from 'lucide-react';
-import { useFrontendTranslation } from '@community-go/i18n';
+import { formatNumber, useFrontendTranslation } from '@community-go/i18n';
 import { Page, PageHeader, Section } from '@community-go/surface-foundation/layout';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -26,21 +24,30 @@ import { useWorkbenchStore } from '../state/use-workbench-store';
 import { useWorkspaceStore } from '../state/use-workspace-store';
 
 const capabilityDefinitions = [
-  { id: 'design', progress: 78, icon: Layers3, status: 'ready' },
-  { id: 'adapter', progress: 64, icon: Boxes, status: 'inProgress' },
-  { id: 'hosts', progress: 46, icon: MonitorSmartphone, status: 'inProgress' },
-  { id: 'gates', progress: 72, icon: ShieldCheck, status: 'ready' },
+  { id: 'design', icon: Layers3, status: 'ready' },
+  { id: 'adapter', icon: Boxes, status: 'inProgress' },
+  { id: 'hosts', icon: MonitorSmartphone, status: 'inProgress' },
+  { id: 'gates', icon: ShieldCheck, status: 'ready' },
 ] as const;
 
 const metrics = [
-  { value: '6', label: 'boundaries', detail: 'ready', icon: Workflow },
-  { value: '24', label: 'tokens', detail: 'shared', icon: Sparkles },
-  { value: '10', label: 'states', detail: 'ready', icon: CircleGauge },
-  { value: '2', label: 'hosts', detail: 'shared', icon: MonitorSmartphone },
+  {
+    value: Object.keys(generatedSurfaceRegistry.routes).length + 1,
+    label: 'routes',
+    detail: 'shared',
+    icon: Workflow,
+  },
+  {
+    value: generatedSurfaceRegistry.catalog.plugins.length,
+    label: 'plugins',
+    detail: 'shared',
+    icon: Boxes,
+  },
+  { value: 1, label: 'hosts', detail: 'shared', icon: MonitorSmartphone },
 ] as const;
 
 export default function OverviewPage() {
-  const { t } = useFrontendTranslation();
+  const { t, locale } = useFrontendTranslation();
   // 首页工作区段（SET-005-005）：收藏 + 最近访问（Host store 直接消费；显示开关
   // 由导航偏好 showRecents 控制；最近记录由 recent-visit-recorder 驱动）。
   const recents = useWorkbenchStore((state) => state.recents);
@@ -90,29 +97,35 @@ export default function OverviewPage() {
         description={t('overview.description')}
         actions={
           <>
-            <RouterTextLink href="/foundations" leadingIcon={<Layers3 className="size-4" />}>
-              {t('overview.action')}
+            <RouterTextLink href="/ui-elements">{t('overview.componentsEntry')}</RouterTextLink>
+            <RouterTextLink href="/page-patterns/layout-navigation" tone="neutral">
+              {t('overview.patternsEntry')}
             </RouterTextLink>
-            <RouterTextLink href="/states" tone="neutral">
-              {t('overview.secondaryAction')}
+            <RouterTextLink href="/reference-resources" tone="neutral">
+              {t('overview.referenceEntry')}
             </RouterTextLink>
           </>
         }
       />
 
-      <div
-        aria-label={t('overview.metricsLabel')}
-        className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"
-      >
+      <div className="text-sm">
+        <RouterTextLink href="/foundations" tone="neutral">
+          {t('overview.action')}
+        </RouterTextLink>
+      </div>
+
+      <div aria-label={t('overview.metricsLabel')} className="grid gap-4 sm:grid-cols-3">
         {metrics.map(({ value, label, detail, icon: Icon }) => (
-          <Card key={label}>
+          <Card key={label} appearance="outlined">
             <CardContent>
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
                   <p className="text-sm font-medium text-ink-muted">
                     {t(`overview.metrics.${label}`)}
                   </p>
-                  <p className="mt-3 text-3xl font-extrabold tracking-tight text-ink">{value}</p>
+                  <p className="mt-3 text-3xl font-extrabold tracking-tight text-ink">
+                    {formatNumber(locale, value)}
+                  </p>
                   <p className="mt-1 text-xs text-ink-muted">{t(`overview.metrics.${detail}`)}</p>
                 </div>
                 <span className="grid size-11 shrink-0 place-items-center rounded-control bg-brand-soft text-brand">
@@ -125,7 +138,7 @@ export default function OverviewPage() {
       </div>
 
       {(showWorkbench || showFavorites) && (
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className={`grid gap-4 ${showWorkbench && showFavorites ? 'sm:grid-cols-2' : ''}`}>
           {showFavorites ? (
             <Section title={t('overview.favoritesTitle')}>
               <ul className="flex flex-col gap-1 p-5">
@@ -159,7 +172,7 @@ export default function OverviewPage() {
           action={<StatusPill tone="success">4 / 4 tracked</StatusPill>}
         >
           <div className="grid gap-4 p-5 sm:grid-cols-2">
-            {capabilityDefinitions.map(({ id, progress, icon: Icon, status }) => (
+            {capabilityDefinitions.map(({ id, icon: Icon, status }) => (
               <Card key={id} appearance="flat">
                 <CardContent>
                   <div className="flex items-start gap-3">
@@ -174,7 +187,7 @@ export default function OverviewPage() {
                     </div>
                   </div>
                   <div className="mt-4">
-                    <ProgressMeter value={progress} label={t(`capability.${status}`)} />
+                    <StatusPill tone="info">{t(`capability.${status}`)}</StatusPill>
                   </div>
                 </CardContent>
               </Card>
@@ -190,18 +203,20 @@ export default function OverviewPage() {
           description={t('overview.qualityDescription')}
         >
           <ul className="space-y-3 p-5">
-            {['Import boundaries', 'HeroUI isolation', 'Token governance', 'Host leakage'].map(
-              (gate) => (
-                <li
-                  key={gate}
-                  className="flex items-center gap-3 rounded-control bg-surface-muted px-3 py-2.5"
-                >
-                  <CheckCircle2 className="size-4 shrink-0 text-success" />
-                  <span className="min-w-0 flex-1 text-sm font-medium text-ink">{gate}</span>
-                  <span className="text-xs font-semibold text-success">Active</span>
-                </li>
-              ),
-            )}
+            {['imports', 'vendor', 'tokens', 'host'].map((gate) => (
+              <li
+                key={gate}
+                className="flex items-center gap-3 rounded-control bg-surface-muted px-3 py-2.5"
+              >
+                <CheckCircle2 className="size-4 shrink-0 text-success" />
+                <span className="min-w-0 flex-1 text-sm font-medium text-ink">
+                  {t(`overview.gates.${gate}`)}
+                </span>
+                <span className="text-xs font-semibold text-success">
+                  {t('overview.gates.active')}
+                </span>
+              </li>
+            ))}
           </ul>
         </Section>
 
@@ -211,17 +226,13 @@ export default function OverviewPage() {
           description={t('overview.activityDescription')}
         >
           <ol className="space-y-4 p-5">
-            {[
-              'Token contract established',
-              'Web Host shell composed',
-              'UI Adapter boundary active',
-            ].map((item, index) => (
+            {['tokens', 'host', 'adapter'].map((item, index) => (
               <li key={item} className="flex gap-3">
                 <span className="mt-1 grid size-5 shrink-0 place-items-center rounded-full bg-brand-soft text-xs font-bold text-brand">
                   {index + 1}
                 </span>
                 <div className="flex min-w-0 flex-1 items-center justify-between gap-3 border-b border-border pb-4 text-sm font-medium text-ink last:border-0 last:pb-0">
-                  <span>{item}</span>
+                  <span>{t(`overview.activity.${item}`)}</span>
                   <ArrowRight className="size-4 shrink-0 text-ink-muted" />
                 </div>
               </li>

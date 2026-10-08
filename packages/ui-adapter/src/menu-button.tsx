@@ -28,7 +28,9 @@ export function MenuButton({
 }: MenuButtonProps) {
   return (
     <Dropdown defaultOpen={defaultOpen}>
-      <Dropdown.Trigger className="ui-overlay-trigger">{label}</Dropdown.Trigger>
+      <Dropdown.Trigger aria-label={ariaLabel} className="ui-overlay-trigger">
+        {label}
+      </Dropdown.Trigger>
       <Dropdown.Popover className="ui-overlay-surface min-w-60 p-1.5" placement="bottom end">
         <Dropdown.Menu
           aria-label={ariaLabel}
@@ -44,7 +46,9 @@ export function MenuButton({
             >
               {item.icon ? <span className="text-ink-muted">{item.icon}</span> : null}
               <span className="min-w-0 flex-1">
-                <Label className="block truncate font-medium">{item.label}</Label>
+                <Label className="block whitespace-normal break-words font-medium">
+                  {item.label}
+                </Label>
                 {item.description ? (
                   <span className="mt-0.5 block text-xs text-ink-muted">{item.description}</span>
                 ) : null}

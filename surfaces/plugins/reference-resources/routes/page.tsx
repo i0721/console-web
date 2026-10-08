@@ -8,7 +8,8 @@ import { route, RouteLink, usePluginNavigation } from '@community-go/plugin-fram
 import { useFrontendTranslation } from '@community-go/i18n';
 import { useEffect } from 'react';
 
-import { getReferenceResources, type ReferenceResource } from '../data';
+import type { ReferenceResource } from '../data';
+import { useReferenceResources } from '../src/use-reference-resources';
 
 const statusTone: Record<ReferenceResource['status'], StatusTone> = {
   active: 'success',
@@ -19,7 +20,7 @@ export default function ReferenceResourcesListPage() {
   const { t } = useFrontendTranslation();
   const { navigate } = usePluginNavigation();
   const commandsPort = useCommandsPort();
-  const resources = getReferenceResources();
+  const resources = useReferenceResources();
 
   // 命令注册（SET-006-006）：新建参考资源——命令菜单入口与页面按钮（PageHeader
   // action RouteLink）引用同一目标；页面级作用域，卸载注销。只依赖稳定 port；
@@ -41,7 +42,7 @@ export default function ReferenceResourcesListPage() {
   return (
     <Page>
       <PageHeader
-        eyebrow="Reference · File Routes"
+        eyebrow={t('referenceResources.common.localDemo')}
         title={t('referenceResources.list.title')}
         description={t('referenceResources.list.description')}
         actions={
@@ -69,10 +70,14 @@ export default function ReferenceResourcesListPage() {
                 </StatusPill>
               </div>
               <div className="mt-4 flex items-center gap-2">
-                <RouteLink target={route('reference-resources.detail')}>
+                <RouteLink
+                  target={route('reference-resources.detail', {}, { query: { id: resource.id } })}
+                >
                   {t('referenceResources.list.detail')}
                 </RouteLink>
-                <RouteLink target={route('reference-resources.edit')}>
+                <RouteLink
+                  target={route('reference-resources.edit', {}, { query: { id: resource.id } })}
+                >
                   {t('referenceResources.list.edit')}
                 </RouteLink>
               </div>

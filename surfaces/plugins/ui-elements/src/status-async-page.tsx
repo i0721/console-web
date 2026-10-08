@@ -143,7 +143,7 @@ export function StatusAsyncPage() {
                         {...(state === 'error'
                           ? {
                               actionLabel: t('productStates.retry'),
-                              onAction: () => setLastAction('Retry'),
+                              onAction: () => setLastAction(t('productStates.retry')),
                             }
                           : {})}
                       />
@@ -153,19 +153,21 @@ export function StatusAsyncPage() {
               </ComponentPreview>
               <ComponentPreview
                 name="LiveRegion"
-                description="异步结果统一使用 polite/assertive 与 atomic 播报语义。"
+                description={t('uiElements.additional.liveRegion')}
                 states={['Polite', 'Assertive', 'Atomic', 'Visible / sr-only']}
               >
-                <LiveRegion visuallyHidden={false}>Reference status has been updated.</LiveRegion>
+                <LiveRegion visuallyHidden={false}>
+                  {t('uiElements.additional.statusUpdated')}
+                </LiveRegion>
               </ComponentPreview>
               <ComponentPreview
                 name="SkipLink"
-                description="键盘用户可以绕过重复 Shell 导航并进入主内容。"
+                description={t('uiElements.additional.skip')}
                 states={['Keyboard focus', 'Semantic target', 'Reduced motion']}
               >
                 <p className="text-sm text-ink-muted">
-                  按 Tab 可验证页面顶部的 SkipLink。
-                  <SkipLink href="#status-async" label="跳到状态场景" />
+                  {t('uiElements.additional.skipHint')}
+                  <SkipLink href="#status-async" label={t('uiElements.additional.skipLabel')} />
                 </p>
               </ComponentPreview>
             </div>

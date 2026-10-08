@@ -1,14 +1,15 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
 /** 清空偏好。 */
-async function resetPreferences(page: import('@playwright/test').Page) {
+async function resetPreferences(page: Page) {
   await page.goto('/settings/locale');
   await page.evaluate(() => window.localStorage.removeItem('community-go.shell'));
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
 }
 
-async function setDateFormat(page: import('@playwright/test').Page, format: string) {
+async function setDateFormat(page: Page, format: string) {
   await page.goto('/settings/locale');
   const group = page.getByLabel('日期格式');
   await group.click();

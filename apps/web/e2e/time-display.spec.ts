@@ -1,8 +1,9 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
-async function publishAndOpenCenter(page: import('@playwright/test').Page) {
+async function publishAndOpenCenter(page: Page) {
   // 编辑保存发布真实通知。
-  await page.goto('/reference-resources/edit');
+  await page.goto('/reference-resources/edit?id=resource-alpha');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   await page.getByRole('button', { name: /保存/ }).first().click();
   await page.waitForTimeout(500);

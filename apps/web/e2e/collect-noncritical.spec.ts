@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test('收纳非关键通知默认开：复制反馈同时进通知中心', async ({ page }) => {
-  await page.goto('/reference-resources/detail');
+  await page.goto('/reference-resources/detail?id=resource-alpha');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   // 触发复制反馈（clipboard 权限需授予）。
   await page.context().grantPermissions(['clipboard-read', 'clipboard-write'], {
@@ -27,7 +27,7 @@ test('关闭 收纳非关键通知：复制反馈仅 toast 不进中心', async 
   await page.context().grantPermissions(['clipboard-read', 'clipboard-write'], {
     origin: 'http://127.0.0.1:4173',
   });
-  await page.goto('/reference-resources/detail');
+  await page.goto('/reference-resources/detail?id=resource-alpha');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   await page.getByRole('button', { name: '复制 ID' }).click();
   await page.waitForTimeout(500);

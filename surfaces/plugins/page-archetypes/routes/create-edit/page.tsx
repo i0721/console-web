@@ -34,8 +34,7 @@ import {
   SplitView,
 } from '@community-go/surface-foundation/layout';
 import type { ReferenceFormInput } from '../../src/schemas';
-
-const simulatedSaveDelayMs = 450;
+import { useLocalSaveSimulation } from '../../src/browser-local-save';
 
 const DatePickerField = dynamic(
   () =>
@@ -48,17 +47,17 @@ export default function ReferenceFormPage() {
   const { notify } = useFeedback();
   const preferencesPort = usePreferencesPort<Preferences>();
   const [saved, setSaved] = useState(false);
+  const waitForSave = useLocalSaveSimulation();
   // 首错误聚焦（操作偏好 focusFirstError，默认开）：校验失败定位首个错误字段。
   const focusFirstError = preferencesPort.getSnapshot().actionPreferences.focusFirstError;
   const form = useFoundationForm<ReferenceFormInput>({
     schema: async () => (await import('../../src/schemas')).referenceFormSchema,
     defaultValues: {
-      name: 'Regional release readiness',
+      name: t('formReference.initialName'),
       owner: 'Lin Chen',
       region: 'apac',
       mode: 'guided',
-      description:
-        'This reference draft deliberately combines validation, overlays, long content, nested sections, and sticky footer actions.',
+      description: t('formReference.initialDescription'),
       reviewDate: '2026-09-15',
       notifyReviewers: true,
       allowOfflineDraft: false,
@@ -68,7 +67,7 @@ export default function ReferenceFormPage() {
 
   const submit = async () => {
     setSaved(false);
-    await new Promise((resolve) => window.setTimeout(resolve, simulatedSaveDelayMs));
+    if (!(await waitForSave())) return;
     setSaved(true);
     notify({
       title: t('formReference.saved'),
@@ -120,13 +119,23 @@ export default function ReferenceFormPage() {
                     label: t('formReference.tabs.identity'),
                     content: (
                       <div className="grid gap-5">
-                        <TextField
-                          label={t('formReference.name')}
-                          hint={t('formReference.nameHint')}
-                          disabled={pending}
-                          {...errorProps('name')}
-                          {...form.registerField('name')}
-                        />
+                        <FoundationControlledField form={form} name="name">
+                          {(field) => (
+                            <TextField
+                              label={t('formReference.name')}
+                              hint={t('formReference.nameHint')}
+                              disabled={pending}
+                              value={field.value}
+                              onBlur={field.onBlur}
+                              {...errorProps('name')}
+                              ref={(instance) => {
+                                if (typeof field.ref === 'function') field.ref(instance);
+                                else if (field.ref) field.ref.current = instance;
+                              }}
+                              onChange={(event) => field.onChange(event.currentTarget.value)}
+                            />
+                          )}
+                        </FoundationControlledField>
                         <div className="grid gap-5 md:grid-cols-2">
                           <FoundationControlledField form={form} name="owner">
                             {(field) => (
@@ -172,14 +181,24 @@ export default function ReferenceFormPage() {
                             )}
                           </FoundationControlledField>
                         </div>
-                        <TextAreaField
-                          label={t('formReference.descriptionLabel')}
-                          hint={t('formReference.descriptionHint')}
-                          disabled={pending}
-                          rows={7}
-                          {...errorProps('description')}
-                          {...form.registerField('description')}
-                        />
+                        <FoundationControlledField form={form} name="description">
+                          {(field) => (
+                            <TextAreaField
+                              label={t('formReference.descriptionLabel')}
+                              hint={t('formReference.descriptionHint')}
+                              disabled={pending}
+                              rows={7}
+                              value={field.value}
+                              onBlur={field.onBlur}
+                              {...errorProps('description')}
+                              ref={(instance) => {
+                                if (typeof field.ref === 'function') field.ref(instance);
+                                else if (field.ref) field.ref.current = instance;
+                              }}
+                              onChange={(event) => field.onChange(event.currentTarget.value)}
+                            />
+                          )}
+                        </FoundationControlledField>
                       </div>
                     ),
                   },

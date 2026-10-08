@@ -2,6 +2,17 @@ export const pluginI18nResources = {
   'zh-CN': {
     translation: {
       referenceResources: {
+        fixtures: {
+          alpha: {
+            name: 'Alpha 示例资源',
+            description: '第一个确定性参考资源，用于验证列表、详情与编辑的路由。',
+          },
+          beta: {
+            name: 'Beta 引导指南',
+            description: '展示静态路由装配与受控导航目标的确定性链路。',
+          },
+          gamma: { name: 'Gamma 模板', description: '草稿资源，用于验证状态展示与编辑场景。' },
+        },
         nav: {
           root: '参考资源',
           list: '参考资源列表',
@@ -33,6 +44,7 @@ export const pluginI18nResources = {
           back: '返回列表',
           copyId: '复制 ID',
           copied: '已复制',
+          copyFailed: '复制失败，请重试或手动复制资源标识。',
           copyFeedbackTitle: '资源 ID 已复制到剪贴板',
           copyFeedbackDescription: '已复制资源 ID，可直接粘贴使用。',
           addFavorite: '收藏此页',
@@ -59,6 +71,16 @@ export const pluginI18nResources = {
           resetFailed: '重置失败，请重试。',
         },
         common: {
+          localDemo: '本地演示 · 刷新后恢复示例数据',
+          notFound: '未找到此资源',
+          invalidId: '资源标识缺失或无效，请返回列表选择资源。',
+          invalidName: '请输入 1–80 个字符的资源名称。',
+          saved: {
+            stay: '已保存，继续留在编辑页。',
+            list: '已保存，返回资源列表。',
+            detail: '已保存，进入此资源详情。',
+            continue: '已创建，可以继续创建下一条。',
+          },
           name: '名称',
           kind: '类型',
           statusLabel: '状态',
@@ -77,6 +99,20 @@ export const pluginI18nResources = {
   en: {
     translation: {
       referenceResources: {
+        fixtures: {
+          alpha: {
+            name: 'Alpha sample resource',
+            description: 'A deterministic resource for the list, detail and edit workflow.',
+          },
+          beta: {
+            name: 'Beta getting started guide',
+            description: 'A guide demonstrating route composition and controlled navigation.',
+          },
+          gamma: {
+            name: 'Gamma template',
+            description: 'A draft resource demonstrating status and editing.',
+          },
+        },
         nav: {
           root: 'Reference Resources',
           list: 'Reference Resources List',
@@ -112,6 +148,7 @@ export const pluginI18nResources = {
           back: 'Back to list',
           copyId: 'Copy ID',
           copied: 'Copied',
+          copyFailed: 'Copy failed. Retry or copy the resource ID manually.',
           copyFeedbackTitle: 'Resource ID copied to clipboard',
           copyFeedbackDescription: 'The resource ID was copied and is ready to paste.',
           addFavorite: 'Add to favorites',
@@ -139,6 +176,16 @@ export const pluginI18nResources = {
           resetFailed: 'Reset failed, please retry.',
         },
         common: {
+          localDemo: 'Local demo · refresh restores fixtures',
+          notFound: 'Resource not found',
+          invalidId: 'The resource ID is missing or invalid. Select a resource from the list.',
+          invalidName: 'Enter a resource name of 1–80 characters.',
+          saved: {
+            stay: 'Saved. Remaining on the edit page.',
+            list: 'Saved. Returning to the resource list.',
+            detail: 'Saved. Opening this resource.',
+            continue: 'Created. Ready to create another resource.',
+          },
           name: 'Name',
           kind: 'Kind',
           statusLabel: 'Status',

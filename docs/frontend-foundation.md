@@ -38,7 +38,31 @@ Patch（内容哈希 etag 并发冲突）、确定性生成与 freshness：
 
 Vendor 类型不得穿透公共 Contract；具体 Surface 通过内容、状态、资源和 Port 组合这些能力。
 
+### 外观 Profile 的所有权
+
+Design System Schema 的 `source.tokens.appearanceProfiles` 管理既有 density、fontScale、
+contentWidth 和 contrast Profile，生成 `tokens.css` 的受控区段。数值仍采用原有
+compact/default/comfortable、small/default/large、standard/wide 与 contrast 规则；
+本次权威化不改变用户偏好、数值、选择优先级或持久化 key。Host 只装配已选 Profile，
+Page 不创建第二份数值表或手改生成 CSS。
+
+默认控件使用语义 control-height 随 density 变化；明确的 small、embedded 变体保留
+其用途尺寸，不把紧凑配置行变成所有 Radio/Switch 的默认。字体、内容宽度和高对比度
+与 density 是独立维度，组合验收归 `/ui-elements` 和真实 Settings 消费者。
+实施/迁移与当前验证见 [109 账本](changes/109-ui-ux-optimization/tasks.md)。
+
 Universal 之下是 [Surface Foundation](surface-foundation.md)（可复用产品视觉/Pattern）、
 [Plugin Framework 与 Surface File Routes](plugin-framework.md)（契约/Registry/Host Capability/Codegen）
 与 `surfaces` 插件实现；它们与 Universal 的边界由 `tooling/foundation-policy.json`
 与 `tooling/foundation-contracts.json` 机器校验。
+
+### Form 的异步提交生命周期
+
+Form Foundation 在异步校验与提交期间只接受一次提交，校验失败或提交结束后释放；
+原生 Enter/requestSubmit 与按钮使用同一入口。表单卸载后尚未完成的校验不再调用
+业务提交回调，避免过期写入和导航。RHF 继续拥有 dirty、errors、isSubmitting 与
+首错定位，Feature 使用正式控件 Pending/Disabled，不复制表单状态机制。
+
+已经开始的业务操作由其 Owner 管理取消和资源清理；本地示例的 Browser Adapter
+清理定时器并结束等待，卸载后不发布旧 UI 反馈。消费者和行为证据见
+[109 提交回归](changes/109-ui-ux-optimization/tasks.md)。

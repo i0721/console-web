@@ -47,6 +47,12 @@ Universal recipe 的单一登记文件是 `packages/design-system/src/motion.css
 
 Surface `screen.enter/exit`、Shell 锚定、Route content、Viewport 与 State recipe 的具体绑定继续由 `packages/surface-foundation/src/styles.css` 持有。非上述权威文件禁止声明 `@keyframes`。
 
+持久布局通过既有 `[data-route-content]` 标出可替换区域。含此区域的外层 Page
+只提供 spacing，不再次触发直接区段 choreography；CSS 根据这个现有布局标识排除
+外层壳，使 Settings 标题/导航保持稳定，分类区段只进入一次。普通 Page 仍由 Host
+自动提供进入体验，不需要页面声明动画类型或绕过 Page。109 回归证明修复的是重复
+进入范围，Duration/Easing Token 保持原值。
+
 ### Schema-Controlled 生成（Design System 单一 Schema）
 
 Design System Token 与 Motion Language facts 的唯一 Source 是

@@ -1,6 +1,7 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
-async function resetPreferences(page: import('@playwright/test').Page) {
+async function resetPreferences(page: Page) {
   await page.goto('/settings/shortcuts');
   await page.evaluate(() => window.localStorage.removeItem('community-go.shell'));
   await page.reload();

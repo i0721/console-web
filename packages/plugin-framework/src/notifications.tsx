@@ -30,6 +30,8 @@ export type NotificationSeverity = (typeof NOTIFICATION_SEVERITIES)[number];
 export type NotificationRouteTarget = Readonly<{
   routeId: string;
   params?: Readonly<Record<string, string>>;
+  query?: Readonly<Record<string, string>>;
+  fragment?: string;
 }>;
 
 /** 一条通知（可序列化；持久化/跨窗口同步安全）。 */

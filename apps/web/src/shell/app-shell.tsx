@@ -5,7 +5,7 @@ import { ShellRoot } from '@community-go/surface-foundation/shell-navigation';
 import { PluginLocaleProvider } from '@community-go/plugin-framework/plugin';
 import type { NavigationNode } from '@community-go/types';
 import { IconAction } from '@community-go/ui-adapter/icon-action';
-import { UserIdentity } from '@community-go/ui-adapter/identity';
+import { Avatar, UserIdentity } from '@community-go/ui-adapter/identity';
 import { MenuButton } from '@community-go/ui-adapter/menu-button';
 import {
   Languages,
@@ -15,7 +15,7 @@ import {
   PanelLeftOpen,
   Sparkles,
   Sun,
-  X,
+  Search,
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
@@ -30,6 +30,7 @@ import { proceedAfterLeaveConfirm } from '../host/leave-confirm';
 import { resolveScrollOption } from '../host/scroll-preference';
 import { useRecentVisitRecorder } from '../host/recent-visit-recorder';
 import { RouteTransition } from '../host/route-transition';
+import { DrawerSurface } from '@community-go/ui-adapter/overlays';
 import { TopProgress } from '../host/top-progress';
 import { useShellStore } from '../state/use-shell-store';
 import { useCommandsPort } from '@community-go/plugin-framework/commands';
@@ -37,7 +38,14 @@ import { BrandMark } from './brand-mark';
 import { combinedShellNavigationGroups } from './navigation';
 import { NavigationTree } from './navigation-tree';
 import { NotificationCenter } from './notification-center';
-import { PageTabs, usePageTabsRecorder } from './page-tabs';
+import { PageTabs } from './page-tabs';
+import { usePageTabsRecorder } from './use-page-tabs-recorder';
+
+const subscribeDesktop = (notify: () => void) => {
+  window.addEventListener('resize', notify);
+  return () => window.removeEventListener('resize', notify);
+};
+const desktopSnapshot = () => window.innerWidth >= 768;
 
 const CommandMenu = dynamic(
   () => import('@community-go/ui-adapter/command-menu').then((module) => module.CommandMenu),
@@ -96,6 +104,7 @@ function NavigationContent({
 export function AppShell({ children }: Readonly<{ children: ReactNode }>) {
   const { t } = useFrontendTranslation();
   const router = useRouter();
+  const desktopTools = useSyncExternalStore(subscribeDesktop, desktopSnapshot, () => false);
   const theme = useShellStore((state) => state.theme);
   const locale = useShellStore((state) => state.locale);
   const mobileNavigationOpen = useShellStore((state) => state.mobileNavigationOpen);
@@ -107,6 +116,14 @@ export function AppShell({ children }: Readonly<{ children: ReactNode }>) {
   const shortcutsEnabled = useShellStore((state) => state.preferences.shortcuts.enabled);
   const commandsPort = useCommandsPort();
   const [commandOpen, setCommandOpen] = useState(false);
+
+  useEffect(() => {
+    const closeOnDesktop = () => {
+      if (window.innerWidth >= 1024) setMobileNavigationOpen(false);
+    };
+    window.addEventListener('resize', closeOnDesktop);
+    return () => window.removeEventListener('resize', closeOnDesktop);
+  }, [setMobileNavigationOpen]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -185,26 +202,18 @@ export function AppShell({ children }: Readonly<{ children: ReactNode }>) {
         <NavigationContent compact={sidebarCollapsed} />
       </aside>
 
-      {mobileNavigationOpen ? (
-        <>
-          <button
-            aria-label={t('shell.closeNavOverlay')}
-            className="fixed inset-0 z-sticky bg-scrim backdrop-blur-sm lg:hidden"
-            onClick={() => setMobileNavigationOpen(false)}
-          />
-          <aside className="fixed inset-y-0 left-0 z-overlay flex w-72 flex-col bg-surface shadow-overlay lg:hidden">
-            <div className="absolute right-3 top-5">
-              <IconAction
-                label={t('shell.closeNav')}
-                onPress={() => setMobileNavigationOpen(false)}
-              >
-                <X className="size-5" />
-              </IconAction>
-            </div>
-            <NavigationContent onNavigate={() => setMobileNavigationOpen(false)} />
-          </aside>
-        </>
-      ) : null}
+      <DrawerSurface
+        triggerLabel={t('shell.menu')}
+        title={t('shell.primaryNav')}
+        description={t('brand.edition')}
+        closeLabel={t('shell.closeNav')}
+        isOpen={mobileNavigationOpen}
+        onOpenChange={setMobileNavigationOpen}
+        placement="left"
+        composition="navigation"
+      >
+        <NavigationContent onNavigate={() => setMobileNavigationOpen(false)} />
+      </DrawerSurface>
 
       <div className="min-w-0">
         <header className="sticky top-0 z-sticky flex h-20 items-center gap-3 border-b border-border bg-canvas/90 px-4 backdrop-blur-xl sm:px-6 xl:px-8">
@@ -225,8 +234,14 @@ export function AppShell({ children }: Readonly<{ children: ReactNode }>) {
               )}
             </IconAction>
           </div>
-          <div className="hidden min-w-0 flex-1 md:block">
+          <div className="md:hidden">
+            <IconAction label={t('shell.search')} onPress={() => setCommandOpen(true)}>
+              <Search className="size-5" />
+            </IconAction>
+          </div>
+          <div className="min-w-0 md:flex-1">
             <CommandMenu
+              hideTrigger={!desktopTools}
               defaultOpen={false}
               emptyLabel={t('shell.commandEmpty')}
               isOpen={commandOpen}
@@ -255,22 +270,26 @@ export function AppShell({ children }: Readonly<{ children: ReactNode }>) {
             />
           </div>
           <div className="ml-auto flex items-center gap-2">
-            <IconAction
-              label={t('shell.locale')}
-              onPress={() => setLocale(locale === 'zh-CN' ? 'en' : 'zh-CN')}
-            >
-              <Languages className="size-4.5" />
-            </IconAction>
-            <IconAction
-              label={t('shell.theme')}
-              onPress={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-            >
-              {theme === 'light' ? <Moon className="size-4.5" /> : <Sun className="size-4.5" />}
-            </IconAction>
+            <div className="hidden items-center gap-2 md:flex">
+              <IconAction
+                label={t('shell.locale')}
+                onPress={() => setLocale(locale === 'zh-CN' ? 'en' : 'zh-CN')}
+              >
+                <Languages className="size-4.5" />
+              </IconAction>
+              <IconAction
+                label={t('shell.theme')}
+                onPress={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+              >
+                {theme === 'light' ? <Moon className="size-4.5" /> : <Sun className="size-4.5" />}
+              </IconAction>
+            </div>
             <NotificationCenter />
             <MenuButton
               ariaLabel={t('shell.account')}
               items={[
+                { id: 'locale', label: t('shell.locale') },
+                { id: 'theme', label: t('shell.theme') },
                 {
                   id: routeTargetResolver.resolveHref({ routeId: 'settings', params: {} }),
                   label: t('nav.settings'),
@@ -278,9 +297,28 @@ export function AppShell({ children }: Readonly<{ children: ReactNode }>) {
                 },
               ]}
               label={
-                <UserIdentity avatarSize="sm" description={t('shell.productOwner')} name="Rin" />
+                <>
+                  <span className="md:hidden">
+                    <Avatar name="Rin" size="sm" />
+                  </span>
+                  <span className="hidden md:inline-flex">
+                    <UserIdentity
+                      avatarSize="sm"
+                      description={t('shell.productOwner')}
+                      name="Rin"
+                    />
+                  </span>
+                </>
               }
               onAction={(href) => {
+                if (href === 'locale') {
+                  setLocale(locale === 'zh-CN' ? 'en' : 'zh-CN');
+                  return;
+                }
+                if (href === 'theme') {
+                  setTheme(theme === 'light' ? 'dark' : 'light');
+                  return;
+                }
                 void proceedAfterLeaveConfirm(href, t('shell.account')).then((proceed) => {
                   if (!proceed) return;
                   markForwardRouteIntent();

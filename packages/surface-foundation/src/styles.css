@@ -121,7 +121,7 @@
    *   两分支共用同一进入编排；[data-route-content] 只允许 layout 壳页面内容容器使用，
    *   避免无 layout 页面内误标造成双重动画。 */
   .surface-route-content[data-route-enter='true']
-    > .surface-page-stack
+    > .surface-page-stack:not(:has([data-route-content]))
     > :not(.surface-viewport-reveal),
   .surface-route-content[data-route-enter='true']
     [data-route-content]
@@ -133,7 +133,7 @@
   }
 
   .surface-route-content[data-route-enter='true'][data-route-kind='forward']
-    > .surface-page-stack
+    > .surface-page-stack:not(:has([data-route-content]))
     > :not(.surface-viewport-reveal),
   .surface-route-content[data-route-enter='true'][data-route-kind='forward']
     [data-route-content]
@@ -145,7 +145,7 @@
   }
 
   .surface-route-content[data-route-enter='true']
-    > .surface-page-stack
+    > .surface-page-stack:not(:has([data-route-content]))
     > :not(.surface-viewport-reveal):nth-child(2),
   .surface-route-content[data-route-enter='true']
     [data-route-content]
@@ -154,7 +154,7 @@
   }
 
   .surface-route-content[data-route-enter='true'][data-route-kind='forward']
-    > .surface-page-stack
+    > .surface-page-stack:not(:has([data-route-content]))
     > :not(.surface-viewport-reveal):nth-child(2),
   .surface-route-content[data-route-enter='true'][data-route-kind='forward']
     [data-route-content]
@@ -163,7 +163,7 @@
   }
 
   .surface-route-content[data-route-enter='true']
-    > .surface-page-stack
+    > .surface-page-stack:not(:has([data-route-content]))
     > :not(.surface-viewport-reveal):nth-child(n + 3),
   .surface-route-content[data-route-enter='true']
     [data-route-content]
@@ -172,7 +172,7 @@
   }
 
   .surface-route-content[data-route-enter='true'][data-route-kind='forward']
-    > .surface-page-stack
+    > .surface-page-stack:not(:has([data-route-content]))
     > :not(.surface-viewport-reveal):nth-child(n + 3),
   .surface-route-content[data-route-enter='true'][data-route-kind='forward']
     [data-route-content]
@@ -182,7 +182,7 @@
 
   html[data-motion-screen='off']
     .surface-route-content[data-route-enter='true']
-    > .surface-page-stack
+    > .surface-page-stack:not(:has([data-route-content]))
     > :not(.surface-viewport-reveal),
   html[data-motion-screen='off']
     .surface-route-content[data-route-enter='true']
@@ -226,7 +226,7 @@
     }
   }
 
-  @media (max-width: 64rem) {
+  @media (width < 64rem) {
     .surface-shell-grid {
       grid-template-columns: minmax(0, 1fr);
     }

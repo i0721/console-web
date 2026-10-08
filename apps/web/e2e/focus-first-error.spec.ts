@@ -1,13 +1,14 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
-async function resetPreferences(page: import('@playwright/test').Page) {
+async function resetPreferences(page: Page) {
   await page.goto('/settings/actions');
   await page.evaluate(() => window.localStorage.removeItem('community-go.shell'));
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
 }
 
-async function activeElementId(page: import('@playwright/test').Page): Promise<string | null> {
+async function activeElementId(page: Page): Promise<string | null> {
   return page.evaluate(() => document.activeElement?.id ?? null);
 }
 

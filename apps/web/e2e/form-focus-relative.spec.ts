@@ -11,7 +11,7 @@ test('相对时间=近似：通知条目显示"N 分钟前"（真实联动）', 
     .click();
   await page.waitForTimeout(300);
   // 触发真实通知 → 打开中心。
-  await page.goto('/reference-resources/edit');
+  await page.goto('/reference-resources/edit?id=resource-alpha');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   await page.getByRole('button', { name: /保存/ }).first().click();
   await page.waitForTimeout(500);

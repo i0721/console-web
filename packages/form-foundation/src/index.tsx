@@ -8,10 +8,9 @@ import {
   type Path,
   type PathValue,
   type Resolver,
-  type SubmitHandler,
   type UseFormReturn,
 } from 'react-hook-form';
-import type { FormEventHandler, ReactNode, Ref } from 'react';
+import { useEffect, useRef, type FormEventHandler, type ReactNode, type Ref } from 'react';
 
 import type { FoundationSchema } from '@community-go/schemas';
 
@@ -66,6 +65,14 @@ export function useFoundationForm<Values extends FieldValues>({
   /** 校验失败后是否自动定位首个错误字段（settings 操作偏好 focusFirstError，默认开）。 */
   focusFirstError?: boolean;
 }>): FoundationFormController<Values> {
+  const submitInFlight = useRef(false);
+  const mounted = useRef(true);
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
   const resolver: Resolver<Values> = async (values, context, options) => {
     const [{ zodResolver }, resolvedSchema] = await Promise.all([
       import('@hookform/resolvers/zod'),
@@ -108,7 +115,18 @@ export function useFoundationForm<Values extends FieldValues>({
       };
     },
     hasError: (name) => Boolean(form.getFieldState(name).error),
-    submit: (handler) => (event) => void form.handleSubmit(handler as SubmitHandler<Values>)(event),
+    submit: (handler) => (event) => {
+      event.preventDefault();
+      if (submitInFlight.current) return;
+      submitInFlight.current = true;
+      void form
+        .handleSubmit((values) => {
+          if (mounted.current) return handler(values);
+        })(event)
+        .finally(() => {
+          submitInFlight.current = false;
+        });
+    },
     reset: (values) => form.reset(values),
     setValue: (name, value, options) =>
       form.setValue(name, value, {

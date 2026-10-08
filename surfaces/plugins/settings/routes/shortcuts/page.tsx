@@ -1,6 +1,6 @@
 'use client';
 
-import { useSettingsShell } from '../../src/settings-layout-shell';
+import { useSettingsShell } from '../../src/settings-context';
 import { ShortcutsSection } from '../../src/category-sections';
 
 /**

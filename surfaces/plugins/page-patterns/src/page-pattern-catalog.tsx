@@ -20,6 +20,9 @@ import { FormErrorSummary } from '@community-go/ui-adapter/form-error-summary';
 import { Panel } from '@community-go/ui-adapter/panel';
 import { StepNavigation } from '@community-go/ui-adapter/step-navigation';
 import { StateSurface } from '@community-go/ui-adapter/state-surface';
+import { useState } from 'react';
+import { useFrontendTranslation } from '@community-go/i18n';
+import { CheckboxField, TextField } from '@community-go/ui-adapter/form-field';
 import { CheckCircle2 } from 'lucide-react';
 
 export type PagePatternKind =
@@ -30,31 +33,54 @@ export type PagePatternKind =
   | 'detail-settings';
 
 export function PagePatternCatalog({ kind }: Readonly<{ kind: PagePatternKind }>) {
+  const { t } = useFrontendTranslation();
+  const [notice, setNotice] = useState('');
+  const [selected, setSelected] = useState<readonly string[]>([]);
+  const [name, setName] = useState('');
+  const [savedName, setSavedName] = useState('');
+  const [invalid, setInvalid] = useState(false);
+  const [archived, setArchived] = useState<readonly string[]>([]);
+  const titleKey = {
+    'layout-navigation': 'layoutNavigation',
+    'collections-data': 'collectionsData',
+    'forms-actions': 'formsActions',
+    'states-feedback': 'statesFeedback',
+    'detail-settings': 'detailSettings',
+  }[kind];
   return (
     <Page>
       <PageHeader
-        eyebrow="Surface Foundation"
-        title={kind}
-        description="Stable Product Surface composition; no API, permission engine, or backend state machine is involved."
+        eyebrow={t('pagePatterns.content.example1')}
+        title={t(`pagePatterns.nav.${titleKey}`)}
+        description={t('pagePatterns.content.example2')}
       />
+      {notice ? (
+        <p role="status" className="text-sm text-ink-muted">
+          {notice}
+        </p>
+      ) : null}
       {kind === 'layout-navigation' ? (
-        <Section title="Layout and navigation">
+        <Section title={t('pagePatterns.content.example3')}>
           <div className="grid gap-5 p-5">
             <Toolbar
-              label="Page toolbar"
-              primary={<Action onPress={() => undefined}>Primary</Action>}
+              label={t('pagePatterns.content.example4')}
+              primary={
+                <Action onPress={() => setNotice(t('pagePatterns.content.primaryDone'))}>
+                  {t('pagePatterns.content.example25')}
+                </Action>
+              }
               secondary={
-                <Action variant="quiet" onPress={() => undefined}>
-                  Secondary
+                <Action variant="quiet" onPress={() => setNotice('')}>
+                  {t('pagePatterns.content.secondary')}
                 </Action>
               }
             />
             <StepNavigation
-              label="Workflow steps"
+              label={t('pagePatterns.content.example5')}
               items={[
-                { id: 'one', label: 'Context', state: 'complete' },
-                { id: 'two', label: 'Configure', state: 'current' },
-                { id: 'three', label: 'Review' },
+                { id: 'one', label: t('pagePatterns.content.example33'), state: 'complete' },
+                { id: 'two', label: t('pagePatterns.content.example34'), state: 'current' },
+                { id: 'three', label: t('pagePatterns.content.example35') },
               ]}
             />
           </div>
@@ -62,55 +88,110 @@ export function PagePatternCatalog({ kind }: Readonly<{ kind: PagePatternKind }>
       ) : kind === 'collections-data' ? (
         <div className="space-y-4">
           <Collection
-            title="Collection pattern"
+            title={t('pagePatterns.content.example6')}
             filters={
               <FilterBar>
-                <span>Filter slot</span>
-                <span>Sort slot</span>
+                <span>{t('pagePatterns.content.example26')}</span>
+                <span>{t('pagePatterns.content.example27')}</span>
               </FilterBar>
             }
             content={
               <div className="p-5 text-sm text-ink-muted">
-                Desktop table or narrow-screen replacement content slot.
+                {['one', 'two', 'three']
+                  .filter((id) => !archived.includes(id))
+                  .map((id) => (
+                    <CheckboxField
+                      key={id}
+                      label={t('pagePatterns.content.record', { id })}
+                      checked={selected.includes(id)}
+                      onCheckedChange={(checked) =>
+                        setSelected((ids) =>
+                          checked ? [...ids, id] : ids.filter((value) => value !== id),
+                        )
+                      }
+                    />
+                  ))}
               </div>
             }
           />
           <BulkActionBar
             actions={
-              <Action size="sm" onPress={() => undefined}>
-                Archive
+              <Action
+                size="sm"
+                disabled={selected.length === 0}
+                onPress={() => {
+                  setArchived((ids) => [...ids, ...selected]);
+                  setSelected([]);
+                }}
+              >
+                {t('pagePatterns.content.archive')}
               </Action>
             }
-            clearLabel="Clear"
-            onClear={() => undefined}
-            selectionLabel="3 selected"
+            clearLabel={t('pagePatterns.content.example7')}
+            onClear={() => setSelected([])}
+            selectionLabel={t('pagePatterns.content.selected', { count: selected.length })}
           />
         </div>
       ) : kind === 'forms-actions' ? (
         <div className="space-y-5">
+          <div id="pattern-name">
+            <TextField
+              label={t('pagePatterns.content.name')}
+              value={name}
+              onChange={(event) => setName(event.currentTarget.value)}
+            />
+          </div>
           <FormErrorSummary
-            title="Please fix 2 fields"
-            errors={[
-              { fieldId: 'name', label: 'Name', message: 'Required' },
-              { fieldId: 'owner', label: 'Owner', message: 'Unavailable' },
-            ]}
+            title={t('pagePatterns.content.fixErrors')}
+            errors={
+              invalid
+                ? [
+                    {
+                      fieldId: 'pattern-name',
+                      label: t('pagePatterns.content.name'),
+                      message: t('pagePatterns.content.required'),
+                    },
+                  ]
+                : []
+            }
           />
           <FormActions
-            primary={<Action onPress={() => undefined}>Save</Action>}
+            primary={
+              <Action
+                onPress={() => {
+                  if (!name.trim()) {
+                    setInvalid(true);
+                    return;
+                  }
+                  setInvalid(false);
+                  setSavedName(name.trim());
+                  setNotice(t('pagePatterns.content.saved'));
+                }}
+              >
+                {t('pagePatterns.content.example28')}
+              </Action>
+            }
             secondary={
-              <Action variant="quiet" onPress={() => undefined}>
-                Cancel
+              <Action
+                variant="quiet"
+                onPress={() => {
+                  setName(savedName);
+                  setInvalid(false);
+                  setNotice('');
+                }}
+              >
+                {t('pagePatterns.content.cancel')}
               </Action>
             }
             summary={
               <FormStatus
-                lifecycle="invalid"
+                lifecycle={invalid ? 'invalid' : name !== savedName ? 'dirty' : 'pristine'}
                 labels={{
-                  pristine: 'Saved',
-                  dirty: 'Unsaved',
-                  submitting: 'Saving',
-                  submitted: 'Saved',
-                  invalid: 'Fix errors',
+                  pristine: t('pagePatterns.content.example37'),
+                  dirty: t('pagePatterns.content.example38'),
+                  submitting: t('pagePatterns.content.example39'),
+                  submitted: t('pagePatterns.content.example37'),
+                  invalid: t('pagePatterns.content.example40'),
                 }}
               />
             }
@@ -120,33 +201,33 @@ export function PagePatternCatalog({ kind }: Readonly<{ kind: PagePatternKind }>
         <div className="grid gap-5">
           <StateRegion
             content={
-              <Panel className="p-5 text-sm text-ink">Ready content remains available.</Panel>
+              <Panel className="p-5 text-sm text-ink">{t('pagePatterns.content.example29')}</Panel>
             }
             denied={
               <StateSurface
                 compact
-                description="Protected content is not disclosed."
+                description={t('pagePatterns.content.example8')}
                 icon={<CheckCircle2 className="size-5" />}
                 state="permission-denied"
-                title="Denied"
+                title={t('pagePatterns.content.example9')}
               />
             }
             empty={
               <StateSurface
                 compact
-                description="No result matches the current filters."
+                description={t('pagePatterns.content.example10')}
                 icon={<CheckCircle2 className="size-5" />}
                 state="empty"
-                title="Empty"
+                title={t('pagePatterns.content.example11')}
               />
             }
             error={
               <StateSurface
                 compact
-                description="The region can be retried independently."
+                description={t('pagePatterns.content.example12')}
                 icon={<CheckCircle2 className="size-5" />}
                 state="error"
-                title="Error"
+                title={t('pagePatterns.content.example13')}
               />
             }
             refreshing={
@@ -154,55 +235,61 @@ export function PagePatternCatalog({ kind }: Readonly<{ kind: PagePatternKind }>
                 Existing content remains while refreshing.
               </Panel>
             }
-            label="Surface state region"
+            label={t('pagePatterns.content.example14')}
             loading={
               <StateSurface
                 compact
-                description="Structure remains stable while loading."
+                description={t('pagePatterns.content.example15')}
                 icon={<CheckCircle2 className="size-5" />}
                 state="loading"
-                title="Loading"
+                title={t('pagePatterns.content.example16')}
               />
             }
             partialNotice={
-              <Panel className="p-3 text-sm text-warning">Partial result notice</Panel>
+              <Panel className="p-3 text-sm text-warning">
+                {t('pagePatterns.content.example30')}
+              </Panel>
             }
             pending={
               <StateSurface
                 compact
-                description="An operation is awaiting confirmation."
+                description={t('pagePatterns.content.example17')}
                 icon={<CheckCircle2 className="size-5" />}
                 state="pending"
-                title="Pending"
+                title={t('pagePatterns.content.example18')}
               />
             }
-            readonlyNotice={<Panel className="p-3 text-sm text-info">Readonly reason</Panel>}
+            readonlyNotice={
+              <Panel className="p-3 text-sm text-info">{t('pagePatterns.content.example31')}</Panel>
+            }
             state="partial"
           />
           <OperationStatus
             state="running"
-            title="Pending operation"
-            description="The operation is active while the surrounding page remains ready."
+            title={t('pagePatterns.content.example19')}
+            description={t('pagePatterns.content.example20')}
             icon={<CheckCircle2 className="size-5" />}
             progress={48}
-            progressLabel="Operation progress"
+            progressLabel={t('pagePatterns.content.example21')}
           />
         </div>
       ) : (
         <SettingsLayout
           navigation={
-            <Panel className="p-4 text-sm text-ink-muted">Settings navigation slot</Panel>
+            <Panel className="p-4 text-sm text-ink-muted">
+              {t('pagePatterns.content.example32')}
+            </Panel>
           }
         >
           <EntitySummary
-            title="Entity summary"
-            description="Stable identity, status, metadata, and action regions."
+            title={t('pagePatterns.content.example22')}
+            description={t('pagePatterns.content.example23')}
           />
-          <Section title="Timeline">
+          <Section title={t('pagePatterns.content.example24')}>
             <div className="p-5">
               <Timeline
-                label="Timeline"
-                items={[{ id: 'one', title: 'Created', tone: 'success' }]}
+                label={t('pagePatterns.content.example24')}
+                items={[{ id: 'one', title: t('pagePatterns.content.example36'), tone: 'success' }]}
               />
             </div>
           </Section>

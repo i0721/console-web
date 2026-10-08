@@ -1,10 +1,8 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
 /** 设 dataDisplay.tableDensity 为指定值。 */
-async function setTableDensity(
-  page: import('@playwright/test').Page,
-  density: 'compact' | 'standard',
-) {
+async function setTableDensity(page: Page, density: 'compact' | 'standard') {
   await page.goto('/settings/data-display');
   await page.evaluate(() => window.localStorage.removeItem('community-go.shell'));
   await page.reload();

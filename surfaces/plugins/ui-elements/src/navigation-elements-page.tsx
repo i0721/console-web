@@ -297,21 +297,29 @@ export function NavigationElementsPage() {
               </ComponentPreview>
               <ComponentPreview
                 name="StepNavigation"
-                description="有限步骤只表达当前位置、完成与错误，不代替页面 Tabs。"
+                description={t('uiElements.additional.steps')}
                 states={['Upcoming', 'Current', 'Complete', 'Error', 'Disabled']}
               >
                 <StepNavigation
-                  label="Foundation steps"
+                  label={t('uiElements.additional.stepsLabel')}
                   items={[
-                    { id: 'contract', label: 'Contract', state: 'complete' },
-                    { id: 'accessibility', label: 'Accessibility', state: 'current' },
-                    { id: 'evidence', label: 'Evidence' },
+                    {
+                      id: 'contract',
+                      label: t('uiElements.additional.contract'),
+                      state: 'complete',
+                    },
+                    {
+                      id: 'accessibility',
+                      label: t('uiElements.additional.accessibility'),
+                      state: 'current',
+                    },
+                    { id: 'evidence', label: t('uiElements.additional.evidence') },
                   ]}
                 />
               </ComponentPreview>
               <ComponentPreview
                 name="Tree"
-                description="层级集合统一键盘导航、展开、选择与 disabled 语义。"
+                description={t('uiElements.additional.tree')}
                 states={[
                   'Nested',
                   'Expanded',
@@ -326,12 +334,12 @@ export function NavigationElementsPage() {
                   collapseLabel={(label) => t('uiElements.catalog.treeCollapse', { label })}
                   defaultExpandedIds={new Set(['foundation'])}
                   expandLabel={(label) => t('uiElements.catalog.treeExpand', { label })}
-                  label="Foundation tree"
+                  label={t('uiElements.additional.treeLabel')}
                   nodes={[
                     {
                       id: 'foundation',
                       label: 'Universal Foundation',
-                      description: '跨 Surface 稳定契约',
+                      description: t('uiElements.additional.treeDescription'),
                       leadingIcon: <Boxes className="size-icon-sm" />,
                       children: [
                         {
@@ -347,8 +355,7 @@ export function NavigationElementsPage() {
                         },
                         {
                           id: 'long-label',
-                          label:
-                            '这是一个用于验证长文本在深层级与窄宽度下仍保持完整可读与可访问名称的树节点条目示例',
+                          label: t('uiElements.additional.longNode'),
                         },
                       ],
                     },
@@ -360,11 +367,11 @@ export function NavigationElementsPage() {
               </ComponentPreview>
               <ComponentPreview
                 name="DisclosurePanel"
-                description="可展开补充内容由 React Aria/HeroUI 持有状态与焦点语义。"
+                description={t('uiElements.additional.disclosure')}
                 states={['Collapsed', 'Expanded', 'Disabled', 'Keyboard']}
               >
-                <DisclosurePanel defaultExpanded title="Composition boundary">
-                  Disclosure 不承担页面导航，也不主持 Overlay。
+                <DisclosurePanel defaultExpanded title={t('uiElements.additional.composition')}>
+                  {t('uiElements.additional.compositionHint')}
                 </DisclosurePanel>
               </ComponentPreview>
             </div>

@@ -6,7 +6,17 @@
 
 当前预算不因新增页面提高：首屏 JS 400 KiB、最大 Route JS 430 KiB、CSS 48 KiB、最大 Chunk 200 KiB（均为 gzip）。阈值变化必须有独立研究和确认，不能用于掩盖回归。
 
-## 当前证据（102 复核 + Sidebar Navigation 重构）
+## 109 当前验收
+
+本轮代码和结果逐项见 [109 实施账本](changes/109-ui-ux-optimization/tasks.md)。
+完整门禁记录为 `docs/changes/109-ui-ux-optimization/evidence/check-final.txt`。
+最后代码已通过治理/lint/类型、369 项单元测试、生产构建与原产物预算。
+浏览器 219 项：205 通过、14 项因视觉比较失败；其后格式/文档门独立补跑。
+完整命令 exit 1，不能声明全绿；早期失败或中断日志不代替最终结果。
+结果见 [109 验证记录](changes/109-ui-ux-optimization/evidence/verification.md)。
+视觉阈值及快照保持原值，人工确认和真实设备验证独立列出。
+
+## 102 历史证据（复核 + Sidebar Navigation 重构）
 
 以对应变更执行时的实际命令输出为准：
 

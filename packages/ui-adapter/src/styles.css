@@ -2,7 +2,7 @@
 
 @layer components {
   .ui-field {
-    @apply grid w-full gap-2 text-sm;
+    @apply grid min-w-0 w-full content-start gap-2 text-sm;
   }
 
   .ui-field-label {
@@ -22,7 +22,7 @@
   }
 
   .ui-overlay-trigger {
-    @apply inline-flex h-10 items-center justify-center gap-2 rounded-control border border-border bg-surface px-3.5 text-sm font-semibold text-ink shadow-sm outline-none transition-colors hover:bg-surface-muted;
+    @apply inline-flex min-h-control items-center justify-center gap-2 rounded-control border border-border bg-surface px-3.5 text-sm font-semibold text-ink shadow-sm outline-none transition-colors hover:bg-surface-muted;
     /* 复合 Overlay Trigger（Popover/Tooltip/Dropdown 的 Trigger 子组件）的交互状态：
        pressed/hover 保持中性 surface-muted 深浅反馈，不切换到任何语义主色；
        focus-visible 保留项目 focus ring（可访问性反馈不删除）。 */
@@ -40,6 +40,28 @@
       box-shadow:
         0 0 0 0.125rem var(--color-surface),
         0 0 0 0.25rem var(--color-focus-ring);
+    }
+  }
+
+  .ui-dialog-layout {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100dvh - var(--spacing) * 8);
+    overflow-y: auto;
+  }
+
+  .ui-dialog-body {
+    min-height: 0;
+    flex: 1;
+    overflow-y: auto;
+  }
+  @media (height < 25rem) {
+    .ui-dialog-layout {
+      display: block;
+    }
+    .ui-dialog-body {
+      flex: none;
+      overflow: visible;
     }
   }
 

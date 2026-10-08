@@ -1,4 +1,6 @@
-import { Calendar } from '@heroui/react/calendar';
+import { lazy, Suspense } from 'react';
+import { Skeleton } from './skeleton';
+const DatePickerCalendar = lazy(() => import('./date-picker-calendar'));
 import { DateField } from '@heroui/react/date-field';
 import { DatePicker } from '@heroui/react/date-picker';
 import { Description } from '@heroui/react/description';
@@ -46,22 +48,15 @@ export function DatePickerField({
       </DateField.Group>
       {hint ? <Description className="ui-field-hint">{hint}</Description> : null}
       <DatePicker.Popover className="ui-overlay-surface p-3">
-        <Calendar aria-label={calendarLabel}>
-          <Calendar.Header>
-            <Calendar.YearPickerTrigger>
-              <Calendar.YearPickerTriggerHeading />
-              <Calendar.YearPickerTriggerIndicator />
-            </Calendar.YearPickerTrigger>
-            <Calendar.NavButton slot="previous" />
-            <Calendar.NavButton slot="next" />
-          </Calendar.Header>
-          <Calendar.Grid>
-            <Calendar.GridHeader>
-              {(day) => <Calendar.HeaderCell>{day}</Calendar.HeaderCell>}
-            </Calendar.GridHeader>
-            <Calendar.GridBody>{(date) => <Calendar.Cell date={date} />}</Calendar.GridBody>
-          </Calendar.Grid>
-        </Calendar>
+        <Suspense
+          fallback={
+            <div role="region" aria-label={calendarLabel} aria-busy="true" className="w-64">
+              <Skeleton className="h-64 w-full" />
+            </div>
+          }
+        >
+          <DatePickerCalendar calendarLabel={calendarLabel} />
+        </Suspense>
       </DatePicker.Popover>
     </DatePicker>
   );

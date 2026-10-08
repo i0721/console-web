@@ -1,6 +1,7 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
-async function resetPreferences(page: import('@playwright/test').Page) {
+async function resetPreferences(page: Page) {
   await page.goto('/settings/navigation');
   await page.evaluate(() => window.localStorage.removeItem('community-go.shell'));
   await page.reload();
@@ -9,7 +10,7 @@ async function resetPreferences(page: import('@playwright/test').Page) {
 
 test('面包屑默认开：详情页显示 参考资源 → 详情 面包屑', async ({ page }) => {
   await resetPreferences(page);
-  await page.goto('/reference-resources/detail');
+  await page.goto('/reference-resources/detail?id=resource-alpha');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   const trail = page.getByRole('list', { name: '面包屑' });
   await expect(trail).toBeVisible();
@@ -27,7 +28,7 @@ test('关闭 显示面包屑：详情页不再显示面包屑', async ({ page })
   await expect(breadcrumbs).not.toBeChecked();
   await page.waitForTimeout(300);
 
-  await page.goto('/reference-resources/detail');
+  await page.goto('/reference-resources/detail?id=resource-alpha');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   await expect(page.getByRole('list', { name: '面包屑' })).not.toBeVisible();
 });

@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test('详情展示模式默认简洁：详情页不显示附加信息', async ({ page }) => {
-  await page.goto('/reference-resources/detail');
+  await page.goto('/reference-resources/detail?id=resource-alpha');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   await expect(page.getByText('资源标识', { exact: true })).not.toBeVisible();
 });
@@ -15,7 +15,7 @@ test('详情展示模式=完整：详情页显示附加信息（真实联动）'
     .getByText('完整', { exact: true })
     .click();
   await page.waitForTimeout(300);
-  await page.goto('/reference-resources/detail');
+  await page.goto('/reference-resources/detail?id=resource-alpha');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   // 完整模式：附加信息真实展示（资源标识 + 完整说明项）。
   await expect(page.getByText('资源标识', { exact: true })).toBeVisible();

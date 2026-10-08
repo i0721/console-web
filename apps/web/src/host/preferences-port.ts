@@ -20,7 +20,6 @@ import type {
 import {
   validatePreferences,
   PREFERENCES_VERSION,
-  type PreferenceCategory,
   type Preferences,
 } from '@community-go/surface/preferences-model';
 
@@ -101,12 +100,12 @@ export function createHostPreferencesPort(): PreferencesPort<Preferences> & {
     subscribe: (listener) => useShellStore.subscribe(listener),
     updateCategory: (category, patch) =>
       toPersistResult(() => {
-        useShellStore.getState().updateCategory(category as PreferenceCategory, patch);
+        useShellStore.getState().updateCategory(category, patch);
         persistSnapshot();
       }),
     resetCategory: (category) =>
       toPersistResult(() => {
-        useShellStore.getState().resetCategory(category as PreferenceCategory);
+        useShellStore.getState().resetCategory(category);
         persistSnapshot();
       }),
     resetAll: () =>

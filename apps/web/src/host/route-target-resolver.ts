@@ -1,7 +1,7 @@
 'use client';
 
 import { generatedSurfaceRegistry } from '@community-go/surface/generated/composition';
-import { resolveRouteTarget } from '@community-go/plugin-framework';
+import { resolveRouteTarget, type RouteTarget } from '@community-go/plugin-framework';
 
 /**
  * Host Route Target Resolver —— 唯一解析 Route Target → href 的地方。
@@ -10,9 +10,7 @@ import { resolveRouteTarget } from '@community-go/plugin-framework';
  * Plugin 不手写 URL，也不自行解析 Route Target。校验失败保持失败语义（抛错）。
  */
 export const routeTargetResolver = {
-  resolveHref: (
-    target: Readonly<{ routeId: string; params: Readonly<Record<string, string>> }>,
-  ): string => {
+  resolveHref: (target: RouteTarget): string => {
     const result = resolveRouteTarget(generatedSurfaceRegistry, target);
     if (result.diagnostics.length > 0) {
       const detail = result.diagnostics

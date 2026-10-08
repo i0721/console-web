@@ -62,11 +62,7 @@ export function PreferencesProvider<Prefs>({
   port,
   children,
 }: Readonly<{ port: PreferencesPort<Prefs>; children: ReactNode }>) {
-  return (
-    <PreferencesContext.Provider value={port as PreferencesPort<unknown>}>
-      {children}
-    </PreferencesContext.Provider>
-  );
+  return <PreferencesContext.Provider value={port}>{children}</PreferencesContext.Provider>;
 }
 
 /** 读取 Preferences Port；调用方按产品模型实例化泛型（如 usePreferencesPort<Preferences>()）。 */

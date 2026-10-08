@@ -7,6 +7,7 @@ import type { MouseEvent, ReactNode } from 'react';
 export type BreadcrumbItem = Readonly<{
   id: string;
   label: string;
+  content?: ReactNode;
   href?: string;
   disabled?: boolean;
 }>;
@@ -33,7 +34,7 @@ export function BreadcrumbTrail({ label, items }: BreadcrumbTrailProps) {
             {...(!current && !item.disabled && item.href ? { href: item.href } : {})}
             {...(item.disabled !== undefined ? { isDisabled: item.disabled } : {})}
           >
-            {item.label}
+            {current ? item.label : (item.content ?? item.label)}
           </Breadcrumbs.Item>
         );
       })}
@@ -78,6 +79,14 @@ export function TextLink({
       {...(onNavigate
         ? {
             onClick: (event: MouseEvent<Element>) => {
+              if (
+                event.button !== 0 ||
+                event.ctrlKey ||
+                event.metaKey ||
+                event.shiftKey ||
+                event.altKey
+              )
+                return;
               event.preventDefault();
               onNavigate();
             },

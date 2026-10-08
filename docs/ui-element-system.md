@@ -181,3 +181,15 @@ Hover/Focus 与 Selected 不得合并为同一种状态；Selected 不能只依�
 5. 只有存在跨 Feature 的独立语义、状态和验证价值时才新增 UI Element。
 
 公共 Token、Form Control、Overlay Surface、Option、Layout 或 Adapter 改动必须同步检查全部调用方、`/ui-elements` 对应 Family 页面的打开态、Pattern Reference、Dark Mode、Locale 扩张、窄屏和 Accessibility。外部成熟产品只用于复核设计规律，内部权威始终是本文、Semantic Token、UI Adapter 与可运行回归证据。
+
+## 响应式空间、配置行与可调整数据列
+
+- SearchBox 根、输入组与所在 Grid 必须允许收缩；清除和图标保留命中区。Field 的说明和错误占独立区域，不由父 Grid 拉长单行输入。
+- RadioGroupField 的 cards 默认保留解释型选项表面；rows 用于短配置选项。SwitchField 的 card 默认不变，row 适用于已有容器内的紧凑配置行。TextField 的 ref 指向输入控件，供 Form Foundation 注册、首错定位和显式用户偏好焦点使用。
+- 单选 ToggleGroup 保持连续组并在内部横滚；多选保持独立项并换行。TabsView 选择、尺寸和文本变化时只调整自身列表，不持续抢回用户手动滚动；vertical 在 md 以下同时回退布局、ARIA 和键盘方向。溢出提示来自实际滚动范围。
+- DrawerSurface 的 placement 为 left/right，缺省 right；navigation composition 用于共享导航内容，缺省 standard。Overlay 的焦点、Escape、背景锁定和焦点返回均由 HeroUI 管理。
+- Dialog 正常采用正文滚动；短高度允许整个对话框滚动，操作必须处于可达滚动区域。异步确认阻止重复提交和提前关闭；重试先清除旧错误。
+- DataTable 通过 columnWidths 与 onColumnWidthsChange 表达稳定 column id 的数值宽度，Adapter 组合官方 ResizableContainer/ColumnResizer 管理指针和键盘交互；不向消费者暴露 vendor Map、slot 或 props。未保存宽度使用官方自动布局。宽度、显隐、列序和排序独立合并，记忆开关只控制恢复和持久化。
+- 默认单行控件使用 min-h-control 并响应 density；small/embedded 的用途尺寸允许受控例外，不把普通控件的旧固定高度当作默认。外观 profile 的 fontScale/density/contentWidth/contrast 数值由 design-system schema 的 appearanceProfiles 及生成绑定管理，不手改生成区域。
+
+当前行为证据见 [109 实施记录](changes/109-ui-ux-optimization/README.md)；人工视觉和真实设备限制单独保留。

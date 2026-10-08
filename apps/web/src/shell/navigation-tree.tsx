@@ -42,11 +42,23 @@ export function NavigationTree({
         {...(title ? { title } : {})}
         onClick={(event) => {
           // 统一导航入口：先做 no-op 短路与离开确认（dirty 时弹窗），确认后才导航。
-          // 取消 → preventDefault（路由/标签/进度不变）。onNavigate 副作用始终触发。
+          // 取消 → preventDefault（路由/标签/进度不变）。确认后才执行关闭等副作用。
+          if (
+            event.button !== 0 ||
+            event.metaKey ||
+            event.ctrlKey ||
+            event.shiftKey ||
+            event.altKey
+          )
+            return;
           event.preventDefault();
-          if (onLinkNavigate) queueMicrotask(onLinkNavigate);
+
           void proceedAfterLeaveConfirm(href, t('shell.primaryNav')).then((proceed) => {
-            if (!proceed) return;
+            if (!proceed) {
+              if (href === location.pathname + location.search + location.hash) onLinkNavigate?.();
+              return;
+            }
+            onLinkNavigate?.();
             markForwardRouteIntent();
             void nextRouter.push(href, {
               transitionTypes: [pageTransitionTypes.forward],

@@ -16,7 +16,9 @@ import type { Preferences } from '@community-go/surface/preferences-model';
 import { Star } from 'lucide-react';
 import { useSyncExternalStore, useState } from 'react';
 
-import { getReferenceResources } from '../../data';
+import { useReferenceResources } from '../../src/use-reference-resources';
+import { copyResourceId } from '../../src/browser-clipboard';
+import { useSearchParams } from 'next/navigation';
 import type { ReferenceResource } from '../../data';
 
 const statusTone: Record<ReferenceResource['status'], StatusTone> = {
@@ -29,8 +31,10 @@ export default function ReferenceResourcesDetailPage() {
   const { notify } = useFeedback();
   const preferencesPort = usePreferencesPort<Preferences>();
   const notifications = useNotificationsPort();
-  const resource = getReferenceResources()[0] ?? null;
+  const id = useSearchParams().get('id');
+  const resource = useReferenceResources().find((item) => item.id === id);
   const [copied, setCopied] = useState(false);
+  const [copyFailed, setCopyFailed] = useState(false);
   // 面包屑（导航偏好 breadcrumbs，默认开）：canonical hierarchy 列表 → 详情。
   const breadcrumbsOn = preferencesPort.getSnapshot().navigation.breadcrumbs;
   // 详情展示模式（操作偏好 detailMode/expandDetailInfo，默认 compact/关）：
@@ -41,7 +45,7 @@ export default function ReferenceResourcesDetailPage() {
   const showDetailInfo = detailMode === 'full' || expandDetailInfo;
   // 收藏（工作台 Port）：首页"收藏"区段的真实数据来源。
   const workbenchPort = useWorkbenchPort();
-  const favoritePath = '/reference-resources/detail';
+  const favoritePath = `/reference-resources/detail?id=${encodeURIComponent(id ?? '')}`;
   const isFavorite = useSyncExternalStore(
     (onChange) => workbenchPort.subscribe(onChange),
     () => workbenchPort.isFavorite(favoritePath),
@@ -50,13 +54,19 @@ export default function ReferenceResourcesDetailPage() {
   const toggleFavorite = () => {
     workbenchPort.toggleFavorite({
       pathname: favoritePath,
-      title: t('referenceResources.detail.title'),
+      title: resource?.name ?? t('referenceResources.detail.title'),
     });
   };
 
   const copyId = async () => {
     if (!resource) return;
-    await navigator.clipboard.writeText(resource.id);
+    setCopyFailed(false);
+    try {
+      await copyResourceId(resource.id);
+    } catch {
+      setCopyFailed(true);
+      return;
+    }
     // 复制后反馈（操作偏好 copyFeedback，默认开）：真实复制成功 → 提示。
     if (preferencesPort.getSnapshot().actionPreferences.copyFeedback) {
       notify({ title: t('referenceResources.detail.copyFeedbackTitle'), tone: 'success' });
@@ -76,17 +86,29 @@ export default function ReferenceResourcesDetailPage() {
 
   return (
     <Page>
+      {copyFailed ? (
+        <p role="alert" className="text-danger">
+          {t('referenceResources.detail.copyFailed')}
+        </p>
+      ) : null}
       <PageHeader
         {...(breadcrumbsOn
           ? {
               breadcrumbLabel: t('referenceResources.common.breadcrumbLabel'),
               breadcrumbs: [
-                { label: t('referenceResources.nav.root') },
+                {
+                  label: t('referenceResources.nav.root'),
+                  content: (
+                    <RouteLink target={route('reference-resources')}>
+                      {t('referenceResources.nav.root')}
+                    </RouteLink>
+                  ),
+                },
                 { label: t('referenceResources.detail.title'), current: true },
               ],
             }
           : {})}
-        eyebrow="Reference · File Routes"
+        eyebrow={t('referenceResources.common.localDemo')}
         title={t('referenceResources.detail.title')}
         description={t('referenceResources.detail.description')}
         actions={
@@ -168,13 +190,17 @@ export default function ReferenceResourcesDetailPage() {
             ) : null}
           </div>
           <div className="flex justify-end border-t border-border p-4">
-            <RouteLink target={route('reference-resources.edit')}>
+            <RouteLink
+              target={route('reference-resources.edit', {}, { query: { id: resource.id } })}
+            >
               {t('referenceResources.detail.edit')}
             </RouteLink>
           </div>
         </Panel>
       ) : (
-        <Panel className="p-6 text-sm text-ink-muted">{t('referenceResources.list.empty')}</Panel>
+        <Panel className="p-6 text-sm text-ink-muted">
+          {t('referenceResources.common.notFound')}. {t('referenceResources.common.invalidId')}
+        </Panel>
       )}
     </Page>
   );

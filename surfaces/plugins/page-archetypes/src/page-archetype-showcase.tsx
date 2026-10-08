@@ -1,216 +1,218 @@
 'use client';
-
+import { useEffect, useState } from 'react';
 import { Collection } from '@community-go/surface-foundation/collection';
-import {
-  EntitySummary,
-  SettingsLayout,
-  Timeline,
-} from '@community-go/surface-foundation/detail-settings';
+import { EntitySummary, SettingsLayout } from '@community-go/surface-foundation/detail-settings';
 import { FormActions, FormStatus } from '@community-go/surface-foundation/form-actions';
 import { Page, PageHeader, Section, SplitView } from '@community-go/surface-foundation/layout';
-import { OperationStatus } from '@community-go/surface-foundation/states-operations';
+import {
+  OperationStatus,
+  type OperationState,
+} from '@community-go/surface-foundation/states-operations';
 import { useFrontendTranslation } from '@community-go/i18n';
 import { Action } from '@community-go/ui-adapter/action';
+import { SwitchField, TextField } from '@community-go/ui-adapter/form-field';
 import { Panel } from '@community-go/ui-adapter/panel';
 import { TextLink } from '@community-go/ui-adapter/navigation';
 import { StateSurface } from '@community-go/ui-adapter/state-surface';
-import { StatusPill } from '@community-go/ui-adapter/status-pill';
 import { Clock3, FileText } from 'lucide-react';
-
 export type PageArchetypeKind = 'overview' | 'detail' | 'settings' | 'master-detail' | 'operation';
-
-const labels = {
-  'zh-CN': {
-    overview: ['总览页面', '指标、异常与下一步行动拥有稳定的信息层级。'],
-    detail: ['实体详情', '摘要、元数据、时间线与状态操作保持职责分离。'],
-    settings: ['设置页面', '导航、只读分区、可编辑分区与保存动作拥有固定位置。'],
-    'master-detail': ['主从页面', '桌面双栏在窄屏退化为单列，详情仍保持上下文。'],
-    operation: ['操作任务', '排队、处理中、成功与失败使用不同于页面 Loading 的语义。'],
-  },
-  en: {
-    overview: ['Overview page', 'Metrics, exceptions, and next actions keep a stable hierarchy.'],
-    detail: ['Entity detail', 'Summary, metadata, timeline, and actions stay independently owned.'],
-    settings: [
-      'Settings page',
-      'Navigation, read-only sections, editable sections, and save actions remain predictable.',
-    ],
-    'master-detail': [
-      'Master-detail page',
-      'The desktop split degrades to one column without losing context.',
-    ],
-    operation: [
-      'Operation page',
-      'Queued, running, successful, and failed work is distinct from page loading.',
-    ],
-  },
-} as const;
-
-function OverviewScenario() {
-  return (
-    <div className="grid gap-4 lg:grid-cols-3">
-      {[
-        ['128', 'Active resources'],
-        ['7', 'Need review'],
-        ['99.9%', 'Policy coverage'],
-      ].map(([value, label]) => (
-        <Panel className="p-5" key={label}>
-          <p className="text-sm text-ink-muted">{label}</p>
-          <p className="mt-2 text-3xl font-extrabold text-ink">{value}</p>
-        </Panel>
-      ))}
-      <Section
-        appearance="outlined"
-        description="The warning remains actionable without replacing healthy content."
-        title="Attention required"
-      >
-        <StateSurface
-          compact
-          actionLabel="Review"
-          description="Two deterministic items are awaiting a decision."
-          icon={<Clock3 className="size-5" />}
-          onAction={() => undefined}
-          state="warning"
-          title="Review queue"
+export function PageArchetypeShowcase({ kind }: Readonly<{ kind: PageArchetypeKind }>) {
+  const { t } = useFrontendTranslation();
+  const text = (key: string) => t(`pageArchetypes.scenario.${key}`);
+  const [reviewing, setReviewing] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [name, setName] = useState('REF-028');
+  const [savedName, setSavedName] = useState('REF-028');
+  const [notifications, setNotifications] = useState(true);
+  const [savedNotifications, setSavedNotifications] = useState(true);
+  const [selected, setSelected] = useState('review');
+  const [operation, setOperation] = useState<OperationState>('queued');
+  const [progress, setProgress] = useState(0);
+  const [fail, setFail] = useState(false);
+  const [invalid, setInvalid] = useState(false);
+  const dirty = name !== savedName || notifications !== savedNotifications;
+  const save = () => {
+    if (!name.trim()) {
+      setInvalid(true);
+      return;
+    }
+    setInvalid(false);
+    setSavedName(name.trim());
+    setSavedNotifications(notifications);
+    setEditing(false);
+  };
+  const reset = () => {
+    setName(savedName);
+    setNotifications(savedNotifications);
+    setInvalid(false);
+  };
+  useEffect(() => {
+    if (operation !== 'running') return;
+    const timer = setInterval(() => setProgress((value) => Math.min(100, value + 25)), 400);
+    return () => clearInterval(timer);
+  }, [operation]);
+  useEffect(() => {
+    if (operation !== 'running' || progress !== 100) return;
+    const timer = setTimeout(() => setOperation(fail ? 'failed' : 'succeeded'), 0);
+    return () => clearTimeout(timer);
+  }, [operation, progress, fail]);
+  const form = (
+    <>
+      <Section id="general" title={text('general')} contentInset>
+        <TextField
+          label={text('name')}
+          value={name}
+          onChange={(event) => setName(event.currentTarget.value)}
+          {...(invalid ? { error: text('required') } : {})}
         />
       </Section>
-    </div>
-  );
-}
-
-function DetailScenario() {
-  return (
-    <div className="space-y-5">
-      <EntitySummary
-        actions={<Action onPress={() => undefined}>Edit</Action>}
-        description="REF-028 · deterministic semantic scenario"
-        status={<StatusPill tone="success">Healthy</StatusPill>}
-        title="Regional release readiness"
-      />
-      <Section title="Activity">
-        <div className="p-5">
-          <Timeline
-            label="Entity activity"
-            items={[
-              { id: 'approved', title: 'Approved', meta: '10:40', tone: 'success' },
-              { id: 'reviewed', title: 'Policy reviewed', meta: '09:15' },
-            ]}
-          />
-        </div>
-      </Section>
-    </div>
-  );
-}
-
-function SettingsScenario() {
-  return (
-    <SettingsLayout
-      navigation={
-        <Panel className="p-3">
-          <nav aria-label="Settings sections" className="grid gap-1">
-            <TextLink href="#general">General</TextLink>
-            <TextLink href="#notifications" tone="neutral">
-              Notifications
-            </TextLink>
-          </nav>
-        </Panel>
-      }
-    >
-      <Section id="general" title="General settings">
-        <div className="p-5 text-sm leading-6 text-ink-muted">
-          Editable fields belong to the Feature schema.
-        </div>
+      <Section id="notifications" title={text('notifications')} contentInset>
+        <SwitchField
+          label={text('notifications')}
+          description={text('notificationsHint')}
+          checked={notifications}
+          onCheckedChange={setNotifications}
+        />
       </Section>
       <FormActions
-        primary={<Action onPress={() => undefined}>Save changes</Action>}
+        primary={
+          <Action onPress={save} disabled={!dirty}>
+            {text('save')}
+          </Action>
+        }
         secondary={
-          <Action variant="quiet" onPress={() => undefined}>
-            Reset
+          <Action variant="quiet" onPress={reset} disabled={!dirty}>
+            {text('reset')}
           </Action>
         }
         summary={
           <FormStatus
-            lifecycle="dirty"
+            lifecycle={invalid ? 'invalid' : dirty ? 'dirty' : 'pristine'}
             labels={{
-              pristine: 'Saved',
-              dirty: 'Unsaved',
-              submitting: 'Saving',
-              submitted: 'Saved',
-              invalid: 'Fix errors',
+              pristine: text('saved'),
+              dirty: text('unsaved'),
+              submitting: text('saving'),
+              submitted: text('saved'),
+              invalid: text('required'),
             }}
           />
         }
       />
-    </SettingsLayout>
+    </>
   );
-}
-
-function MasterDetailScenario() {
-  return (
-    <SplitView
-      master={
-        <Collection
-          content={
-            <div className="grid gap-1 p-2">
-              {['Policy review', 'Release readiness', 'Audit queue'].map((item) => (
-                <Action fullWidth key={item} variant="quiet" onPress={() => undefined}>
-                  {item}
-                </Action>
-              ))}
-            </div>
-          }
-          title="Resources"
-        />
-      }
-      detail={
-        <EntitySummary description="Selected from the master collection" title="Policy review" />
-      }
-    />
-  );
-}
-
-function OperationScenario() {
-  return (
-    <OperationStatus
-      actions={
-        <Action variant="secondary" onPress={() => undefined}>
-          Cancel
-        </Action>
-      }
-      description="This local state proves pending-operation semantics without a backend task."
-      icon={<FileText className="size-5" />}
-      progress={62}
-      progressLabel="Operation progress"
-      state="running"
-      title="Generating report"
-    />
-  );
-}
-
-export function PageArchetypeShowcase({ kind }: Readonly<{ kind: PageArchetypeKind }>) {
-  const { locale } = useFrontendTranslation();
-  const [title, description] = labels[locale === 'en' ? 'en' : 'zh-CN'][kind];
-  const scenario =
-    kind === 'overview' ? (
-      <OverviewScenario />
-    ) : kind === 'detail' ? (
-      <DetailScenario />
-    ) : kind === 'settings' ? (
-      <SettingsScenario />
-    ) : kind === 'master-detail' ? (
-      <MasterDetailScenario />
-    ) : (
-      <OperationScenario />
-    );
-
   return (
     <Page>
       <PageHeader
-        actions={<StatusPill tone="info">Reference Scenario</StatusPill>}
-        description={description}
-        eyebrow="Page Archetype"
-        title={title}
+        eyebrow={text('eyebrow')}
+        title={text(`title.${kind}`)}
+        description={text('description')}
       />
-      {scenario}
+      {kind === 'overview' ? (
+        <Section title={text('review')} appearance="outlined">
+          <StateSurface
+            compact
+            state="warning"
+            title={text('queue')}
+            description={text('queueDescription')}
+            icon={<Clock3 className="size-5" />}
+            actionLabel={text('review')}
+            onAction={() => setReviewing(true)}
+          />
+          {reviewing ? (
+            <div className="grid gap-3 p-5">
+              <p>{text('reviewContent')}</p>
+              <Action onPress={() => setReviewing(false)}>{text('complete')}</Action>
+            </div>
+          ) : null}
+        </Section>
+      ) : kind === 'detail' ? (
+        <>
+          <EntitySummary
+            title={savedName}
+            description={text('entityDescription')}
+            actions={
+              <Action onPress={() => setEditing(true)} disabled={editing}>
+                {text('edit')}
+              </Action>
+            }
+          />
+          {editing ? (
+            form
+          ) : (
+            <Section title={text('activity')} contentInset>
+              {text('activityContent')}
+            </Section>
+          )}
+        </>
+      ) : kind === 'settings' ? (
+        <SettingsLayout
+          navigation={
+            <Panel appearance="outlined" className="grid gap-2 p-3">
+              <TextLink href="#general">{text('general')}</TextLink>
+              <TextLink href="#notifications">{text('notifications')}</TextLink>
+            </Panel>
+          }
+        >
+          {form}
+        </SettingsLayout>
+      ) : kind === 'master-detail' ? (
+        <SplitView
+          master={
+            <Collection
+              title={text('resources')}
+              content={
+                <div className="grid gap-1 p-2">
+                  {['review', 'release', 'audit'].map((id) => (
+                    <Action
+                      fullWidth
+                      key={id}
+                      variant={selected === id ? 'secondary' : 'quiet'}
+                      onPress={() => setSelected(id)}
+                    >
+                      {text(id)}
+                    </Action>
+                  ))}
+                </div>
+              }
+            />
+          }
+          detail={<EntitySummary title={text(selected)} description={text(`detail.${selected}`)} />}
+        />
+      ) : (
+        <>
+          <SwitchField
+            label={text('fail')}
+            description={text('failDescription')}
+            checked={fail}
+            onCheckedChange={setFail}
+            disabled={operation === 'running'}
+          />
+          <OperationStatus
+            state={operation}
+            title={text(`operation.${operation}`)}
+            description={text('operationDescription')}
+            icon={<FileText className="size-5" />}
+            progress={progress}
+            progressLabel={text('progress')}
+            actions={
+              operation === 'running' ? (
+                <Action variant="secondary" onPress={() => setOperation('cancelled')}>
+                  {text('cancel')}
+                </Action>
+              ) : (
+                <Action
+                  onPress={() => {
+                    setProgress(0);
+                    setOperation('running');
+                  }}
+                >
+                  {text(operation === 'failed' ? 'retry' : 'run')}
+                </Action>
+              )
+            }
+          />
+        </>
+      )}
     </Page>
   );
 }

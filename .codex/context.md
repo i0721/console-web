@@ -1,5 +1,9 @@
 # Console Web Agent 任务上下文与跨电脑交接
 
+> 当前实施已进入 109 优化收尾。前十节保留电脑 A 的历史快照；继续工作先看
+> [109 实施账本](../docs/changes/109-ui-ux-optimization/tasks.md) 与最终验证日志，
+> 不把以下旧 lint、列宽阻塞或未实施描述当成当前代码状态。
+
 记录日期：2026-10-07（用户时区 America/New_York）。所有路径以仓库根目录为基准，不依赖电脑 A 的绝对路径。本文件是交接快照；当前架构 authority 仍为根 AGENTS.md、README.md、docs/README.md 及主题文档。
 
 ## 1 接手说明
@@ -284,3 +288,41 @@ pnpm dev
 | `docs/changes/108-ui-ux-audit/evidence/typecheck.log`                             | 检查日志          | 首轮UI/UX与工程检查                   |
 | `docs/changes/108-ui-ux-audit/evidence/unit-tests.log`                            | 检查日志          | 首轮UI/UX与工程检查                   |
 | `docs/changes/108-ui-ux-audit/evidence/workspace-mobile.jpg`                      | 截图              | 首轮UI/UX与工程检查                   |
+
+## 11 电脑 B 的 109 实施快照（2026-10-08，Asia/Shanghai）
+
+用户已明确批准完整七批实施方案。本节更新第 1–10 节历史快照，不从零重做
+108 审查；依据三份报告的 37 编号归并 18 工作包，当前源码、设计与消费者说明见
+[109 入口](../docs/changes/109-ui-ux-optimization/README.md) 和
+[实施账本](../docs/changes/109-ui-ux-optimization/tasks.md)。
+
+- 当前 main / HEAD da0a0a53c410c20fde5bc4293f2465f0f5762786；本轮修改未提交、未推送。
+  初始 83 个 tracked M 文本 diff 为空，未回滚现场。现在已有真实代码/文档修改。
+- Node 24.11.1，pnpm 10.22.0；旧电脑 Node 24.19.0。既有两个 codegen watcher 保留。
+  开发服务仍为 4173；Next dev 使用 .next，production build 使用 dist，避免 ENOTEMPTY。
+- 七批代码已实施：正式手机导航、Shell/Overlay、尺寸/Tabs/Toggle、Settings 与
+  appearanceProfiles Schema、PageTabs/导航保护、工作台/列宽、真实本地示例与
+  Reference、i18n/首页事实/Showcase。公共聚合入口保持；不是一轮新的待实施计划。
+- 原生重复提交、过期校验重定向、草稿 reset/dirty、标签 hydration、Settings 重复
+  进入、大字号 body 最小宽、手机详情关闭焦点等新增实际缺陷也已修复并回归。
+  详情打开延后一帧让 HeroUI 捕获集合焦点；清理 frame/跨桌面状态，不自建 Focus。
+- 最终完整 pnpm check 已执行：治理/lint/类型、369 单元、生产构建、原预算通过。
+  最大 Route gzip 432613 B，原上限 440320 B。浏览器 219 项：205 通过、14 视觉
+  比较失败；27 个错误均为 toHaveScreenshot，无其它行为断言失败。完整命令 exit 1。
+  被截断的 format/docs 门单独补跑，具体最终结果见验证记录及对应日志。
+- 107 Schema 权威收尾已标记完成；列宽功能和迁移已实现并自动验证，整体视觉门
+  尚未批准。外部五页 × 两主题 × 三宽度 30 张截图与交互态已补，不声称外部全部
+  状态、真实设备或原生 zoom 均通过。旧 vendor 缺导出阻塞结论已纠正。
+- 原始 108 截图、审查文字和 JSON 数据保留；18 个文本文件只有统一 LF/Prettier
+  格式空白变化。增加 .gitattributes 收口换行，不降低质量规则或增加无条件排除。
+- 当前人工复核入口为 [27 组视觉差异](../docs/changes/109-ui-ux-optimization/evidence/visual-diffs-final/index.html)。
+  保留原基线/最终渲染/diff，manifest 有来源和 SHA256；既有 baseline 修改数为 0。
+  临时只读预览 4174，目录仅为 109/evidence；完整原日志 check-final.txt。
+- [最终验证记录](../docs/changes/109-ui-ux-optimization/evidence/verification.md) 是本轮
+  状态入口。早期 check-current、check-before-submit-guards、check-before-detail-focus
+  与被中断日志是过程证据，不能当作当前结果。
+
+继续时先检查实时 Git 和上述最终日志，保留现有实现。下一步是人工逐张确认视觉
+变化是否合理；AGENTS 要求批准后才更新 baseline，再执行完整门禁。不提高 diff
+阈值、不将人工和真实设备限制改为“通过”。有指定视觉修改则先修代码并复验，
+不要把用户的普通“继续”自动当作视觉基线批准。

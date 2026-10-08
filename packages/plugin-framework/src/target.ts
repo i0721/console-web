@@ -13,8 +13,9 @@ export type { RouteTarget } from './target-types';
 export function route<RouteId extends string = string>(
   routeId: RouteId,
   params: Readonly<Record<string, string>> = {},
+  location?: Readonly<{ query?: Readonly<Record<string, string>>; fragment?: string }>,
 ): RouteTarget<RouteId> {
-  return { routeId, params };
+  return { routeId, params, ...location };
 }
 
 /** 编码单个段；动态段直接编码，静态段保持原样。 */

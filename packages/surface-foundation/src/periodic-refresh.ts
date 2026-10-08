@@ -56,7 +56,7 @@ export function createPeriodicRefresh(input: PeriodicRefreshInput) {
     if (input.isPaused()) return; // 后台/离线/提交中/未提交编辑 → 跳过本次
     const result = input.onTick();
     // 仅当返回 thenable 才进入 pending（同步 onTick 立即完成，不阻塞下一周期）。
-    if (result && typeof (result as Promise<void>).then === 'function') {
+    if (result && typeof result.then === 'function') {
       pending = true;
       try {
         await result;

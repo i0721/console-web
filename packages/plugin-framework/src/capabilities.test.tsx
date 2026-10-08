@@ -108,7 +108,7 @@ function createWorkspacePort(): WorkspacePort<'name' | 'kind'> {
     savePageState: (pageId, input) => {
       const stored: Stored = { pageId, version: 1 };
       if (input.list) stored.list = input.list;
-      if (input.draft) stored.draft = input.draft as NonNullable<Stored['draft']>;
+      if (input.draft) stored.draft = input.draft;
       store.set(pageId, stored);
       return { ok: true };
     },

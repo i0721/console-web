@@ -2,6 +2,7 @@ import { tv } from '@heroui/styles';
 import { ToggleButton } from '@heroui/react/toggle-button';
 import { ToggleButtonGroup as HeroToggleButtonGroup } from '@heroui/react/toggle-button-group';
 import { useId, type ReactNode } from 'react';
+import { useCollectionViewport } from './browser-layout';
 
 export type ToggleGroupOption = Readonly<{
   id: string;
@@ -53,9 +54,10 @@ const itemBorderByMode = {
  * single（coherent segmented）不加 gap，保持连续 segmented composition。
  */
 const groupContainerClass = {
-  single: 'inline-flex max-w-full rounded-panel border border-border bg-surface-muted p-1',
+  single:
+    'inline-flex min-w-0 max-w-full overflow-x-auto rounded-panel border border-border bg-surface-muted p-1',
   multiple:
-    'inline-flex max-w-full items-stretch gap-1 rounded-panel border border-border bg-surface-muted p-1',
+    'inline-flex min-w-0 max-w-full flex-wrap items-stretch gap-1 rounded-panel border border-border bg-surface-muted p-1',
 } as const;
 
 export function ToggleGroup({
@@ -70,9 +72,14 @@ export function ToggleGroup({
 }: ToggleGroupProps) {
   const labelId = useId();
   const descriptionId = useId();
+  const { ref, overflow } = useCollectionViewport(
+    selectedIds.join('|'),
+    options.map((option) => [option.id, option.label, option.disabled].join(':')).join('|'),
+    '[aria-checked="true"], [aria-pressed="true"]',
+  );
 
   return (
-    <div className="grid gap-2">
+    <div className="grid min-w-0 grid-cols-1 gap-2">
       <span className="text-sm font-semibold text-ink" id={labelId}>
         {label}
       </span>
@@ -82,6 +89,7 @@ export function ToggleGroup({
         </span>
       ) : null}
       <HeroToggleButtonGroup
+        ref={ref}
         aria-labelledby={labelId}
         className={groupContainerClass[selectionMode]}
         isDisabled={disabled}
@@ -92,7 +100,7 @@ export function ToggleGroup({
       >
         {options.map((option) => (
           <ToggleButton
-            className={`${toggleStyles({ size })} ${itemBorderByMode[selectionMode]}`}
+            className={`${toggleStyles({ size })} ${itemBorderByMode[selectionMode]} ${selectionMode === 'single' ? 'shrink-0 whitespace-nowrap' : ''}`}
             id={option.id}
             key={option.id}
             variant="ghost"
@@ -110,6 +118,12 @@ export function ToggleGroup({
           </ToggleButton>
         ))}
       </HeroToggleButtonGroup>
+      {overflow.before || overflow.after ? (
+        <span aria-hidden="true" className="text-end text-xs text-ink-muted">
+          {overflow.before ? '‹ ' : ''}
+          {overflow.after ? ' ›' : ''}
+        </span>
+      ) : null}
     </div>
   );
 }

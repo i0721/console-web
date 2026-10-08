@@ -1,6 +1,7 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
-async function resetAll(page: import('@playwright/test').Page) {
+async function resetAll(page: Page) {
   await page.goto('/settings/actions');
   await page.evaluate(() => {
     window.localStorage.removeItem('community-go.shell');
@@ -11,7 +12,7 @@ async function resetAll(page: import('@playwright/test').Page) {
 }
 
 /** 开启 保留最近搜索 + 显示搜索历史（默认均关）。 */
-async function enableHistory(page: import('@playwright/test').Page) {
+async function enableHistory(page: Page) {
   await page.goto('/settings/actions');
   await page.getByRole('heading', { name: '操作偏好' }).first().scrollIntoViewIfNeeded();
   for (const label of ['保留最近搜索', '显示搜索历史']) {

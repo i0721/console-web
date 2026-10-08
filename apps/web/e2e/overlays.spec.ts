@@ -120,7 +120,7 @@ test('九个 Family 页面逐项公开全部 UI Element', async ({ page }) => {
       await expect(page.getByRole('heading', { level: 3, name: element, exact: true })).toHaveCount(
         1,
       );
-      await expect(page.getByLabel(`${element} states`, { exact: true })).toBeAttached();
+      await expect(page.getByLabel(`${element} 状态`, { exact: true })).toBeAttached();
     }
     await assertOverlayAccessibility(page);
   }
@@ -202,16 +202,16 @@ test('危险确认使用 AlertDialog 语义且确认动作真实可执行', asyn
   await expect(dialog).toContainText('仅清除当前 UI Elements 中的本地动作状态。');
   await assertOverlayAccessibility(page);
   const trigger = page.getByRole('button', { name: '危险确认' });
-  await page.getByRole('button', { name: '取消' }).click();
+  await dialog.getByRole('button', { name: '取消' }).click();
   await expect(dialog).toBeHidden();
   await trigger.click();
   await expect(dialog).toBeVisible();
-  await page.getByRole('button', { name: '取消' }).click();
+  await dialog.getByRole('button', { name: '取消' }).click();
   await expect(dialog).toBeHidden();
   await expect(trigger).toBeFocused();
   await trigger.click();
   await expect(dialog).toBeVisible();
-  await page.getByRole('button', { name: '确认删除' }).click();
+  await dialog.getByRole('button', { name: '确认删除' }).click();
   await expect(dialog).toBeHidden();
   await expect(page.getByRole('status').filter({ hasText: '确认删除' })).toBeVisible();
 });
@@ -566,7 +566,7 @@ test('Select 与 Combobox 使用统一 Popup、键盘和选中状态', async ({ 
   await assertMatchesTriggerWidth(page, 'select-popover');
   await assertListboxScrolls(page);
   await expect(page.getByRole('option', { name: '执行队列 12' })).toBeVisible();
-  await expect(page).toHaveScreenshot('ui-elements-select-open.png');
+  await expect.soft(page).toHaveScreenshot('ui-elements-select-open.png');
   await page.keyboard.press('Enter');
   await expect(page.getByRole('button', { name: '执行队列 12 Select' })).toBeVisible();
 
@@ -589,7 +589,7 @@ test('Select 与 Combobox 使用统一 Popup、键盘和选中状态', async ({ 
   await combo.fill('Mika');
   await expect(page.getByRole('option', { name: 'Mika Sato' })).toBeVisible();
   await assertMatchesTriggerWidth(page, 'combo-box-popover');
-  await expect(page).toHaveScreenshot('ui-elements-combobox-open.png');
+  await expect.soft(page).toHaveScreenshot('ui-elements-combobox-open.png');
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('Enter');
   await expect(combo).toHaveValue('Mika Sato');
@@ -598,10 +598,10 @@ test('Select 与 Combobox 使用统一 Popup、键盘和选中状态', async ({ 
 
 test('Dropdown、Popover 与 Tooltip 展开面进入视觉回归', async ({ page }) => {
   await page.goto('/ui-elements/overlays');
-  const menuTrigger = page.getByRole('button', { name: 'Dropdown Menu' });
+  const menuTrigger = page.getByRole('button', { name: 'Reference 操作菜单' });
   await menuTrigger.click();
   await expect(page.getByRole('menu')).toBeVisible();
-  await expect(page).toHaveScreenshot('ui-elements-menu-open.png');
+  await expect.soft(page).toHaveScreenshot('ui-elements-menu-open.png');
   await page.keyboard.press('Escape');
   await expect(menuTrigger).toBeFocused();
 
@@ -620,7 +620,7 @@ test('Dropdown、Popover 与 Tooltip 展开面进入视觉回归', async ({ page
     .locator('html')
     .evaluate((element) => element.scrollHeight);
   expect(pageHeightAfterOpen).toBe(pageHeightBeforeOpen);
-  await expect(page).toHaveScreenshot('ui-elements-popover-open.png');
+  await expect.soft(page).toHaveScreenshot('ui-elements-popover-open.png');
   await page.keyboard.press('Escape');
   await expect(popover).toBeHidden();
   await expect(popoverTrigger).toBeFocused();
@@ -628,7 +628,7 @@ test('Dropdown、Popover 与 Tooltip 展开面进入视觉回归', async ({ page
   const tooltipTrigger = page.getByRole('button', { name: 'Tooltip' });
   await tooltipTrigger.focus();
   await expect(page.getByRole('tooltip')).toBeVisible();
-  await expect(page).toHaveScreenshot('ui-elements-tooltip-open.png');
+  await expect.soft(page).toHaveScreenshot('ui-elements-tooltip-open.png');
 });
 
 test('DatePicker 与 Command 展开面支持键盘及无障碍扫描', async ({ page }) => {
@@ -641,7 +641,7 @@ test('DatePicker 与 Command 展开面支持键盘及无障碍扫描', async ({ 
   );
   await datePickerTrigger.click();
   await expect(page.getByRole('dialog')).toBeVisible();
-  await expect(page).toHaveScreenshot('ui-elements-date-picker-open.png');
+  await expect.soft(page).toHaveScreenshot('ui-elements-date-picker-open.png');
   await page.keyboard.press('Escape');
 
   await page.goto('/ui-elements/overlays');
@@ -654,7 +654,7 @@ test('DatePicker 与 Command 展开面支持键盘及无障碍扫描', async ({ 
   await page.getByLabel('搜索命令').fill('状态');
   await expect(page.getByRole('option', { name: /状态体系/ })).toBeVisible();
   await assertOverlayAccessibility(page);
-  await expect(page).toHaveScreenshot('ui-elements-command-open.png');
+  await expect.soft(page).toHaveScreenshot('ui-elements-command-open.png');
 });
 
 test('Dialog 与 Drawer 锁定焦点并支持 Escape 恢复 Trigger', async ({ page }) => {
@@ -665,7 +665,7 @@ test('Dialog 与 Drawer 锁定焦点并支持 Escape 恢复 Trigger', async ({ p
   await expect(dialog).toBeVisible();
   await page.keyboard.press('Tab');
   await expect(dialog.locator(':focus')).toHaveCount(1);
-  await expect(page).toHaveScreenshot('ui-elements-dialog-open.png');
+  await expect.soft(page).toHaveScreenshot('ui-elements-dialog-open.png');
   await page.keyboard.press('Escape');
   await expect(dialogTrigger).toBeFocused();
 
@@ -674,7 +674,7 @@ test('Dialog 与 Drawer 锁定焦点并支持 Escape 恢复 Trigger', async ({ p
   const drawer = page.getByRole('dialog');
   await expect(drawer).toContainText('辅助配置');
   await assertOverlayAccessibility(page);
-  await expect(page).toHaveScreenshot('ui-elements-drawer-open.png');
+  await expect.soft(page).toHaveScreenshot('ui-elements-drawer-open.png');
   await page.keyboard.press('Escape');
   await expect(drawerTrigger).toBeFocused();
 });
@@ -734,11 +734,15 @@ test('Overlay Trigger 交互状态不切换成 Brand Primary（idle/hover/presse
   const restored = await readBg();
   expect(restored.cls).not.toContain('button--primary');
   // 中性 hover 反馈（surface-muted）或回到 idle 白皆可；绝不出现 brand 蓝实色
-  const isNeutral =
-    restored.bg === 'rgb(255, 255, 255)' ||
-    restored.bg === 'rgb(240, 242, 247)' ||
-    restored.bg === 'rgb(242, 244, 248)';
-  expect(isNeutral).toBe(true);
+  const muted = await page.evaluate(() => {
+    const probe = document.createElement('span');
+    probe.style.backgroundColor = 'var(--color-surface-muted)';
+    document.body.append(probe);
+    const color = getComputedStyle(probe).backgroundColor;
+    probe.remove();
+    return color;
+  });
+  await expect.poll(async () => [idle.bg, muted].includes((await readBg()).bg)).toBe(true);
 });
 
 test('危险确认 Trigger 在 pressed 状态保持 danger 语义（不切换 Brand）', async ({ page }) => {
@@ -779,7 +783,7 @@ test('危险确认 Trigger 在 pressed 状态保持 danger 语义（不切换 Br
 test('Tree 层级数据集合：depth 缩进、展开/折叠、状态与 keyboard 语义', async ({ page }) => {
   await page.goto('/ui-elements/navigation');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
-  const tree = page.getByRole('treegrid', { name: 'Foundation tree' });
+  const tree = page.getByRole('treegrid', { name: '基座树' });
 
   // Tree 自身轻量透明（Surface 由宿主提供）
   await expect(tree).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
@@ -832,7 +836,7 @@ test('Tree 层级数据集合：depth 缩进、展开/折叠、状态与 keyboar
 
   // Axe WCAG AA（treegrid 内）
   const accessibility = await new AxeBuilder({ page })
-    .include('[aria-label="Foundation tree"]')
+    .include('[aria-label="基座树"]')
     .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
     .analyze();
   expect(accessibility.violations).toEqual([]);

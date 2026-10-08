@@ -25,6 +25,7 @@ export function DataElementsPage() {
   const { t } = useFrontendTranslation();
   const searchParams = useSearchParams();
   const { locale } = usePluginLocale();
+  const [columnWidths, setColumnWidths] = useState<Readonly<Record<string, number>>>({});
   const [selectedTableId, setSelectedTableId] = useState('UI-001');
   const [selectedTableIds, setSelectedTableIds] = useState<readonly string[]>([]);
   const [tableMode, setTableMode] = useState<'single' | 'multiple' | 'empty'>(
@@ -154,6 +155,8 @@ export function DataElementsPage() {
                   <DataTable
                     label={t('uiElements.dataTableLabel')}
                     columns={visibleTableColumns}
+                    columnWidths={columnWidths}
+                    onColumnWidthsChange={setColumnWidths}
                     density={density}
                     emptyContent={t('uiElements.dataTableEmpty')}
                     rows={tableMode === 'empty' ? [] : visibleTableRows}

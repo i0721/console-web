@@ -1,6 +1,7 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
-async function resetAll(page: import('@playwright/test').Page) {
+async function resetAll(page: Page) {
   await page.goto('/settings');
   await page.evaluate(() => {
     window.localStorage.removeItem('community-go.shell');
@@ -12,7 +13,7 @@ async function resetAll(page: import('@playwright/test').Page) {
 
 test('收藏：详情页收藏 → 首页"收藏"区段展示并可跳转', async ({ page }) => {
   await resetAll(page);
-  await page.goto('/reference-resources/detail');
+  await page.goto('/reference-resources/detail?id=resource-alpha');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   await page.getByRole('button', { name: '收藏此页' }).click();
   // 已收藏态。

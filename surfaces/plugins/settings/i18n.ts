@@ -5,6 +5,8 @@ export const pluginI18nResources = {
       settings: {
         eyebrow: '系统',
         navLabel: '设置分类',
+        switchCategory: '切换分类与搜索',
+        closeCategories: '关闭设置分类',
         navGroups: {
           display: '显示与数据',
           preferences: '偏好与反馈',
@@ -14,7 +16,7 @@ export const pluginI18nResources = {
         searchPlaceholder: '搜索名称、说明或分类，如“动画”',
         searchEmpty: '没有匹配的设置项',
         searchResults: '匹配的设置',
-        searchResultHint: '选择以定位到对应分类',
+        searchResultHint: '选择以定位具体设置项',
         searchClear: '清除搜索',
         searchNoResultsDescription: '换个关键词试试。',
         notSaved: '未保存到此浏览器',
@@ -220,6 +222,8 @@ export const pluginI18nResources = {
       settings: {
         eyebrow: 'System',
         navLabel: 'Settings categories',
+        switchCategory: 'Switch category and search',
+        closeCategories: 'Close settings categories',
         navGroups: {
           display: 'Display & data',
           preferences: 'Preferences & feedback',

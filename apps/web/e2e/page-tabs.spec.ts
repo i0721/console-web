@@ -1,6 +1,7 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
-async function resetAll(page: import('@playwright/test').Page) {
+async function resetAll(page: Page) {
   await page.goto('/settings/navigation');
   await page.evaluate(() => {
     window.localStorage.removeItem('community-go.shell');
@@ -12,7 +13,10 @@ async function resetAll(page: import('@playwright/test').Page) {
 
 test('顶部页面标签默认关：不显示标签条', async ({ page }) => {
   await resetAll(page);
-  await page.goto('/reference-resources');
+  await page
+    .getByRole('navigation', { name: '主导航' })
+    .getByRole('link', { name: '参考资源', exact: true })
+    .click();
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   await expect(page.getByRole('navigation', { name: '页面标签' })).not.toBeVisible();
 });
@@ -29,7 +33,10 @@ test('开启 顶部页面标签：访问页面显示标签、可切换与关闭'
   await page.waitForTimeout(300);
 
   // 访问参考资源列表 → 标签条出现含当前页。
-  await page.goto('/reference-resources');
+  await page
+    .getByRole('navigation', { name: '主导航' })
+    .getByRole('link', { name: '参考资源', exact: true })
+    .click();
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   const strip = page.getByRole('navigation', { name: '页面标签' });
   await expect(strip).toBeVisible();
@@ -40,7 +47,7 @@ test('开启 顶部页面标签：访问页面显示标签、可切换与关闭'
   await nav.getByRole('link', { name: '设置', exact: true }).click();
   await page.waitForURL(/\/settings/);
   const strip2 = page.getByRole('navigation', { name: '页面标签' });
-  await expect(strip2.getByRole('button', { name: '设置', exact: true })).toBeVisible();
+  await expect(strip2.getByRole('button', { name: '外观', exact: true })).toBeVisible();
   await expect(strip2.getByRole('button', { name: '参考资源', exact: true })).toBeVisible();
 
   // 关闭参考资源标签 → 消失。
@@ -64,10 +71,16 @@ test('关闭当前激活标签按策略导航到最近其他标签（默认 rece
   await page.waitForTimeout(300);
 
   // 访问设置根（导航叶子入口 → 记 tab）与参考资源并激活后者。
-  await page.goto('/settings');
+  await page
+    .getByRole('navigation', { name: '主导航' })
+    .getByRole('link', { name: '设置', exact: true })
+    .click();
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   await page.waitForTimeout(400);
-  await page.goto('/reference-resources');
+  await page
+    .getByRole('navigation', { name: '主导航' })
+    .getByRole('link', { name: '参考资源', exact: true })
+    .click();
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   await page.waitForTimeout(600);
   // 当前激活 = 参考资源；关闭它 → 导航到另一标签 设置（recent）。
@@ -111,7 +124,18 @@ test('恢复上次打开的标签：重载后标签保持（默认关时清除�
   }
   await page.waitForTimeout(300);
   // 访问两个页面（均为导航入口叶子：参考资源根 + 设置）。
-  await page.goto('/reference-resources');
+  await page
+    .getByRole('navigation', { name: '主导航' })
+    .getByRole('link', { name: '参考资源', exact: true })
+    .click();
+  await expect(
+    page.getByRole('heading', { level: 1, name: '参考资源', exact: true }),
+  ).toBeVisible();
+  await expect(
+    page
+      .getByRole('navigation', { name: '页面标签' })
+      .getByRole('button', { name: '参考资源', exact: true }),
+  ).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   const nav = page.getByRole('navigation', { name: '主导航' });
   await nav.getByRole('link', { name: '设置', exact: true }).click();
@@ -124,5 +148,5 @@ test('恢复上次打开的标签：重载后标签保持（默认关时清除�
   const strip = page.getByRole('navigation', { name: '页面标签' });
   await expect(strip).toBeVisible();
   await expect(strip.getByRole('button', { name: '参考资源', exact: true })).toBeVisible();
-  await expect(strip.getByRole('button', { name: '设置', exact: true })).toBeVisible();
+  await expect(strip.getByRole('button', { name: '外观', exact: true })).toBeVisible();
 });

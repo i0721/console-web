@@ -8,7 +8,6 @@ import {
   timeToIntlOptions,
   validateCategory,
   validatePreferences,
-  type Preferences,
 } from './preferences-model';
 
 describe('preferences-model 默认值（新用户无记录）', () => {
@@ -79,7 +78,7 @@ describe('preferences-model validatePreferences（不可信持久化守卫）', 
     const result = validatePreferences(input);
     expect(result.ok).toBe(true);
     if (result.ok) {
-      const value = result.value as Preferences;
+      const value = result.value;
       expect(value.appearance.themeMode).toBe('dark');
       expect(value.appearance.accent).toBe('blue');
       expect(value.dataDisplay.pageSize).toBe(50);

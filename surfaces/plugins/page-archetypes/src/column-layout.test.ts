@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { parseColumnLayoutPersisted } from './column-layout-schema';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { rehydrateStore } from '@community-go/state-foundation';
@@ -9,6 +10,29 @@ const CANONICAL = ['workstream', 'owner', 'status', 'region', 'progress', 'updat
 const MANDATORY = new Set(['workstream']);
 
 describe('列布局 store（column-layout，SET-002-005 分片）', () => {
+  it('migrates v1 without discarding sort or explicit visibility', () => {
+    expect(
+      parseColumnLayoutPersisted({
+        layouts: {
+          list: {
+            visibleOrder: ['status', 'status', 'owner'],
+            sort: { columnId: 'status', direction: 'ascending' },
+          },
+        },
+      }).layouts.list,
+    ).toEqual({
+      visibleOrder: ['status', 'owner'],
+      customVisibility: true,
+      sort: { columnId: 'status', direction: 'ascending' },
+    });
+  });
+  it('rejects damaged width records rather than applying invalid geometry', () => {
+    expect(() =>
+      parseColumnLayoutPersisted({
+        layouts: { list: { visibleOrder: ['owner'], widths: { owner: -1 } } },
+      }),
+    ).toThrow('记录损坏');
+  });
   beforeEach(() => {
     useColumnLayoutStore.setState({ layouts: {} });
   });

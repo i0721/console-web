@@ -1,6 +1,7 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
-async function resetAll(page: import('@playwright/test').Page) {
+async function resetAll(page: Page) {
   await page.goto('/settings/notifications');
   await page.evaluate(() => {
     window.localStorage.removeItem('community-go.shell');
@@ -13,7 +14,7 @@ async function resetAll(page: import('@playwright/test').Page) {
 test('通知中心：保存成功事件入铃铛 → 未读角标 → Drawer 列表 → 全部已读清角标', async ({ page }) => {
   await resetAll(page);
   // 编辑页保存（stay 默认）publish 真实 success 通知。
-  await page.goto('/reference-resources/edit');
+  await page.goto('/reference-resources/edit?id=resource-alpha');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   await page.getByRole('button', { name: '保存' }).click();
   // 铃铛（通知 aria）出现未读角标。

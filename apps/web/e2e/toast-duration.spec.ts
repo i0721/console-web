@@ -1,7 +1,8 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
 /** 清空偏好 + 设 toastDuration。 */
-async function setToastDuration(page: import('@playwright/test').Page, duration: 'short' | 'long') {
+async function setToastDuration(page: Page, duration: 'short' | 'long') {
   await page.goto('/settings/notifications');
   await page.evaluate(() => window.localStorage.removeItem('community-go.shell'));
   await page.reload();

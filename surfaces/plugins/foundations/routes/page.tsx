@@ -3,7 +3,7 @@
 import { Card, CardContent } from '@community-go/ui-adapter/card';
 import { Panel } from '@community-go/ui-adapter/panel';
 import { StatusPill } from '@community-go/ui-adapter/status-pill';
-import { AppWindow, Braces, Component, DatabaseZap, ShieldCheck } from 'lucide-react';
+import { AppWindow, Braces, Component, ShieldCheck } from 'lucide-react';
 import { useFrontendTranslation } from '@community-go/i18n';
 import { usePreferencesPort } from '@community-go/plugin-framework/preferences';
 import { useWorkbenchPort } from '@community-go/plugin-framework/workbench';
@@ -15,10 +15,9 @@ import { Page, PageHeader } from '@community-go/surface-foundation/layout';
 import { ViewportReveal } from '@community-go/surface-foundation/viewport-reveal';
 
 const layers = [
-  { id: 'hosts', icon: AppWindow, tone: 'bg-brand-soft text-brand' },
-  { id: 'application', icon: Component, tone: 'bg-info-soft text-info' },
-  { id: 'adapters', icon: DatabaseZap, tone: 'bg-warning-soft text-warning' },
   { id: 'stable', icon: Braces, tone: 'bg-success-soft text-success' },
+  { id: 'application', icon: Component, tone: 'bg-info-soft text-info' },
+  { id: 'hosts', icon: AppWindow, tone: 'bg-brand-soft text-brand' },
 ] as const;
 
 export default function FoundationsPage() {
@@ -48,7 +47,7 @@ export default function FoundationsPage() {
         actions={<StatusPill tone="success">Executable boundaries</StatusPill>}
       />
       {(showWorkbench || showFavorites) && (
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid gap-4 xl:grid-cols-3">
           {showFavorites ? (
             <Panel className="p-5">
               <h2 className="text-sm font-bold uppercase tracking-wider text-ink-muted">

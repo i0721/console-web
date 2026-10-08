@@ -58,7 +58,7 @@ test('收缩侧栏的 Hover Flyout 保持稳定并支持键盘进入', async ({ 
   await expect(flyout).toHaveCount(1);
   await expect(flyout).toBeVisible();
   await expect(expandSidebar).toBeFocused();
-  await expect(page).toHaveScreenshot('surface-shell-compact-flyout.png');
+  await expect.soft(page).toHaveScreenshot('surface-shell-compact-flyout.png');
 
   await flyout.hover();
   await page.waitForTimeout(300);
@@ -107,7 +107,7 @@ test('收缩侧栏切换兄弟菜单时同一时刻只有一个 Flyout 且旧菜
   await page.waitForTimeout(400);
   await expect(dialogs).toHaveCount(1);
   await expect(dialogs.first()).toHaveAttribute('aria-label', 'Page Archetypes');
-  await expect(page).toHaveScreenshot('surface-shell-compact-sibling-swap.png');
+  await expect.soft(page).toHaveScreenshot('surface-shell-compact-sibling-swap.png');
 
   // 快速来回切换：旧 Flyout 的延迟关闭计时器不能误关新菜单
   await uiElementsTrigger.hover();

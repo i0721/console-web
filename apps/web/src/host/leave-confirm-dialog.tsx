@@ -43,6 +43,7 @@ export function LeaveConfirmationGuard({ children }: Readonly<{ children: ReactN
   // 装配确认实现（只装一次）。
   useEffect(() => {
     setLeaveConfirmResolver((message) => {
+      pendingResolveRef.current?.(false);
       setPendingMessage(message);
       return new Promise<boolean>((resolve) => {
         pendingResolveRef.current = resolve;
@@ -50,6 +51,7 @@ export function LeaveConfirmationGuard({ children }: Readonly<{ children: ReactN
     });
     return () => {
       setLeaveConfirmResolver(null);
+      pendingResolveRef.current?.(false);
       pendingResolveRef.current = null;
     };
   }, []);

@@ -44,7 +44,7 @@ test('播放提示音：真实通知发布触发 AudioContext 提示音', async 
   await expect(sound).toBeChecked();
   await page.waitForTimeout(300);
   // 触发真实通知：编辑参考资源 → 保存发布通知。
-  await page.goto('/reference-resources/edit');
+  await page.goto('/reference-resources/edit?id=resource-alpha');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   await page.getByRole('button', { name: /保存/ }).first().click();
   await page.waitForTimeout(800);

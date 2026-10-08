@@ -3,7 +3,8 @@
 import { FeedbackProvider } from '@community-go/ui-adapter/feedback-provider';
 import { AlertBanner } from '@community-go/ui-adapter/feedback';
 import { AlertTriangle } from 'lucide-react';
-import { NotificationAlerts, useDesktopNotificationGate } from './notification-alerts';
+import { NotificationAlerts } from './notification-alerts';
+import { useDesktopNotificationGate } from './use-desktop-notification';
 import { FrontendI18nProvider, useFrontendTranslation } from '@community-go/i18n';
 import { CommandsProvider } from '@community-go/plugin-framework/commands';
 import { LeaveConfirmProvider } from '@community-go/plugin-framework/leave-confirm';

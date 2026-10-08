@@ -18,7 +18,7 @@ test('连续导航：快速依次跳转多个页面全部成功且无错误边�
 });
 
 test('连续导航含离开确认：快速导航不被脏表单残留卡死', async ({ page }) => {
-  await page.goto('/reference-resources/edit');
+  await page.goto('/reference-resources/edit?id=resource-alpha');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   // 制造脏表单但不触发离开确认的导航路径：直接 SPA 切到列表（应用内链接会先确认）。
   await page.getByLabel('名称').fill('脏值');

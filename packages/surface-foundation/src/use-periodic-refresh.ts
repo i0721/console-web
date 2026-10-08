@@ -1,9 +1,8 @@
 'use client';
 
 /* Library entry同时导出 Hook，不是应用 Fast Refresh 边界。 */
-/* eslint-disable react-refresh/only-export-components */
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 
 import { createPeriodicRefresh, PERIODIC_REFRESH_INTERVAL_MS } from './periodic-refresh';
 
@@ -31,9 +30,11 @@ export function usePeriodicRefresh({
   intervalMs,
 }: UsePeriodicRefreshInput): void {
   const isPausedRef = useRef(isPaused);
-  isPausedRef.current = isPaused;
   const onTickRef = useRef(onTick);
-  onTickRef.current = onTick;
+  useLayoutEffect(() => {
+    isPausedRef.current = isPaused;
+    onTickRef.current = onTick;
+  });
 
   useEffect(() => {
     if (!enabled) return;

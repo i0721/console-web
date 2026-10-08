@@ -1,13 +1,14 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
-async function resetPreferences(page: import('@playwright/test').Page) {
+async function resetPreferences(page: Page) {
   await page.goto('/settings/data-display');
   await page.evaluate(() => window.localStorage.removeItem('community-go.shell'));
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
 }
 
-async function setPageSize(page: import('@playwright/test').Page, size: string) {
+async function setPageSize(page: Page, size: string) {
   await page.goto('/settings/data-display');
   const select = page.getByRole('button', { name: /每页数量/ });
   await select.click();

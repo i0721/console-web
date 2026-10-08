@@ -4,10 +4,13 @@ import { Badge } from '@community-go/ui-adapter/feedback';
 import { SelectField, SwitchField } from '@community-go/ui-adapter/form-field';
 import { Panel } from '@community-go/ui-adapter/panel';
 import { ChevronRight } from 'lucide-react';
-import Link from 'next/link';
+import { DisclosurePanel } from '@community-go/ui-adapter/disclosure';
+import { route, RouteLink } from '@community-go/plugin-framework/plugin';
 import { useSearchParams } from 'next/navigation';
-import { useState, type ReactNode } from 'react';
+import { Children, isValidElement, useState, type ReactNode } from 'react';
 import { useFrontendTranslation } from '@community-go/i18n';
+import { ComponentPreview } from './component-preview';
+import { previewAnchor } from './preview-anchor';
 
 import { usePluginLocale } from '@community-go/plugin-framework/plugin';
 import { PageHeader, Page } from '@community-go/surface-foundation/layout';
@@ -56,6 +59,35 @@ export function UiElementsFamilyPage({
   const spacing = density === 'compact' ? 'gap-2' : 'gap-4';
   const family = uiElementFamilies.find(({ id }) => id === familyId)!;
 
+  const catalogNavigation = (
+    <nav aria-label={t('uiElements.catalog.label')} className="mt-5 flex flex-wrap gap-2">
+      {uiElementFamilies.map((item) => (
+        <RouteLink
+          className="inline-flex items-center gap-1.5 rounded-control font-semibold text-brand underline-offset-4 outline-none hover:text-brand-strong hover:underline"
+          target={route(`ui-elements.${item.id}`)}
+          key={item.id}
+        >
+          {t(item.labelKey)} · {item.count}
+          <ChevronRight aria-hidden="true" className="size-4" />
+        </RouteLink>
+      ))}
+    </nav>
+  );
+  const content = children({ density, longText, setLongText, description, spacing });
+  const sections: { id: string; title: string }[] = [];
+  const collect = (nodes: ReactNode) =>
+    Children.forEach(nodes, (node) => {
+      if (
+        !isValidElement<{ id?: string; title?: string; name?: string; children?: ReactNode }>(node)
+      )
+        return;
+      if (node.type === ComponentPreview && node.props.name)
+        sections.push({ id: previewAnchor(node.props.name), title: node.props.name });
+      if (node.props.id && typeof node.props.title === 'string')
+        sections.push({ id: node.props.id, title: node.props.title });
+      collect(node.props.children);
+    });
+  collect(content);
   return (
     <Page>
       <PageHeader
@@ -70,7 +102,7 @@ export function UiElementsFamilyPage({
         description={familyDescription}
       />
 
-      <Panel className="grid gap-4 p-4 md:grid-cols-3">
+      <Panel className="surface-filter-grid p-4">
         <SelectField
           label={t('uiElements.density')}
           options={[
@@ -94,34 +126,42 @@ export function UiElementsFamilyPage({
         />
       </Panel>
 
-      <Panel aria-label={t('uiElements.catalog.label')} className="p-5">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div className="max-w-3xl">
-            <p className="text-xs font-bold uppercase tracking-widest text-brand">
-              {t('uiElements.catalog.kicker')}
-            </p>
-            <h2 className="mt-2 text-xl font-extrabold text-ink">{title}</h2>
-            <p className="mt-2 text-sm leading-6 text-ink-muted">{familyDescription}</p>
+      <div className="hidden md:block">
+        <Panel appearance="outlined" aria-label={t('uiElements.catalog.label')} className="p-5">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div className="max-w-3xl">
+              <p className="text-xs font-bold uppercase tracking-widest text-brand">
+                {t('uiElements.catalog.kicker')}
+              </p>
+              <h2 className="mt-2 text-xl font-extrabold text-ink">{title}</h2>
+              <p className="mt-2 text-sm leading-6 text-ink-muted">{familyDescription}</p>
+            </div>
+            <Badge appearance="solid" tone="info" size="md">
+              {family.count} / {t('uiElements.catalog.total', { count: uiElementTotal })}
+            </Badge>
           </div>
-          <Badge appearance="solid" tone="info" size="md">
-            {family.count} / {t('uiElements.catalog.total', { count: uiElementTotal })}
-          </Badge>
-        </div>
-        <nav aria-label={t('uiElements.catalog.label')} className="mt-5 flex flex-wrap gap-2">
-          {uiElementFamilies.map((item) => (
-            <Link
-              className="inline-flex items-center gap-1.5 rounded-control font-semibold text-brand underline-offset-4 outline-none hover:text-brand-strong hover:underline"
-              href={`/ui-elements/${item.id}`}
-              key={item.id}
+          {catalogNavigation}
+        </Panel>
+      </div>
+
+      <div className="md:hidden">
+        <DisclosurePanel title={t('uiElements.catalog.label') + ' · ' + title}>
+          {catalogNavigation}
+        </DisclosurePanel>
+      </div>
+      {sections.length > 1 ? (
+        <nav aria-label={t('uiElements.sectionIndex')} className="flex flex-wrap gap-3">
+          {sections.map((section) => (
+            <RouteLink
+              key={section.id}
+              target={route('ui-elements.' + familyId, {}, { fragment: section.id })}
             >
-              {t(item.labelKey)} · {item.count}
-              <ChevronRight aria-hidden="true" className="size-4" />
-            </Link>
+              {section.title}
+            </RouteLink>
           ))}
         </nav>
-      </Panel>
-
-      {children({ density, longText, setLongText, description, spacing })}
+      ) : null}
+      {content}
     </Page>
   );
 }

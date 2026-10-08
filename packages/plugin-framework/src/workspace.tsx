@@ -75,11 +75,7 @@ export function WorkspaceProvider<Fields extends string>({
   port,
   children,
 }: Readonly<{ port: WorkspacePort<Fields>; children: ReactNode }>) {
-  return (
-    <WorkspaceContext.Provider value={port as WorkspacePort<string>}>
-      {children}
-    </WorkspaceContext.Provider>
-  );
+  return <WorkspaceContext.Provider value={port}>{children}</WorkspaceContext.Provider>;
 }
 
 /** 读取 Workspace Port。 */
@@ -88,5 +84,5 @@ export function useWorkspacePort<Fields extends string>(): WorkspacePort<Fields>
   if (!port) {
     throw new Error('WorkspaceProvider 未安装：Workspace Port 属于 application runtime context。');
   }
-  return port as WorkspacePort<Fields>;
+  return port;
 }

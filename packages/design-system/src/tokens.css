@@ -256,38 +256,52 @@ html:is([data-motion-mode='reduced'], [data-motion-mode='off']) *::after {
 
 /* 界面字号：根字号 rem 缩放（small/large 相对 standard 100%）。 */
 html[data-font-scale='small'] {
+  /* @ds-region:appearance-font-small:start */
   font-size: 93.75%;
+  /* @ds-region:appearance-font-small:end */
 }
 html[data-font-scale='large'] {
+  /* @ds-region:appearance-font-large:start */
   font-size: 112.5%;
+  /* @ds-region:appearance-font-large:end */
 }
 
 /* 界面密度：紧凑/舒适重映射控件与面板 spacing（standard = 默认不做覆盖）。 */
 html[data-density='compact'] {
+  /* @ds-region:appearance-density-compact:start */
   --spacing-control-sm: 1.875rem;
   --spacing-control: 2.25rem;
   --spacing-control-lg: 2.5rem;
   --radius-control: 0.625rem;
   --radius-panel: 0.875rem;
+  /* @ds-region:appearance-density-compact:end */
 }
 html[data-density='comfortable'] {
+  /* @ds-region:appearance-density-comfortable:start */
   --spacing-control-sm: 2.625rem;
   --spacing-control: 3.25rem;
   --spacing-control-lg: 3.5rem;
+  /* @ds-region:appearance-density-comfortable:end */
 }
 
 /* 内容宽度：仅作用于产品主内容区（Host 稳定区域），auto 不限制。 */
 html[data-content-width='standard'] #main-content {
+  /* @ds-region:appearance-content-standard:start */
   max-width: 72rem;
+  /* @ds-region:appearance-content-standard:end */
 }
 html[data-content-width='wide'] #main-content {
+  /* @ds-region:appearance-content-wide:start */
   max-width: 100rem;
+  /* @ds-region:appearance-content-wide:end */
 }
 
 /* 高对比度：增强焦点环可见性（标准 = 默认不做覆盖）。 */
 html[data-contrast='high'] {
+  /* @ds-region:appearance-contrast-high:start */
   --spacing-focus-ring-width: 0.1875rem;
   --spacing-focus-ring-offset: 0.1875rem;
+  /* @ds-region:appearance-contrast-high:end */
 }
 
 /* 可访问性增强（默认关；只增强不降低产品焦点/键盘底线）。 */

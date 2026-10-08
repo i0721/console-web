@@ -1,13 +1,14 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
-async function resetPreferences(page: import('@playwright/test').Page) {
+async function resetPreferences(page: Page) {
   await page.goto('/settings/data-display');
   await page.evaluate(() => window.localStorage.removeItem('community-go.shell'));
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
 }
 
-async function gotoEmptyList(page: import('@playwright/test').Page) {
+async function gotoEmptyList(page: Page) {
   await page.goto('/page-archetypes/resource-list');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   // 输入无匹配词并回车（默认 enter 触发）→ 空结果。

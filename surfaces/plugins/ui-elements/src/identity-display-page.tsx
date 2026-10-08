@@ -69,14 +69,14 @@ export function IdentityDisplayPage() {
               <ComponentPreview
                 fullWidth
                 name="ReadyImage"
-                description="非 Avatar 图片预留尺寸，在 decode 完成后显现，并保留错误占位。"
+                description={t('uiElements.additional.readyImage')}
                 states={['Loading', 'Decoded', 'Error', 'Reserved layout', 'cover / contain']}
               >
                 <ReadyImage
-                  alt="Community Go media readiness sample"
+                  alt={t('uiElements.additional.mediaAlt')}
                   error={
                     <span className="grid size-full place-items-center text-sm text-danger">
-                      图片不可用
+                      {t('uiElements.additional.imageError')}
                     </span>
                   }
                   height={160}

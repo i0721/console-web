@@ -15,12 +15,12 @@ test('桌面与超宽屏 Reference 布局保持稳定', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/page-archetypes/resource-list');
   await expectReferenceReady(page);
-  await expect(page).toHaveScreenshot('reference-desktop.png', { fullPage: true });
+  await expect.soft(page).toHaveScreenshot('reference-desktop.png', { fullPage: true });
 
   await page.setViewportSize({ width: 1920, height: 1080 });
   await page.reload();
   await expectReferenceReady(page);
-  await expect(page).toHaveScreenshot('reference-ultrawide.png', { fullPage: true });
+  await expect.soft(page).toHaveScreenshot('reference-ultrawide.png', { fullPage: true });
 });
 
 test('桌面 UI Elements Family 保持基础组件权威面稳定', async ({ page }) => {
@@ -33,11 +33,13 @@ test('桌面 UI Elements Family 保持基础组件权威面稳定', async ({ pag
   await expectHydrated(page);
   await expect(page.getByRole('heading', { level: 1, name: '操作与选择' })).toBeVisible();
   await expect(page.getByText('公开 Element 46 / 46')).toBeVisible();
-  await expect(page).toHaveScreenshot('ui-elements-desktop.png', { fullPage: true });
+  await expect.soft(page).toHaveScreenshot('ui-elements-desktop.png', { fullPage: true });
   expect(consoleErrors).toEqual([]);
 });
 
 test('九个 UI Element Family 页面均有独立视觉基线', async ({ page }) => {
+  // Nine independent renders and snapshot comparisons retain their per-assertion limit.
+  test.setTimeout(120_000);
   await page.setViewportSize({ width: 1440, height: 1000 });
 
   const families = [
@@ -57,9 +59,9 @@ test('九个 UI Element Family 页面均有独立视觉基线', async ({ page })
     await expectHydrated(page);
     await expect(page.getByText('公开 Element 46 / 46')).toBeVisible();
     const sectionId = family === 'actions-selection' ? 'actions' : family;
-    await expect(page.locator(`#${sectionId}`)).toHaveScreenshot(
-      `ui-elements-family-${family}.png`,
-    );
+    await expect
+      .soft(page.locator(`#${sectionId}`))
+      .toHaveScreenshot(`ui-elements-family-${family}.png`);
   }
 });
 
@@ -67,14 +69,16 @@ test('移动窗口、Dark Mode 与英文扩张保持无溢出', async ({ page })
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/ui-elements/forms');
   await expectHydrated(page);
-  await page.getByRole('button', { name: '切换主题' }).click();
-  await page.getByRole('button', { name: '切换语言' }).click();
+  await page.getByRole('button', { name: '当前用户', exact: true }).click();
+  await page.getByRole('menuitem', { name: '切换主题', exact: true }).click();
+  await page.getByRole('button', { name: '当前用户', exact: true }).click();
+  await page.getByRole('menuitem', { name: '切换语言', exact: true }).click();
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - window.innerWidth,
   );
   expect(overflow).toBeLessThanOrEqual(0);
-  await expect(page).toHaveScreenshot('ui-elements-mobile-dark-en.png', { fullPage: true });
+  await expect.soft(page).toHaveScreenshot('ui-elements-mobile-dark-en.png', { fullPage: true });
 });
 
 test('移动侧栏打开状态纳入视觉回归', async ({ page }) => {
@@ -83,7 +87,7 @@ test('移动侧栏打开状态纳入视觉回归', async ({ page }) => {
   await expectHydrated(page);
   await page.getByRole('button', { name: '打开导航' }).click();
   await expect(page.getByRole('navigation', { name: '主导航' })).toBeVisible();
-  await expect(page).toHaveScreenshot('mobile-navigation-open.png');
+  await expect.soft(page).toHaveScreenshot('mobile-navigation-open.png');
 });
 
 test('状态体系页面保持 Loading 与异常状态视觉基线', async ({ page }) => {
@@ -95,7 +99,7 @@ test('状态体系页面保持 Loading 与异常状态视觉基线', async ({ pa
     'aria-busy',
     'true',
   );
-  await expect(page).toHaveScreenshot('states-desktop.png', { fullPage: true });
+  await expect.soft(page).toHaveScreenshot('states-desktop.png', { fullPage: true });
 });
 
 test('Overview、Reference Form 与 Settings 真实页面进入视觉矩阵', async ({ page }) => {
@@ -104,18 +108,18 @@ test('Overview、Reference Form 与 Settings 真实页面进入视觉矩阵', as
   await page.goto('/');
   await expectHydrated(page);
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-  await expect(page).toHaveScreenshot('overview-desktop.png', { fullPage: true });
+  await expect.soft(page).toHaveScreenshot('overview-desktop.png', { fullPage: true });
 
   await page.goto('/page-archetypes/create-edit');
   await expectHydrated(page);
   await expect(page.getByRole('heading', { name: '复杂设置与审批表单' })).toBeVisible();
-  await expect(page).toHaveScreenshot('reference-form-desktop.png', { fullPage: true });
+  await expect.soft(page).toHaveScreenshot('reference-form-desktop.png', { fullPage: true });
 
   await page.goto('/settings');
   await expectHydrated(page);
   // 根 /settings 即默认外观分类页（无索引主页）。
   await expect(page.getByRole('heading', { level: 1, name: '外观' })).toBeVisible();
-  await expect(page).toHaveScreenshot('settings-desktop.png', { fullPage: true });
+  await expect.soft(page).toHaveScreenshot('settings-desktop.png', { fullPage: true });
 });
 
 test('Toast、Destructive Confirm 与 Compact Density 开启态进入视觉矩阵', async ({ page }) => {
@@ -124,12 +128,12 @@ test('Toast、Destructive Confirm 与 Compact Density 开启态进入视觉矩�
   await page.goto('/ui-elements/feedback?overlay=toast&density=compact');
   await expectHydrated(page);
   await expect(page.getByText('项目反馈已入队')).toBeVisible();
-  await expect(page).toHaveScreenshot('ui-elements-toast-compact.png');
+  await expect.soft(page).toHaveScreenshot('ui-elements-toast-compact.png');
 
   await page.goto('/ui-elements/overlays?overlay=confirm');
   await expectHydrated(page);
   await expect(page.getByRole('alertdialog')).toBeVisible();
-  await expect(page).toHaveScreenshot('ui-elements-destructive-confirm.png');
+  await expect.soft(page).toHaveScreenshot('ui-elements-destructive-confirm.png');
 });
 
 test('Reference 多选与分页的真实联动状态进入视觉矩阵', async ({ page }) => {
@@ -151,5 +155,5 @@ test('Reference 多选与分页的真实联动状态进入视觉矩阵', async (
     }
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
   });
-  await expect(page).toHaveScreenshot('reference-multi-select.png', { fullPage: true });
+  await expect.soft(page).toHaveScreenshot('reference-multi-select.png', { fullPage: true });
 });

@@ -8,21 +8,22 @@ import { createPersistStore, createSessionStorage } from '@community-go/state-fo
  * 不跨窗口/跨启动恢复；restoreLastTabs 只在本窗口刷新时恢复）。
  *
  * - 页面身份由 pathname（Route Target 语义；筛选/排序变化不创建重复标签）；
- * - LRU 活动：激活的标签移到最近；上限固定；
+ * - 标签保持访问顺序；activatedAt 用于关闭后的最近激活策略；
  * - 关闭当前标签后跳转由调用方按 tabCloseBehavior 决定。
  */
 export const PAGE_TABS_LIMIT = 12;
 
 export type PageTab = Readonly<{
   pathname: string;
+  href?: string;
   title: string;
   activatedAt: number;
 }>;
 
 type PageTabsState = {
   tabs: readonly PageTab[];
-  /** 打开标签（页面入口提交时；同 pathname 去重前移并更新时间戳）。 */
-  openTab: (entry: { pathname: string; title: string }) => void;
+  /** 打开标签（页面入口提交时；同 pathname 更新目标与时间戳，保持访问顺序）。 */
+  openTab: (entry: { pathname: string; href?: string; title: string }) => void;
   /** 关闭标签；返回被关闭的 pathname。 */
   closeTab: (pathname: string) => void;
   /** 清空全部（restoreLastTabs=false 时挂载清空陈旧会话标签）。 */
@@ -37,13 +38,20 @@ type PageTabsPersisted = {
 
 export function pushPageTab(
   tabs: readonly PageTab[],
-  entry: { pathname: string; title: string; activatedAt?: number },
+  entry: { pathname: string; href?: string; title: string; activatedAt?: number },
   limit = PAGE_TABS_LIMIT,
 ): readonly PageTab[] {
   const activatedAt = entry.activatedAt ?? Date.now();
-  const withoutCurrent = tabs.filter((tab) => tab.pathname !== entry.pathname);
-  const next = [{ pathname: entry.pathname, title: entry.title, activatedAt }, ...withoutCurrent];
-  return next.slice(0, limit);
+  const current = {
+    pathname: entry.pathname,
+    title: entry.title,
+    ...(entry.href ? { href: entry.href } : {}),
+    activatedAt,
+  };
+  const next = tabs.some((tab) => tab.pathname === entry.pathname)
+    ? tabs.map((tab) => (tab.pathname === entry.pathname ? current : tab))
+    : [...tabs, current];
+  return next.slice(-limit);
 }
 
 export const usePageTabsStore = createPersistStore<PageTabsState, PageTabsPersisted>(
@@ -60,7 +68,7 @@ export const usePageTabsStore = createPersistStore<PageTabsState, PageTabsPersis
   }),
   {
     name: 'community-go.page-tabs',
-    version: 1,
+    version: 2,
     skipHydration: true,
     storage: createSessionStorage(),
     partialize: ({ tabs }) => ({ tabs }),
@@ -78,7 +86,16 @@ export const usePageTabsStore = createPersistStore<PageTabsState, PageTabsPersis
               typeof tab.activatedAt === 'number',
           )
         : [];
-      return { tabs };
+      return {
+        tabs: tabs.map((tab) => ({
+          pathname: tab.pathname,
+          title: tab.title,
+          activatedAt: tab.activatedAt,
+          ...(typeof tab.href === 'string' && tab.href.startsWith(tab.pathname + '?')
+            ? { href: tab.href }
+            : {}),
+        })),
+      };
     },
   },
 );

@@ -73,7 +73,7 @@ pnpm docs:check   # 文档结构门禁（入口、链接、索引、必备 autho
   `README.md + research/ + requirements/ + design/ + tasks.md`；它只保存历史证据，
   当前有效结论必须落在本文与主题文档。
 - 涉及产品范围、兼容、migration、历史数据或模块保留/移除时，先读仓库根
-  [repository-scope](../../docs/repository-scope.md) 与前端变更记录，再决定是否新建变更。
+  [Frontend Foundation](frontend-foundation.md) 与前端变更记录，再决定是否新建变更。
 
 ## 5. 变更记录导航
 

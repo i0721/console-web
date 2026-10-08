@@ -1,13 +1,14 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
-async function resetPreferences(page: import('@playwright/test').Page) {
+async function resetPreferences(page: Page) {
   await page.goto('/settings/navigation');
   await page.evaluate(() => window.localStorage.removeItem('community-go.shell'));
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
 }
 
-async function spaToSettings(page: import('@playwright/test').Page) {
+async function spaToSettings(page: Page) {
   const nav = page.getByRole('navigation', { name: '主导航' });
   await nav.getByRole('link', { name: /^设置$/ }).click();
   await page.waitForURL(/\/settings$/);

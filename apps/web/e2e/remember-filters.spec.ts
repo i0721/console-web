@@ -1,6 +1,7 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
-async function resetPreferences(page: import('@playwright/test').Page) {
+async function resetPreferences(page: Page) {
   await page.goto('/settings/data-display');
   await page.evaluate(() => {
     window.localStorage.removeItem('community-go.shell');
@@ -10,7 +11,7 @@ async function resetPreferences(page: import('@playwright/test').Page) {
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
 }
 
-async function fullRowCount(page: import('@playwright/test').Page): Promise<number> {
+async function fullRowCount(page: Page): Promise<number> {
   return page.getByRole('grid').getByRole('row').count();
 }
 

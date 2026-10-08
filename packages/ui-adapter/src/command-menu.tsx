@@ -21,6 +21,7 @@ export type CommandMenuProps = Readonly<{
   emptyLabel: string;
   items: readonly CommandItem[];
   defaultOpen?: boolean;
+  hideTrigger?: boolean;
   isOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
   onAction: (id: string) => void;
@@ -34,6 +35,7 @@ export function CommandMenu({
   emptyLabel,
   items,
   defaultOpen = false,
+  hideTrigger = false,
   isOpen,
   onOpenChange,
   onAction,
@@ -55,14 +57,14 @@ export function CommandMenu({
       {...(isOpen !== undefined ? { isOpen } : {})}
       {...(onOpenChange ? { onOpenChange } : {})}
     >
-      <OverlayTriggerAction>{triggerLabel}</OverlayTriggerAction>
+      {hideTrigger ? null : <OverlayTriggerAction>{triggerLabel}</OverlayTriggerAction>}
       <Modal.Backdrop className="bg-scrim backdrop-blur-sm">
         <Modal.Container placement="top" size="lg">
-          <Modal.Dialog className="ui-overlay-surface mt-16 w-full overflow-hidden">
+          <Modal.Dialog className="ui-overlay-surface ui-dialog-layout w-full">
             <Modal.Heading className="border-b border-border px-5 py-4 text-base font-bold text-ink">
               {title}
             </Modal.Heading>
-            <Modal.Body className="p-0">
+            <Modal.Body className="ui-dialog-body p-0">
               <div className="border-b border-border p-3">
                 <SearchBox
                   label={searchLabel}

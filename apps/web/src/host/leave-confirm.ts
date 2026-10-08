@@ -9,7 +9,8 @@
  * 刷新/关闭：仅当存在未提交输入（dirty）时注册 beforeunload（原生提示；接受平台限制，
  * 配合草稿恢复兜底，不承诺覆盖全部关闭场景）。
  */
-import { shouldProceedWithNavigation } from './navigation-lifecycle';
+import { shouldProceedWithNavigation, getCurrentResolvedHref } from './navigation-lifecycle';
+import { parseResolvedHref, isResolvedNavigationEqual } from '@community-go/core';
 
 /** 页面注册的 dirty source。 */
 export type DirtySource = Readonly<{
@@ -92,6 +93,12 @@ export async function proceedAfterLeaveConfirm(
   targetHref: string,
   label?: string,
 ): Promise<boolean> {
+  const current = getCurrentResolvedHref();
+  if (
+    current &&
+    isResolvedNavigationEqual(parseResolvedHref(current), parseResolvedHref(targetHref))
+  )
+    return false;
   if (isLeaveConfirmEnabled()) {
     if (isAnyDirty()) {
       const message = dirtyMessage();

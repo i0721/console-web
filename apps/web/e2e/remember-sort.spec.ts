@@ -1,6 +1,7 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
-async function resetAll(page: import('@playwright/test').Page) {
+async function resetAll(page: Page) {
   await page.goto('/settings/data-display');
   await page.evaluate(() => {
     window.localStorage.removeItem('community-go.shell');
@@ -10,7 +11,7 @@ async function resetAll(page: import('@playwright/test').Page) {
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
 }
 
-async function sortByWorkstream(page: import('@playwright/test').Page) {
+async function sortByWorkstream(page: Page) {
   await page.getByRole('columnheader', { name: /工作流/ }).click();
   await expect(page.getByRole('columnheader', { name: /工作流/ })).toHaveAttribute(
     'aria-sort',

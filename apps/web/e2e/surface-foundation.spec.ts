@@ -44,15 +44,15 @@ test('七类 Page Archetype 在四级视口可直接验收', async ({ page }) =>
 test('Universal 与 Surface authority 视觉面保持分层', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/motion');
-  await expect(page).toHaveScreenshot('universal-motion-desktop.png', { fullPage: true });
+  await expect.soft(page).toHaveScreenshot('universal-motion-desktop.png', { fullPage: true });
 
   await page.goto('/page-patterns/collections-data');
-  await expect(page).toHaveScreenshot('page-patterns-collections-desktop.png', {
+  await expect.soft(page).toHaveScreenshot('page-patterns-collections-desktop.png', {
     fullPage: true,
   });
 
   await page.goto('/page-archetypes/overview');
-  await expect(page).toHaveScreenshot('page-archetypes-overview-desktop.png', {
+  await expect.soft(page).toHaveScreenshot('page-archetypes-overview-desktop.png', {
     fullPage: true,
   });
 });

@@ -18,5 +18,8 @@ test('损坏的设置记录：显示原因与恢复动作，恢复后回到默�
   await expect(page.getByText('本地设置记录无法读取')).not.toBeVisible();
   const shell = await page.evaluate(() => window.localStorage.getItem('community-go.shell'));
   expect(shell).not.toBeNull();
-  expect(() => JSON.parse(shell!)).not.toThrow();
+  expect(() => {
+    const parsed: unknown = JSON.parse(shell!);
+    return parsed;
+  }).not.toThrow();
 });
