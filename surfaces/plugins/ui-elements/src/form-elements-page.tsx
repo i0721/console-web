@@ -19,6 +19,7 @@ import { useFrontendTranslation } from '@community-go/i18n';
 import { Section } from '@community-go/surface-foundation/layout';
 import { ComponentPreview } from './component-preview';
 import { UiElementsFamilyPage } from './family-page';
+import { Eye, Compass, Sparkles } from 'lucide-react';
 
 const ownerOptions = [
   'Lin Chen',
@@ -228,6 +229,32 @@ export function FormElementsPage({
                     {
                       value: 'automatic',
                       label: t('uiElements.formDemo.automatic'),
+                      disabled: true,
+                    },
+                  ]}
+                  value={selected}
+                  onValueChange={setSelected}
+                />
+                <RadioGroupField
+                  presentation="tiles"
+                  label={t('uiElements.radioTiles')}
+                  labelIcon={<Sparkles className="size-5" />}
+                  hint={t('uiElements.catalog.radioDescription')}
+                  options={[
+                    {
+                      value: 'observe',
+                      label: t('uiElements.formDemo.observe'),
+                      icon: <Eye className="size-5" />,
+                    },
+                    {
+                      value: 'guided',
+                      label: t('uiElements.formDemo.guided'),
+                      icon: <Compass className="size-5" />,
+                    },
+                    {
+                      value: 'automatic',
+                      label: t('uiElements.formDemo.automatic'),
+                      icon: <Sparkles className="size-5" />,
                       disabled: true,
                     },
                   ]}

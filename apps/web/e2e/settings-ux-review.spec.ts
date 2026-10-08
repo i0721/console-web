@@ -36,6 +36,135 @@ async function chooseCategory(page: Page, name: string) {
   await expect(page.getByRole('heading', { level: 1, name, exact: true })).toBeVisible();
 }
 
+test('Theme tiles retain horizontal hierarchy, pointer and keyboard selection and persistence', async ({
+  browser,
+}) => {
+  for (const width of [1440, 390, 320]) {
+    for (const language of ['zh-CN', 'en']) {
+      const context = await browser.newContext({
+        viewport: { width, height: 900 },
+        colorScheme: 'light',
+        hasTouch: width < 768,
+      });
+      const page = await context.newPage();
+      if (language === 'en') {
+        await page.goto('/settings/locale');
+        await page
+          .getByRole('radiogroup', { name: '界面语言' })
+          .getByText('English', { exact: true })
+          .click();
+      }
+      await page.goto('/settings');
+      const group = page.getByRole('radiogroup', {
+        name: language === 'en' ? 'Theme mode' : '主题模式',
+        exact: true,
+      });
+      const names: readonly [string, string, string] =
+        language === 'en'
+          ? ['Light theme', 'Dark theme', 'Follow system']
+          : ['浅色主题', '深色主题', '跟随系统'];
+      await expect(group.getByRole('radio')).toHaveCount(3);
+      await expect(group).toHaveAccessibleDescription(
+        language === 'en'
+          ? 'Switch to light, dark, or system; preview takes effect immediately.'
+          : '切换浅色、深色或跟随系统，立即预览。',
+      );
+      const boxes = await group
+        .locator('label')
+        .filter({ has: page.getByRole('radio') })
+        .evaluateAll((es) =>
+          es.map((e) => {
+            const r = e.getBoundingClientRect();
+            return { x: r.x, y: r.y, width: r.width, height: r.height };
+          }),
+        );
+      expect(boxes).toHaveLength(3);
+      const firstBox = boxes[0];
+      if (!firstBox) throw new Error('Theme tiles missing');
+      for (const box of boxes) {
+        expect(Math.abs(box.y - firstBox.y)).toBeLessThan(1);
+        expect(box.width).toBeGreaterThanOrEqual(44);
+        expect(box.height).toBeGreaterThanOrEqual(44);
+      }
+      const dark = group.getByRole('radio', { name: names[1], exact: true });
+      const darkIcon = group
+        .locator('label')
+        .filter({ has: page.getByRole('radio', { name: names[1], exact: true }) })
+        .locator('svg');
+      if (width < 768) await darkIcon.tap();
+      else await darkIcon.click();
+      await expect(dark).toBeChecked();
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+      expect(
+        (await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze())
+          .violations,
+      ).toEqual([]);
+      await page.screenshot({
+        animations: 'disabled',
+        path: `docs/changes/109-ui-ux-optimization/evidence/review-2026-10-08/theme-tiles-${width}-${language}-dark.png`,
+      });
+      await dark.focus();
+      await page.keyboard.press('ArrowRight');
+      const system = group.getByRole('radio', { name: names[2], exact: true });
+      await expect(system).toBeChecked();
+      const light = group.getByRole('radio', { name: names[0], exact: true });
+      await group
+        .locator('label')
+        .filter({ has: page.getByRole('radio', { name: names[0], exact: true }) })
+        .click({ position: { x: 4, y: 4 } });
+      await expect(light).toBeChecked();
+      await page.reload();
+      await expect(light).toBeChecked();
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+      await group
+        .locator('label')
+        .filter({ has: page.getByRole('radio', { name: names[2], exact: true }) })
+        .click();
+      await expect(system).toBeChecked();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
+        width,
+      );
+      await page.getByRole('heading', { level: 1 }).click();
+      await page.screenshot({
+        animations: 'disabled',
+        path: `docs/changes/109-ui-ux-optimization/evidence/review-2026-10-08/theme-tiles-${width}-${language}-system.png`,
+      });
+      await context.close();
+    }
+  }
+});
+
+test('Choice tiles authority retains disabled state and keyboard focus on the card', async ({
+  page,
+}) => {
+  await page.goto('/ui-elements/forms#element-radiogroupfield');
+  const group = page.getByRole('radiogroup', { name: '图标选择卡片', exact: true });
+  const disabled = group.getByRole('radio', { name: '自动执行', exact: true });
+  await expect(disabled).toBeDisabled();
+  const observe = group.getByRole('radio', { name: '仅观察', exact: true });
+  await group
+    .locator('label')
+    .filter({ has: page.getByRole('radio', { name: '仅观察', exact: true }) })
+    .locator('svg')
+    .click();
+  await expect(observe).toBeChecked();
+  await observe.focus();
+  await page.keyboard.press('ArrowRight');
+  const guided = group.getByRole('radio', { name: '引导执行', exact: true });
+  await expect(guided).toBeChecked();
+  await expect(
+    group
+      .locator('label')
+      .filter({ has: page.getByRole('radio', { name: '引导执行', exact: true }) }),
+  ).toHaveAttribute('data-focus-visible', 'true');
+  await page.keyboard.press('ArrowRight');
+  await expect(observe).toBeChecked();
+  expect(
+    (await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze())
+      .violations,
+  ).toEqual([]);
+});
+
 async function expectSwitchGeometry(page: Page) {
   await expect
     .poll(() =>
@@ -385,7 +514,7 @@ test('Settings drawer and form authority retain WCAG AA semantics in dark Englis
   await page.keyboard.press('Escape');
   await page
     .getByRole('radiogroup', { name: '主题模式' })
-    .getByText('深色', { exact: true })
+    .getByText('深色主题', { exact: true })
     .click();
   await chooseCategory(page, '语言与地区');
   await page

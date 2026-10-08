@@ -9,6 +9,7 @@ import { route, RouteLink } from '@community-go/plugin-framework/plugin';
 import { Children, isValidElement, type ReactNode } from 'react';
 import { Section } from '@community-go/surface-foundation/layout';
 import { SETTINGS_INDEX } from './settings-index';
+import { Sun, Moon, MonitorCog, SunMoon } from 'lucide-react';
 
 /**
  * 分类设置区段（settings 插件）—— 每个区段真实消费 preferences-model 的对应分类，
@@ -78,17 +79,26 @@ export function AppearanceSection({ ctx }: Readonly<{ ctx: Ctx }>) {
   return (
     <SectionShell title={t('settings.categories.appearance')}>
       <RadioGroupField
-        presentation="rows"
+        presentation="tiles"
+        labelIcon={<SunMoon className="size-5" />}
         hint={t('settings.appearance.themeModeDescription')}
         label={t('settings.appearance.themeMode')}
         options={[
           {
-            description: t('settings.appearance.themeFollowSystem'),
+            label: t('settings.appearance.themeLight'),
+            value: 'light',
+            icon: <Sun className="size-5" />,
+          },
+          {
+            label: t('settings.appearance.themeDark'),
+            value: 'dark',
+            icon: <Moon className="size-5" />,
+          },
+          {
             label: t('settings.appearance.themeSystem'),
             value: 'system',
+            icon: <MonitorCog className="size-5" />,
           },
-          { label: t('settings.appearance.themeLight'), value: 'light' },
-          { label: t('settings.appearance.themeDark'), value: 'dark' },
         ]}
         value={appearance.themeMode}
         onValueChange={(value) => updateSetting(ctx, 'appearance', { themeMode: value })}

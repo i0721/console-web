@@ -329,6 +329,7 @@ export const pluginI18nResources = {
         checkboxDescription: '验证标签、说明与 Control 的组合。',
         disabledCheckbox: '禁用复选项',
         radioGroup: '反馈密度',
+        radioTiles: '图标选择卡片',
         formDemo: {
           observe: '仅观察',
           guided: '引导执行',
@@ -702,6 +703,7 @@ export const pluginI18nResources = {
         checkboxDescription: 'Validates label, description, and control composition.',
         disabledCheckbox: 'Disabled checkbox',
         radioGroup: 'Feedback density',
+        radioTiles: 'Icon choice tiles',
         formDemo: {
           observe: 'Observe only',
           guided: 'Guided execution',

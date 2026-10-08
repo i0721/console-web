@@ -57,10 +57,10 @@ export const pluginI18nResources = {
         },
         appearance: {
           themeMode: '主题模式',
-          themeModeDescription: '跟随系统、浅色或深色；切换后立即预览。',
+          themeModeDescription: '切换浅色、深色或跟随系统，立即预览。',
           themeSystem: '跟随系统',
-          themeLight: '浅色',
-          themeDark: '深色',
+          themeLight: '浅色主题',
+          themeDark: '深色主题',
           themeFollowSystem: '跟随操作系统的浅色/深色偏好',
           accent: '强调色',
           accentDescription: '产品主操作与选中状态的强调颜色。',
@@ -277,10 +277,11 @@ export const pluginI18nResources = {
         },
         appearance: {
           themeMode: 'Theme mode',
-          themeModeDescription: 'Follow system, light, or dark; preview takes effect immediately.',
+          themeModeDescription:
+            'Switch to light, dark, or system; preview takes effect immediately.',
           themeSystem: 'Follow system',
-          themeLight: 'Light',
-          themeDark: 'Dark',
+          themeLight: 'Light theme',
+          themeDark: 'Dark theme',
           themeFollowSystem: 'Follow the operating system light/dark preference',
           accent: 'Accent color',
           accentDescription: 'Accent for primary actions and selected states.',

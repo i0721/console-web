@@ -580,3 +580,52 @@ appearance="outlined"，保留语义边框、背景、圆角、间距与交互�
 238项浏览器测试224通过、14项视觉比较失败，27个失败断言均为toHaveScreenshot，无其它
 功能断言失败。19项设置专项全部通过。独立format:check和docs:check通过。R16-01修复与
 桌面/移动检查完成；整体视觉基线仍未更新，完整命令因此exit 1。
+
+## 17. 主题模式的图标选择卡片与信息层次
+
+用户参考图要求主题分组使用装饰图标＋标题＋说明，选项以图标在上、标题在下的横排卡片
+表达浅色、深色、跟随系统。现有主题模式是RadioGroupField rows，已有完整即时更新与
+持久化契约；缺口在内容表达和布局，而非导航状态。
+
+| 方案                  | 适用性与决策                                                                                                 |
+| --------------------- | ------------------------------------------------------------------------------------------------------------ |
+| TabsView              | 适合不同内容面板切换；主题是同一个偏好值，不能引入tab/tabpanel语义。                                         |
+| ToggleGroup           | 已有图标＋文字的连体分段模式，适合紧凑工具栏；没有参考图要求的分组层次与独立选项卡片，不为此修改其默认几何。 |
+| RadioGroupField tiles | 推荐并落实：保留互斥单选状态、整卡点击和键盘机制，扩展现有呈现能力，不另造主题组件。                         |
+
+RadioGroupField新增tiles呈现，以及受控labelIcon和option.icon内容。分组标题与hint先于
+选项，三个卡片等宽，选中表面/边框/文字继承现有brand语义Token，避免硬编码参考图的
+橙色。主题选项按浅色、深色、跟随系统排列；中文/英文文案明确Light/Dark theme。
+不新增外壳、全局Token、页面CSS或自研选择状态；既有cards/rows保持默认视觉与交互。
+图标为装饰并aria-hidden，选项真实label内仍包含HeroUI生成的原生input，整个卡片都可操作。
+
+公共能力复用路径：已有Element → 新呈现Variant → 设置Feature composition；没有新增
+公共export或平行基础组件。Header的图标/标题/说明属于该Field组合，当前不需要另封装
+万能IconHeading。UI Elements/forms的RadioGroupField补充同源tiles示例与禁用项。
+所有RadioGroupField真实消费者已检索；只在主题设置与权威示例显式启用tiles，其余维持
+现有模式。现有form-field导出、owner与authority登记保留，增加单元证据。
+
+修改前定向查看TailAdmin Form Elements单选的普通、选中与禁用状态并实际切换；未复制
+外部实现。[HeroUI官方RadioGroup anatomy](https://heroui.com/en/docs/react/components/radio-group)
+及已安装3.2.4源码确认Radio.Content拥有原生RadioButton/input，图标卡片可保留单选语义。
+
+新增DOM测试验证分组名称、说明、图标点击与禁用状态；浏览器专项覆盖1440/390/320、
+中英、深色与系统浅色、图标/边缘点击、ArrowRight、刷新持久化、卡片焦点和Axe WCAG AA。
+两个新专项通过（24.1s）；初次失败源于测试filter的has使用了带祖先group作用域的locator，
+修正为相对label可匹配的radio定位后通过，初次日志保留。默认30s超时不改。
+12张主题实际画面保存在109 evidence/review-2026-10-08/theme-tiles-*.png；320英文卡片
+宽度不小于44px，文字自然换行，无横向溢出。完整检查记录theme-tiles-check-final.txt。
+
+首次全量检查在新增测试的类型检查处停止：选项名称用普通数组导致索引可为undefined，
+DOM测试误用了Playwright的exact参数。已改为固定三项tuple与DOM name正则，保留
+初次theme-tiles-check.txt；后续完整检查使用theme-tiles-check-final.txt。没有放宽类型规则。
+
+完整theme-tiles-check-final.txt已结束：治理、lint、类型、371项单元测试、构建及原预算通过；
+240项浏览器225通过、15失败。其中14项为原视觉基线比较，另1项是旧Radio几何测试把
+新增tiles示例也视为带dot的选项。已将原dot断言明确限定到既有反馈密度group（仍验证3项），
+并新增tiles的列方向、图标在标题上方、20px透明图标、无圆点控件等断言；补跑该专项通过，
+没有删除旧断言、提高视觉阈值或更新基线。证据theme-tiles-anatomy.txt。
+21项设置专项全部通过，新主题矩阵19.7s，手机用hasTouch与tap验证图标操作；最终测试文件
+另行类型检查通过。首轮全量结果不能宣称全绿，剩余14项视觉比较仍待人工验收。
+新增choice-tiles-focus-disabled.png实际图确认整卡焦点与禁用表现。R17-01（P2，信息层次
+优化）的实施及专项验证完成；无真实设备或读屏新增证据。

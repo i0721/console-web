@@ -21,7 +21,7 @@ test('打开 /settings 直接是外观分类页（默认页，无索引）：即
   await expect(themeGroup.getByRole('radio', { name: /^跟随系统/ })).toBeChecked();
   await page
     .getByRole('radiogroup', { name: '主题模式' })
-    .getByText('深色', { exact: true })
+    .getByText('深色主题', { exact: true })
     .click();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   const accentGroup = page.getByRole('radiogroup', { name: '强调色' });
@@ -56,7 +56,7 @@ test('恢复全部默认（任意分类页 header）：确认弹窗重置回默�
   await resetPreferences(page);
   await page
     .getByRole('radiogroup', { name: '主题模式' })
-    .getByText('深色', { exact: true })
+    .getByText('深色主题', { exact: true })
     .click();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   await page.getByRole('button', { name: '恢复全部默认' }).click();

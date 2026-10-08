@@ -82,6 +82,32 @@ describe('Action Family', () => {
     expect(screen.getByRole('radio', { name: '自动' })).toBeDisabled();
   });
 
+  it('图标选择卡片保留分组名称、说明、整卡点击与禁用语义', () => {
+    const onValueChange = vi.fn();
+    render(
+      <RadioGroupField
+        label="显示模式"
+        hint="选择一个模式"
+        labelIcon={<span>装饰</span>}
+        presentation="tiles"
+        value="light"
+        onValueChange={onValueChange}
+        options={[
+          { value: 'light', label: '浅色', icon: <span>太阳</span> },
+          { value: 'dark', label: '深色', icon: <span data-testid="dark-icon">月亮</span> },
+          { value: 'system', label: '系统', disabled: true, icon: <span>屏幕</span> },
+        ]}
+      />,
+    );
+    const group = screen.getByRole('radiogroup', { name: '显示模式' });
+    expect(group).toHaveAccessibleDescription('选择一个模式');
+    const radio = screen.getByRole('radio', { name: /^深色$/ });
+    expect(radio.closest('label')).toContainElement(screen.getByTestId('dark-icon'));
+    fireEvent.click(screen.getByTestId('dark-icon'));
+    expect(onValueChange).toHaveBeenCalledWith('dark');
+    expect(screen.getByRole('radio', { name: '系统' })).toBeDisabled();
+  });
+
   it('ConfirmDialog 在异步确认期间阻止重复动作并在成功后关闭', async () => {
     let resolveConfirm: (() => void) | undefined;
     const onConfirm = vi.fn(

@@ -186,6 +186,7 @@ Hover/Focus 与 Selected 不得合并为同一种状态；Selected 不能只依�
 
 - SearchBox 根、输入组与所在 Grid 必须允许收缩；清除和图标保留命中区。Field 的说明和错误占独立区域，不由父 Grid 拉长单行输入。
 - RadioGroupField 的 cards 默认保留解释型选项表面；rows 用于短配置选项。SwitchField 的 card 默认不变，row 适用于已有容器内的紧凑配置行。TextField 的 ref 指向输入控件，供 Form Foundation 注册、首错定位和显式用户偏好焦点使用。
+- RadioGroupField 的 tiles 用于少量互斥模式的图标选择卡片：分组可通过 labelIcon 提供装饰图标，标题与 hint 先于选项；选项 icon 在上、label 在下，三列等宽，长文字允许换行。保留 RadioGroup/Radio.Content 的原生单选、整卡点击、方向键、焦点与禁用语义，不使用 Tabs 内容切换替代表单值选择。内层图标透明且 aria-hidden，选中表面由外层卡片承担，沿用语义 brand Token。cards/rows 默认视觉与行为不变。权威示例为 /ui-elements/forms 的 RadioGroupField，真实消费者为 /settings 的主题模式。
 - 单选 ToggleGroup 保持连续组并在内部横滚；多选保持独立项并换行。TabsView 选择、尺寸和文本变化时只调整自身列表，不持续抢回用户手动滚动；vertical 在 md 以下同时回退布局、ARIA 和键盘方向。溢出提示来自实际滚动范围。
 - DrawerSurface 的 placement 为 left/right，缺省 right；navigation composition 用于共享导航内容，缺省 standard。Overlay 的焦点、Escape、背景锁定和焦点返回均由 HeroUI 管理。
 - Dialog 正常采用正文滚动；短高度允许整个对话框滚动，操作必须处于可达滚动区域。异步确认阻止重复提交和提前关闭；重试先清除旧错误。

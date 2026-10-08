@@ -416,7 +416,9 @@ test('Radio/Checkbox 内部 indicator 与 label 同行且无双重成形', async
   const radioPanel = page
     .getByRole('heading', { level: 3, name: 'RadioGroupField' })
     .locator('xpath=ancestor::section[1]');
-  const radioRows = radioPanel.locator('.ui-choice-content');
+  const standardRadioGroup = radioPanel.getByRole('radiogroup', { name: '反馈密度', exact: true });
+  const radioRows = standardRadioGroup.locator('.ui-choice-content');
+  await expect(radioRows).toHaveCount(3);
   await expect(radioRows.first()).toHaveCSS('flex-direction', 'row');
   const radioGeom = await radioRows.first().evaluate((row) => {
     const ctrl = row.querySelector('.radio__control');
@@ -433,7 +435,7 @@ test('Radio/Checkbox 内部 indicator 与 label 同行且无双重成形', async
   expect(Math.abs((radioGeom?.controlTop ?? 0) - (radioGeom?.labelTop ?? 0))).toBeLessThan(8);
 
   // dot：unselected 行不可见（opacity 0），selected 行可见
-  const dotStates = await radioPanel.evaluate((panel) => {
+  const dotStates = await standardRadioGroup.evaluate((panel) => {
     const rows = [...panel.querySelectorAll('[class*="radio "]')];
     return rows.map((row) => {
       const input = row.querySelector('input[type="radio"]');
@@ -448,6 +450,34 @@ test('Radio/Checkbox 内部 indicator 与 label 同行且无双重成形', async
   for (const row of dotStates) {
     if (row.checked) expect(row.dotOpacity).toBe('1');
     else expect(row.dotOpacity).toBe('0');
+  }
+
+  // 图标选择卡片没有圆点；独立验证透明图标与上图标/下标题的 anatomy。
+  const tileGroup = radioPanel.getByRole('radiogroup', { name: '图标选择卡片', exact: true });
+  await expect(tileGroup.getByRole('radio')).toHaveCount(3);
+  await expect(tileGroup.locator('.radio__control')).toHaveCount(0);
+  const tiles = tileGroup.locator('.ui-choice-content');
+  for (const tile of await tiles.all()) {
+    await expect(tile).toHaveCSS('flex-direction', 'column');
+    const geometry = await tile.evaluate((row) => {
+      const icon = row.querySelector('[aria-hidden="true"]');
+      const label = row.querySelector('span.flex');
+      if (!icon || !label) throw new Error('Choice tile anatomy missing');
+      const style = getComputedStyle(icon);
+      return {
+        iconBottom: icon.getBoundingClientRect().bottom,
+        labelTop: label.getBoundingClientRect().top,
+        background: style.backgroundColor,
+        border: style.borderTopWidth,
+        width: icon.getBoundingClientRect().width,
+        height: icon.getBoundingClientRect().height,
+      };
+    });
+    expect(geometry.iconBottom).toBeLessThanOrEqual(geometry.labelTop);
+    expect(geometry.background).toBe('rgba(0, 0, 0, 0)');
+    expect(geometry.border).toBe('0px');
+    expect(geometry.width).toBe(20);
+    expect(geometry.height).toBe(20);
   }
 
   // CheckboxField：行 flex-row（非列堆叠）
