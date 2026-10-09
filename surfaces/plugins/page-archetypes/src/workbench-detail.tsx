@@ -23,7 +23,7 @@ export function WorkbenchDetail({
     <Panel appearance={embedded ? 'embedded' : 'outlined'} className="overflow-hidden">
       {selectedRecord ? (
         <>
-          <div className="border-b border-border p-5">
+          <div data-reveal-item className="border-b border-border p-5">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
                 <p className="text-xs font-bold uppercase tracking-wider text-brand">
@@ -80,7 +80,7 @@ export function WorkbenchDetail({
                   id: 'activity',
                   label: t('reference.tabs.activity'),
                   content: (
-                    <ol className="space-y-3">
+                    <ol data-reveal-items className="space-y-3">
                       {[0, 1, 2].map((item) => (
                         <li className="flex gap-3 text-sm" key={item}>
                           <RefreshCw className="mt-0.5 size-4 shrink-0 text-info" />

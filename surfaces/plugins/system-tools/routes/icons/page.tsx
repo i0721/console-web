@@ -23,7 +23,7 @@ export default function SystemToolsIconsPage() {
         description={t('systemTools.icons.description')}
       />
       <Panel aria-label={t('systemTools.icons.title')} className="p-6">
-        <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <ul data-reveal-items className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {navigationIconVocabulary.map((iconId) => (
             <li
               className="flex min-w-0 items-center gap-3 rounded-panel border border-border bg-surface-muted px-4 py-3"

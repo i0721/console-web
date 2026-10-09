@@ -37,7 +37,7 @@ export function OverlayElementsPage() {
             title={t('uiElements.overlaysTitle')}
             description={t('uiElements.overlaysDescription')}
           >
-            <div className="grid gap-4 p-5 lg:grid-cols-2">
+            <div data-reveal-items className="grid gap-4 p-5 lg:grid-cols-2">
               <ComponentPreview
                 name="MenuButton"
                 description={t('uiElements.catalog.menuDescription')}

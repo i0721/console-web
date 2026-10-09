@@ -79,7 +79,7 @@ layout`），区段优先组合 `PageHeader`、`Section`、`Toolbar`、
    不得自行定义另一套 page-enter / drawer / dialog / overlay / async 动画。
    - Page Enter 是统一页面体验（Host RouteTransition 自动提供）；正常页面**不**手工
      为整页包 ViewportReveal 或自定义进入动画。
-   - ViewportReveal / Section Reveal 只用于长页面真正 below-fold 的内容区。
+   - Page 自动装配 ViewportReveal items scope；独立语义项随滚动首次进入视口，首屏短错峰。设置字段、Card、阅读 List Item 分别触发，禁止把多项 Section 作为单一动画单元；快滚、恢复位置和焦点进入直接稳定。
    - reduced-motion 由项目级 Motion Policy 统一控制，页面不自行判断。
    - 方向过渡（forward/back）由 Host `data-route-kind` + Motion Token 纯 CSS 自动
      提供（`surface-enter-forward`）；同路由内容替换用 `ContentSwapTransition`

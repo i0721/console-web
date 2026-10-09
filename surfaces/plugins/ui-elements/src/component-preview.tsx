@@ -27,7 +27,7 @@ export function ComponentPreview({
       appearance={embedded ? 'embedded' : 'outlined'}
       className={`min-w-0 overflow-hidden ${fullWidth ? 'lg:col-span-2' : ''}`}
     >
-      <div className="border-b border-border px-4 py-3">
+      <div data-reveal-item className="border-b border-border px-4 py-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h3 id={previewAnchor(name)} tabIndex={-1} className="scroll-mt-24 font-bold text-ink">
             {name}
@@ -43,7 +43,9 @@ export function ComponentPreview({
         </div>
         <p className="mt-2 text-sm leading-6 text-ink-muted">{description}</p>
       </div>
-      <div className="p-4">{children}</div>
+      <div data-reveal-item className="p-4">
+        {children}
+      </div>
     </Panel>
   );
 }

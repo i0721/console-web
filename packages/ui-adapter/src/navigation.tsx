@@ -21,7 +21,7 @@ export function BreadcrumbTrail({ label, items }: BreadcrumbTrailProps) {
   return (
     <Breadcrumbs
       aria-label={label}
-      className="flex flex-wrap text-sm text-ink-muted"
+      className="ui-breadcrumbs flex flex-wrap text-sm text-ink-muted"
       separator={<span aria-hidden="true">/</span>}
     >
       {items.map((item, index) => {

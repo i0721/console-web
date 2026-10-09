@@ -13,7 +13,7 @@ import { PreferencesProvider } from '@community-go/plugin-framework/preferences'
 import { WorkspaceProvider } from '@community-go/plugin-framework/workspace';
 import { WorkbenchProvider } from '@community-go/plugin-framework/workbench';
 import { rehydrateStore } from '@community-go/state-foundation';
-import { ViewportRevealProvider } from '@community-go/surface-foundation/viewport-reveal';
+import { ScrollRevealRuntime } from './scroll-reveal-runtime';
 import { useEffect, useMemo, useRef, useSyncExternalStore, type ReactNode } from 'react';
 
 import { appI18n } from '../i18n/i18n';
@@ -220,11 +220,11 @@ export function AppProviders({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <FrontendI18nProvider runtime={appI18n}>
       <MotionPolicyProvider preference={motionPreference}>
-        <ViewportRevealProvider>
+        <ScrollRevealRuntime>
           <GlobalProgressProvider>
             <RuntimeProviders>{children}</RuntimeProviders>
           </GlobalProgressProvider>
-        </ViewportRevealProvider>
+        </ScrollRevealRuntime>
       </MotionPolicyProvider>
     </FrontendI18nProvider>
   );

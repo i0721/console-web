@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { renderToString } from 'react-dom/server';
 import {
@@ -9,6 +9,64 @@ import { MotionPolicyProvider } from '../host/motion-policy';
 
 beforeEach(() => window.sessionStorage.clear());
 afterEach(() => vi.unstubAllGlobals());
+
+it('observes leaf semantics, orders simultaneous entries by reading position, and caps stagger', async () => {
+  let callback: IntersectionObserverCallback = () => undefined;
+  const observe = vi.fn();
+  const unobserve = vi.fn();
+  vi.stubGlobal('IntersectionObserver', function (next: IntersectionObserverCallback) {
+    callback = next;
+    return { observe, unobserve, disconnect: vi.fn() };
+  });
+  let fast = false;
+  const readViewport = () => ({ fast, restored: false });
+  const content = (count: number) => (
+    <MotionPolicyProvider>
+      <ViewportRevealProvider readViewport={readViewport}>
+        <ViewportReveal items>
+          <div data-reveal-item data-testid="group">
+            <div data-reveal-items>
+              {Array.from({ length: count }, (_, index) => (
+                <div key={index} data-testid={`item-${index}`}>
+                  <button>item {index}</button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </ViewportReveal>
+      </ViewportRevealProvider>
+    </MotionPolicyProvider>
+  );
+  const view = render(content(5));
+  expect(screen.getByTestId('group')).not.toHaveAttribute('data-reveal');
+  expect(observe).toHaveBeenCalledTimes(5);
+  const entries = (indices: number[], intersecting: boolean) =>
+    indices.map((index) => ({
+      target: screen.getByTestId(`item-${index}`),
+      isIntersecting: intersecting,
+      boundingClientRect: new DOMRect(0, index * 100, 100, 90),
+      intersectionRatio: intersecting ? 1 : 0,
+      rootBounds: null,
+      intersectionRect: new DOMRect(),
+      time: 0,
+    }));
+  act(() => callback(entries([4, 3, 2, 1, 0], true), {} as IntersectionObserver));
+  for (let index = 0; index < 5; index++) {
+    expect(screen.getByTestId(`item-${index}`)).toHaveAttribute('data-reveal-order', String(index));
+    expect(screen.getByTestId(`item-${index}`)).toHaveAttribute('data-reveal-entry', 'true');
+  }
+  view.rerender(content(6));
+  await waitFor(() => expect(observe).toHaveBeenCalledTimes(6));
+  act(() => callback(entries([5], false), {} as IntersectionObserver));
+  expect(screen.getByTestId('item-5')).toHaveAttribute('data-reveal', 'pending');
+  fast = true;
+  act(() => callback(entries([5], true), {} as IntersectionObserver));
+  expect(screen.getByTestId('item-5')).toHaveAttribute('data-reveal-entry', 'false');
+  fireEvent.focus(screen.getByRole('button', { name: 'item 0' }));
+  expect(screen.getByTestId('item-0')).toHaveAttribute('data-reveal-entry', 'false');
+  act(() => callback(entries([0], true), {} as IntersectionObserver));
+  expect(screen.getByTestId('item-0')).toHaveAttribute('data-reveal-entry', 'false');
+});
 
 it('server output preserves the full reading content without an animation visibility gate', () => {
   const markup = renderToString(

@@ -163,7 +163,7 @@ test('分类切换复用主 Shell route-enter 动效：内容区段淡入、壳�
     const sample = await page.evaluate(() => {
       const content = document.querySelector('[data-route-content]');
       const stack = content?.querySelector(':scope > .surface-page-stack');
-      const first = stack?.querySelector(':scope > .surface-route-region');
+      const first = stack?.querySelector('[id^=settings-][data-reveal]');
       const header = document.querySelector('.surface-route-region');
       return {
         anim: first ? getComputedStyle(first).animationName : '',
@@ -171,7 +171,7 @@ test('分类切换复用主 Shell route-enter 动效：内容区段淡入、壳�
         op: header ? parseFloat(getComputedStyle(header).opacity) : -1,
       };
     });
-    if (sample.anim.includes('surface-enter-forward')) sawFade = true;
+    if (sample.anim.includes('surface-item-enter')) sawFade = true;
     expect(sample.stackAnim).toBe('none');
     shellOpacities.push(sample.op);
     await page.waitForTimeout(16);

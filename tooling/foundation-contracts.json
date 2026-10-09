@@ -155,7 +155,8 @@
         "apps/web/e2e/ui-ux-109.spec.ts",
         "docs/changes/109-ui-ux-optimization/README.md",
         "apps/web/src/test/motion-reveal.test.tsx",
-        "apps/web/e2e/motion-progressive.spec.ts"
+        "apps/web/e2e/motion-progressive.spec.ts",
+        "apps/web/e2e/scroll-reveal-items.spec.ts"
       ]
     },
     "@community-go/plugin-framework": {

@@ -88,3 +88,19 @@ evidence/semantic-final-check-current.txt。此结果是以下 Motion 专项实�
 详见[最终验证](evidence/motion-final-verification.md)与
 [本次视觉对照](evidence/motion-final/visual-differences/index.html)。原基线未更新，
 完整检查尚未全绿；人工视觉确认是剩余验收项。
+
+## 2026-10-09 语义内容项 Scroll Reveal 续轮
+
+依据新要求将上轮区段级呈现扩为独立语义项：Page统一scope，设置行、Card、标题、
+阅读列表项独立触发；路由仅保留标题轻过渡。源码/浏览器问题与实施范围见
+[专项审查](design/scroll-reveal-review.md)，执行结果见[验证记录](evidence/scroll-items-verification.md)。
+历史审查与证据保留，当前规范已同步Motion authority；本轮不自动更新视觉基线。
+
+本轮最终383单元、构建、原性能预算通过；301浏览器287通过、14视觉比较失败，
+共28个截图差异。38个真实入口审计及快滚/恢复/Reduced专项通过，入场期间的四类
+对比度失败已修复并复验。功能/Axe与视觉基线分别验收，完整检查尚未全绿。
+当前[视觉对照](evidence/scroll-items/visual-differences/index.html)已归档，随后获人工确认。
+
+用户随后明确确认这28项，已限定范围更新对应golden并保存前后hash。
+人工确认后的完整 `pnpm check` exit 0：383单元、301浏览器、生产构建、原预算与全部
+门禁通过，含38个真实入口及已批准基线复验。最终成绩见上述验证记录；旧对照与失败证据保留。

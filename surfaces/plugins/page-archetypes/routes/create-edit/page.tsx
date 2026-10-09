@@ -118,7 +118,7 @@ export default function ReferenceFormPage() {
                     id: 'identity',
                     label: t('formReference.tabs.identity'),
                     content: (
-                      <div className="grid gap-5">
+                      <div data-reveal-items className="grid gap-5">
                         <FoundationControlledField form={form} name="name">
                           {(field) => (
                             <TextField
@@ -136,7 +136,7 @@ export default function ReferenceFormPage() {
                             />
                           )}
                         </FoundationControlledField>
-                        <div className="grid gap-5 md:grid-cols-2">
+                        <div data-reveal-items className="grid gap-5 md:grid-cols-2">
                           <FoundationControlledField form={form} name="owner">
                             {(field) => (
                               <ComboField
@@ -206,7 +206,7 @@ export default function ReferenceFormPage() {
                     id: 'behavior',
                     label: t('formReference.tabs.behavior'),
                     content: (
-                      <div className="grid gap-5">
+                      <div data-reveal-items className="grid gap-5">
                         <FoundationControlledField form={form} name="mode">
                           {(field) => (
                             <RadioGroupField

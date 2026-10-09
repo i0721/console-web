@@ -29,7 +29,7 @@ export function SurfacesPage() {
             title={t('uiElements.cardsTitle')}
             description={t('uiElements.cardsDescription')}
           >
-            <div className="grid gap-4 p-5 lg:grid-cols-2">
+            <div data-reveal-items className="grid gap-4 p-5 lg:grid-cols-2">
               <ComponentPreview
                 embedded
                 fullWidth
@@ -46,7 +46,7 @@ export function SurfacesPage() {
                   'Long content',
                 ]}
               >
-                <div className="grid gap-4 lg:grid-cols-3">
+                <div data-reveal-items className="grid gap-4 lg:grid-cols-3">
                   <Card>
                     <CardHeader
                       action={<Badge tone="info">{t('uiElements.elevatedCardBadge')}</Badge>}
@@ -115,7 +115,7 @@ export function SurfacesPage() {
                   'Layout surface',
                 ]}
               >
-                <div className="grid gap-4 lg:grid-cols-3">
+                <div data-reveal-items className="grid gap-4 lg:grid-cols-3">
                   <Panel className="p-4">
                     <p className="font-semibold text-ink">Elevated · Default</p>
                     <p className="mt-2 text-sm text-ink-muted">{description}</p>

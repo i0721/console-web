@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 import { mkdir } from 'node:fs/promises';
 import { defaultPreferences, PREFERENCES_VERSION } from '@community-go/surface/preferences-model';
 
-const evidence = 'docs/changes/109-ui-ux-optimization/evidence/motion-final';
+const evidence = 'docs/changes/109-ui-ux-optimization/evidence/scroll-items';
 
 test('settings keeps its shell stable and enters semantic regions inside the nested Page', async ({
   page,
@@ -25,16 +25,16 @@ test('settings keeps its shell stable and enters semantic regions inside the nes
   await expect
     .poll(() =>
       stack
-        .locator(':scope > .surface-route-region')
+        .locator('[id^=settings-][data-reveal]')
         .first()
         .evaluate((e) => getComputedStyle(e).animationName),
     )
-    .toContain('surface-enter-forward');
+    .toContain('surface-item-enter');
   await expect
     .poll(() =>
       page.locator('main h1').evaluate((e) => getComputedStyle(e.closest('header')!).animationName),
     )
-    .toBe('none');
+    .not.toContain('surface-enter-forward');
 });
 
 for (const width of [1440, 390, 320]) {
@@ -67,15 +67,15 @@ for (const width of [1440, 390, 320]) {
     });
     await page.goto('/settings/actions');
     await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
-    const regions = page.locator('.surface-viewport-reveal');
-    await expect(regions).toHaveCount(2);
-    await expect(regions.first()).toHaveAttribute('data-reveal', 'pending');
+    const regions = page.locator('[id^=settings-][data-reveal]');
+    expect(await regions.count()).toBeGreaterThan(10);
+    await expect(regions.last()).toHaveAttribute('data-reveal', 'pending');
     await expect(regions.first()).toHaveCSS('opacity', '1');
     const height = await page.evaluate(() => document.documentElement.scrollHeight);
     const regionHeight = (await regions.first().boundingBox())!.height;
-    if (width < 400) expect(regionHeight).toBeGreaterThan(360);
+    expect(regionHeight).toBeGreaterThan(0);
     await regions.first().scrollIntoViewIfNeeded();
-    await expect(regions.first()).toHaveAttribute('data-reveal-entry', 'true');
+    await expect(regions.first()).toHaveAttribute('data-reveal', 'revealed');
     await expect
       .poll(() =>
         regions.first().evaluate((e) => e.getAnimations().some((a) => a.playState === 'running')),
@@ -128,7 +128,7 @@ for (const mode of ['missing', 'silent', 'reduced'] as const) {
       }, mode);
     await page.goto('/settings/actions');
     await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
-    const region = page.locator('.surface-viewport-reveal').last();
+    const region = page.locator('#settings-actionPreferences-showSearchSuggestions');
     await expect(region).toHaveCSS('opacity', '1');
     await expect(region).toHaveCSS('transform', 'none');
     await region.getByRole('switch', { name: '显示搜索建议', exact: true }).focus();
@@ -147,7 +147,7 @@ for (const mode of ['missing', 'silent', 'reduced'] as const) {
 test('anchor refresh and browser return never leave reading content hidden', async ({ page }) => {
   await page.goto('/settings/actions#settings-actionPreferences-showSearchSuggestions');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
-  const region = page.locator('.surface-viewport-reveal').last();
+  const region = page.locator('#settings-actionPreferences-showSearchSuggestions');
   const target = page.locator('#settings-actionPreferences-showSearchSuggestions');
   await expect(target).toBeInViewport();
   await expect(target.getByRole('switch')).toBeFocused();
@@ -188,7 +188,7 @@ test('an invalid bookmark fragment cannot interrupt hydration or hide settings',
   await page.goto('/settings/actions#%E0%A4%A');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   await expect(page.getByRole('heading', { name: '操作偏好', exact: true })).toBeVisible();
-  await expect(page.locator('.surface-viewport-reveal').last()).toHaveCSS('opacity', '1');
+  await expect(page.locator('[id^=settings-][data-reveal]').last()).toHaveCSS('opacity', '1');
   expect(errors).toEqual([]);
 });
 
@@ -217,8 +217,8 @@ for (const width of [320, 2048]) {
     );
     await page.goto('/settings/actions');
     await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
-    await page.locator('.surface-viewport-reveal').last().scrollIntoViewIfNeeded();
-    await expect(page.locator('.surface-viewport-reveal').last()).toHaveCSS('opacity', '1');
+    await page.locator('[id^=settings-][data-reveal]').last().scrollIntoViewIfNeeded();
+    await expect(page.locator('[id^=settings-][data-reveal]').last()).toHaveCSS('opacity', '1');
     expect(
       (await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze())
         .violations,

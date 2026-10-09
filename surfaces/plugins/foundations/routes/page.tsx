@@ -12,7 +12,6 @@ import Link from 'next/link';
 import type { Preferences } from '@community-go/surface/preferences-model';
 
 import { Page, PageHeader } from '@community-go/surface-foundation/layout';
-import { ViewportReveal } from '@community-go/surface-foundation/viewport-reveal';
 
 const layers = [
   { id: 'stable', icon: Braces, tone: 'bg-success-soft text-success' },
@@ -47,13 +46,13 @@ export default function FoundationsPage() {
         actions={<StatusPill tone="success">Executable boundaries</StatusPill>}
       />
       {(showWorkbench || showFavorites) && (
-        <div className="grid gap-4 xl:grid-cols-3">
+        <div data-reveal-items className="grid gap-4 xl:grid-cols-3">
           {showFavorites ? (
             <Panel className="p-5">
               <h2 className="text-sm font-bold uppercase tracking-wider text-ink-muted">
                 {t('foundations.favoritesTitle')}
               </h2>
-              <ul className="mt-3 flex flex-col gap-1">
+              <ul data-reveal-items className="mt-3 flex flex-col gap-1">
                 {favorites.map((favorite) => (
                   <li key={favorite.pathname}>
                     <Link
@@ -72,7 +71,7 @@ export default function FoundationsPage() {
               <h2 className="text-sm font-bold uppercase tracking-wider text-ink-muted">
                 {t('foundations.recentsTitle')}
               </h2>
-              <ul className="mt-3 flex flex-col gap-1">
+              <ul data-reveal-items className="mt-3 flex flex-col gap-1">
                 {recents.slice(0, 6).map((recent) => (
                   <li key={recent.pathname}>
                     <Link
@@ -88,7 +87,7 @@ export default function FoundationsPage() {
           ) : null}
         </div>
       )}
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div data-reveal-items className="grid gap-4 lg:grid-cols-2">
         {layers.map(({ id, icon: Icon, tone }, index) => (
           <Card key={id}>
             <CardContent>
@@ -108,34 +107,32 @@ export default function FoundationsPage() {
           </Card>
         ))}
       </div>
-      <ViewportReveal>
-        <div className="grid gap-6 xl:grid-cols-3">
-          <Panel className="p-5 sm:p-6 xl:col-span-2" tone="brand">
-            <div className="flex items-start gap-4">
-              <span className="grid size-11 shrink-0 place-items-center rounded-control bg-surface text-brand shadow-sm">
-                <ShieldCheck className="size-5" />
-              </span>
-              <div>
-                <h2 className="text-lg font-bold text-ink">{t('foundations.directUse')}</h2>
-                <p className="mt-2 text-sm leading-6 text-ink-muted">
-                  {t('foundations.directUseDescription')}
-                </p>
-              </div>
+      <div data-reveal-items className="grid gap-6 xl:grid-cols-3">
+        <Panel className="p-5 sm:p-6 xl:col-span-2" tone="brand">
+          <div className="flex items-start gap-4">
+            <span className="grid size-11 shrink-0 place-items-center rounded-control bg-surface text-brand shadow-sm">
+              <ShieldCheck className="size-5" />
+            </span>
+            <div>
+              <h2 className="text-lg font-bold text-ink">{t('foundations.directUse')}</h2>
+              <p className="mt-2 text-sm leading-6 text-ink-muted">
+                {t('foundations.directUseDescription')}
+              </p>
             </div>
-          </Panel>
-          <Panel className="p-5 sm:p-6">
-            <h2 className="text-lg font-bold text-ink">{t('foundations.rulesTitle')}</h2>
-            <ol className="mt-4 space-y-3">
-              {['first', 'second', 'third', 'fourth'].map((rule, index) => (
-                <li key={rule} className="flex gap-3 text-sm leading-6 text-ink-muted">
-                  <span className="font-bold text-brand">{index + 1}.</span>
-                  <span>{t(`foundations.rules.${rule}`)}</span>
-                </li>
-              ))}
-            </ol>
-          </Panel>
-        </div>
-      </ViewportReveal>
+          </div>
+        </Panel>
+        <Panel className="p-5 sm:p-6">
+          <h2 className="text-lg font-bold text-ink">{t('foundations.rulesTitle')}</h2>
+          <ol data-reveal-items className="mt-4 space-y-3">
+            {['first', 'second', 'third', 'fourth'].map((rule, index) => (
+              <li key={rule} className="flex gap-3 text-sm leading-6 text-ink-muted">
+                <span className="font-bold text-brand">{index + 1}.</span>
+                <span>{t(`foundations.rules.${rule}`)}</span>
+              </li>
+            ))}
+          </ol>
+        </Panel>
+      </div>
     </Page>
   );
 }

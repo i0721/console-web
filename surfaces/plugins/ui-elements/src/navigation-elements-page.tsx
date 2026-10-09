@@ -37,7 +37,7 @@ export function NavigationElementsPage() {
             title={t('uiElements.navigationTitle')}
             description={t('uiElements.catalog.navigationDescription')}
           >
-            <div className="grid gap-4 p-5 lg:grid-cols-2">
+            <div data-reveal-items className="grid gap-4 p-5 lg:grid-cols-2">
               <ComponentPreview
                 name="TextLink"
                 description={t('uiElements.catalog.textLinkDescription')}

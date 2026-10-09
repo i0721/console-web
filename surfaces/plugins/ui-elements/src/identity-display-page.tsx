@@ -24,7 +24,7 @@ export function IdentityDisplayPage() {
             title={t('uiElements.catalog.identityDisplay')}
             description={t('uiElements.catalog.identityDisplayDescription')}
           >
-            <div className="grid gap-4 p-5 lg:grid-cols-2">
+            <div data-reveal-items className="grid gap-4 p-5 lg:grid-cols-2">
               <ComponentPreview
                 name="Avatar"
                 description={t('uiElements.catalog.avatarDescription')}

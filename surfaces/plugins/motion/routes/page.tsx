@@ -10,6 +10,7 @@ import { StateSurface } from '@community-go/ui-adapter/state-surface';
 import { ToggleGroup } from '@community-go/ui-adapter/toggle-group';
 import { CircleAlert, Inbox } from 'lucide-react';
 import { useState } from 'react';
+import { useFrontendTranslation } from '@community-go/i18n';
 
 import { MotionInspector } from '../src/motion-inspector';
 import { ViewportReveal } from '@community-go/surface-foundation/viewport-reveal';
@@ -24,6 +25,7 @@ const asyncPhases: readonly AsyncRegionPhase[] = [
 ];
 
 export default function MotionPage() {
+  const { t } = useFrontendTranslation();
   const [phase, setPhase] = useState<AsyncRegionPhase>('initial');
   return (
     <Page>
@@ -107,14 +109,17 @@ export default function MotionPage() {
           </DisclosurePanel>
         </div>
       </Section>
-      <ViewportReveal>
-        <Section
-          title="Viewport Reveal"
-          description="该 below-fold Region 只在首次进入视口时 reveal，离开后不重播。"
-        >
-          <div className="p-5 text-sm leading-6 text-ink-muted">
-            Observer 生命周期由 Web Host 单例管理；Recipe 与 Reduced Motion Policy 仍由 Foundation
-            管理。
+      <ViewportReveal items>
+        <Section title="Viewport Reveal" description={t('motionContent.revealDescription')}>
+          <div data-reveal-items className="grid gap-4 p-5 sm:grid-cols-2">
+            {[1, 2, 3, 4, 5, 6].map((index) => (
+              <div key={index} className="rounded-panel border border-border bg-surface-muted p-5">
+                <h3 className="font-bold text-ink">{t('motionContent.item', { index })}</h3>
+                <p className="mt-3 text-sm leading-6 text-ink-muted">
+                  {t('motionContent.itemDescription')}
+                </p>
+              </div>
+            ))}
           </div>
         </Section>
       </ViewportReveal>

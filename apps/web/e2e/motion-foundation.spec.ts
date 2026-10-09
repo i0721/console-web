@@ -20,7 +20,7 @@ test('Motion Inspector 按模式、分类与慢速倍率统一控制 recipe', as
 
   await inspector.getByRole('button', { name: 'reveal', exact: true }).click();
   await expect(page.locator('html')).toHaveAttribute('data-motion-reveal', 'off');
-  await expect(page.locator('[data-motion-recipe="reveal"]')).toHaveAttribute(
+  await expect(page.getByRole('heading', { name: '独立阅读项 6' }).locator('..')).toHaveAttribute(
     'data-reveal',
     'revealed',
   );
@@ -28,7 +28,7 @@ test('Motion Inspector 按模式、分类与慢速倍率统一控制 recipe', as
 
 test('ViewportReveal 首次进入后保持 revealed，不因再次滚入而重播', async ({ page }) => {
   await page.goto('/motion');
-  const reveal = page.locator('[data-motion-recipe="reveal"]');
+  const reveal = page.getByRole('heading', { name: '独立阅读项 6' }).locator('..');
   await reveal.scrollIntoViewIfNeeded();
   await expect(reveal).toHaveAttribute('data-reveal', 'revealed');
   await page.evaluate(() => window.scrollTo(0, 0));

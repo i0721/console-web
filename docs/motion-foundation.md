@@ -18,7 +18,7 @@ Semantic Component 绑定真实生命周期，决定为什么动、何时动
 | ------------------------ | ---------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | Router / Suspense        | Host `RouteTransition`       | `apps/web/src/host`                           | `nav-forward` 使用 Surface screen recipe；无导航类型使用克制的 `content.enter`；hydration 不重复播放页面滑动 |
 | 数据 readiness           | `AsyncRegion`、`StateRegion` | Universal / Product Surface                   | initial 才替换 Skeleton；refresh 保留旧内容；background 静默                                                 |
-| 首次进入视口             | `ViewportReveal`             | 已登记浏览器适配 + Host 装配 + Surface recipe | 仅显式 below-fold Region，单例 Observer，默认可见，reveal-once                                               |
+| 首次进入视口             | `ViewportReveal`             | 已登记浏览器适配 + Host 装配 + Surface recipe | Page 语义项 scope，单例 Observer，默认可见，首次进入一次                                                     |
 | 同路由内容切换           | `ContentSwapTransition`      | UI Adapter                                    | 使用稳定 `contentKey`；`TabsView` 默认接入；筛选刷新不使用它                                                 |
 | Inline Feedback Presence | `FeedbackPresence`           | UI Adapter                                    | exit 期间立即退出辅助技术与交互树；支持快速反转；Toast 不接入                                                |
 | 非 Avatar 图片 readiness | `ReadyImage`                 | UI Adapter                                    | width/height 预留空间，load + decode 后 crossfade，error 保持尺寸                                            |
@@ -47,15 +47,9 @@ Universal recipe 的单一登记文件是 `packages/design-system/src/motion.css
 
 Surface `screen.enter/exit`、Shell 锚定、Route content、Viewport 与 State recipe 的具体绑定继续由 `packages/surface-foundation/src/styles.css` 持有。非上述权威文件禁止声明 `@keyframes`。
 
-持久布局通过既有 `[data-route-content]` 标出可替换区域。含此区域的外层 Page
-只提供 spacing，不再次触发直接区段 choreography；CSS 根据这个现有布局标识排除
-外层壳，使 Settings 标题/导航保持稳定，分类区段只进入一次。普通 Page 仍由 Host
-自动提供进入体验，不需要页面声明动画类型或绕过 Page。109 回归证明修复的是重复
-进入范围，Duration/Easing Token 保持原值。
-
-持久布局内容包含内层 `Page` 时，route recipe 命中该 Page 的直接语义区段，
-不对 Page wrapper 与子区段双重动画。ViewportReveal 不参加 route 错峰，避免同一
-区域同时由路由和滚动生命周期控制。
+持久布局通过既有 `[data-route-content]` 标出可替换区域。外层壳和内层 Page
+保持空间骨架，分类内容独立观察；route recipe 仅给非持久 PageHeader 轻量转场。
+ViewportReveal 的内容项不参加 route 错峰，避免父子动画叠加。
 
 ### Schema-Controlled 生成（Design System 单一 Schema）
 
@@ -111,14 +105,26 @@ Browser API 的一般豁免。新增平台生命周期仍优先在 Host 或明�
 ## 6. 组合规则
 
 - Screen Transition 只表达已经进入另一个 Screen，不等待全部数据后整页 reveal。
-- Above-fold Shell/Region 立即稳定；below-fold 只有显式 Region 使用 `ViewportReveal`。
-- Reveal 内容在 SSR、pending、Observer 不支持/失败/无回调时始终可见。Observer
-  只提供增强：首次回调已在视口或已越过的区域直接完成，从视口外进入才播放一次。
-  使用 viewport root、零边界 margin 与零比例阈值；不设 scroll listener 或每帧测量。
-- Reveal 使用现役位移 Token 的短 rise，保持 opacity 为 1，无错峰等待队列；焦点
-  进入取消位移。区域超高、快速滚动、反向浏览和锚点定位均不影响内容可用性。
-- Card 只有本身是独立阅读单元时才作为 Reveal 粒度；相关 Card 优先整体 Section。
-  表格行、表单字段、短设置分类、目录控件不以动画覆盖率为由强制 Reveal。
+- Page 自动组合 `ViewportReveal items`，保持原空间骨架，scope 本身不动画。
+  `data-reveal-item` 声明独立语义项，`data-reveal-items` 声明直属子项集合；
+  含子项的父级不再注册。Section 标题与内容分开，设置字段、阅读 Card/List Item
+  分别进入；图标、文字、选项、表格单元格不拆分。`data-reveal-skip` 排除持久导航。
+- 首屏按 IO 快照的 top/left 阅读顺序短错峰；后续项在真正进入视口时播放一次。
+  Observer root 是正文实际使用的文档视口，零 margin/零比例阈值；Sidebar 不是正文 root。
+  MutationObserver 只处理子树结构变化，登记新内容并释放移除节点；不监听属性反馈。
+- Reveal 在 SSR、pending、Observer 失败或无回调时默认可见；动画从语义透明度 0.96
+  开始，轻上移至稳定位置，避免观察反馈迟到时从完全可见突然归零。
+  使用 `--motion-duration-feedback`、`--motion-distance-reveal`、`--motion-opacity-reveal-start`、
+  `--motion-delay-reveal-step/max`；默认 180ms、0.5rem、40ms 步进、最多120ms，
+  大批项目自动压缩步进，使每项仍有独立延迟且最后一项不超过120ms。
+  无定时串行队列，animation fill=backwards，结束不保留 transform。
+- Web Host `ScrollRevealRuntime` 单点采样正文 scrollY，向现役 Provider 提供 fast/restored
+  判断；单个 passive listener，无每帧 DOM 测量、无滚动时 React 更新。快滚跳过后续项动画；
+  已越过区域、首次恢复位置、hash、Reduced/off 和焦点进入直接稳定，反向浏览不重播。
+- RouteTransition 仅给非持久 PageHeader 轻量方向/抬升，标题保持不透明，取消页面直接子区段的路由 stagger。
+  设置持久 Shell 不动；内容项由视口生命周期拥有，避免父子叠加。原显式单 Region
+  ViewportReveal 仍用于真正单一内容单元；禁止用于包含多个独立语义项的大容器。
+- 高对比度（含系统 more）将 Reveal 透明度起点设为1；Adapter 的 Dialog、Confirm、Command、Drawer 打开/关闭不做透明度过渡，HeroUI 继续拥有焦点与生命周期。
 - Async Region 各自 progressive ready；不得 Wait-all → Reveal-all。
 - `refreshing → ready`、`background → ready` 保留同一内容实例，不重播整块进场。
 - `TabsView` 的键盘、Selection 和 Focus 仍由 HeroUI 主持，Content Swap 只主持面板视觉切换。
@@ -147,7 +153,7 @@ Browser API 的一般豁免。新增平台生命周期仍优先在 Host 或明�
 
 1. 路由改变 → Host RouteTransition；不包整页 Reveal。
 2. 数据首次就绪/刷新/后台更新 → AsyncRegion 或 StateRegion；刷新保留旧内容。
-3. 真正 below-fold 的独立阅读分组 → ViewportReveal；首屏与高频操作直接显示。
+3. 语义内容项首次进入视口 → Page/ViewportReveal items；按内容粒度声明，快滚、恢复与焦点直接稳定。
 4. 同一路由替换一个内容域 → ContentSwapTransition，稳定 contentKey；TabsView 已集成。
 5. 展开折叠 → Disclosure；浮层 → Adapter/HeroUI Overlay，禁止第二层 Presence。
 6. 流内反馈挂载/退出 → FeedbackPresence；Toast 仍由现有 FeedbackController 管理。

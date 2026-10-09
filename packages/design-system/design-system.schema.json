@@ -284,6 +284,8 @@
       "required": [
         "debugScale",
         "delayRoute",
+        "delayReveal",
+        "revealOpacity",
         "durationBase",
         "durationPurpose",
         "durationProgress",
@@ -320,6 +322,11 @@
             }
           }
         },
+        "delayReveal": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/cssValue" }
+        },
+        "revealOpacity": { "$ref": "#/$defs/cssValue" },
         "durationBase": {
           "type": "object",
           "additionalProperties": {
@@ -628,8 +635,15 @@
         "contrastHigh": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["--spacing-focus-ring-width", "--spacing-focus-ring-offset"],
+          "required": [
+            "--spacing-focus-ring-width",
+            "--spacing-focus-ring-offset",
+            "--motion-opacity-reveal-start"
+          ],
           "properties": {
+            "--motion-opacity-reveal-start": {
+              "$ref": "#/$defs/cssValue"
+            },
             "--spacing-focus-ring-width": {
               "$ref": "#/$defs/cssValue"
             },
@@ -878,6 +892,11 @@
               }
             }
           },
+          "delayReveal": {
+            "step": "40ms",
+            "max": "120ms"
+          },
+          "revealOpacity": "0.96",
           "durationBase": {
             "fast": "120ms",
             "standard": "180ms",
@@ -956,6 +975,7 @@
             "max-width": "100rem"
           },
           "contrastHigh": {
+            "--motion-opacity-reveal-start": "1",
             "--spacing-focus-ring-width": "0.1875rem",
             "--spacing-focus-ring-offset": "0.1875rem"
           }
@@ -1277,6 +1297,17 @@
                   "shape": "ref",
                   "sourcePointer": "/x-community-go/source/tokens/rootMotion/delayRoute/values",
                   "template": "  --motion-delay-route-{key}: var(--motion-duration-{refKey});"
+                },
+                {
+                  "kind": "record",
+                  "shape": "literal",
+                  "sourcePointer": "/x-community-go/source/tokens/rootMotion/delayReveal",
+                  "template": "  --motion-delay-reveal-{key}: calc({value} * var(--motion-debug-scale));"
+                },
+                {
+                  "kind": "scalar",
+                  "sourcePointer": "/x-community-go/source/tokens/rootMotion/revealOpacity",
+                  "template": "  --motion-opacity-reveal-start: {value};"
                 },
                 {
                   "kind": "record",

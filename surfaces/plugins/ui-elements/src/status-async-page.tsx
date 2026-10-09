@@ -39,7 +39,7 @@ export function StatusAsyncPage() {
             title={t('uiElements.statusTitle')}
             description={t('uiElements.statusDescription')}
           >
-            <div className="grid gap-4 p-5 lg:grid-cols-2">
+            <div data-reveal-items className="grid gap-4 p-5 lg:grid-cols-2">
               <ComponentPreview
                 name="StatusPill"
                 description={t('uiElements.catalog.statusDescription')}

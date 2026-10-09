@@ -115,102 +115,48 @@
   }
 
   /* Default-visible enhancement: observer failure/SSR never hides reading or controls. */
-  .surface-viewport-reveal[data-reveal-entry='true'] {
-    animation: content-rise-in var(--motion-duration-feedback) var(--ease-product) both;
+  .surface-viewport-reveal[data-reveal-entry='true'],
+  [data-reveal-scope] [data-reveal-entry='true'] {
+    animation: surface-item-enter var(--motion-duration-feedback) var(--ease-product) backwards;
   }
 
-  .surface-viewport-reveal:focus-within {
+  [data-reveal-scope] [data-reveal-order][data-reveal-entry='true'] {
+    animation-delay: min(
+      calc(var(--motion-delay-reveal-step) * var(--surface-reveal-rank)),
+      calc(var(--motion-delay-reveal-max) * var(--surface-reveal-fraction))
+    );
+  }
+
+  .surface-viewport-reveal:focus-within,
+  [data-reveal-scope] [data-reveal-entry]:focus-within {
     animation: none;
   }
 
-  html[data-motion-reveal='off'] .surface-viewport-reveal {
+  html[data-motion-reveal='off'] .surface-viewport-reveal,
+  html[data-motion-reveal='off'] [data-reveal-scope] [data-reveal-entry] {
     opacity: 1;
     transform: none;
-    animation-duration: 0.01ms;
-  }
-
-  /* Route content.enter：页面内容进入编排（region 级，不逐 DOM 元素）。
-   * - 无方向/后退：轻上移淡入（content.enter recipe）
-   * - forward（导航前进）：克制右入淡入（方向位移语义，非手机重横滑）
-   * - reduced-motion / motion-screen=off：由 Motion Policy 统一降级（见下）。
-   * - 命中区段容器两类：
-   *   1) route-content 直接子 .surface-page-stack（无 layout 页面 = 页面输出区段）；
-   *   2) 任意深度 [data-route-content]（带持久 layout 的壳页面 = layout 内容区，
-   *      如设置分类路由内容；壳 PageHeader/侧栏不在其内 → 不命中、静止）。
-   *   两分支共用同一进入编排；[data-route-content] 只允许 layout 壳页面内容容器使用，
-   *   避免无 layout 页面内误标造成双重动画。 */
-  .surface-route-content[data-route-enter='true']
-    > .surface-page-stack:not(:has([data-route-content]))
-    > :not(.surface-viewport-reveal),
-  .surface-route-content[data-route-enter='true']
-    :is([data-route-content], [data-route-content] > .surface-page-stack)
-    > :not(.surface-viewport-reveal, .surface-page-stack) {
-    animation:
-      content-fade-in var(--motion-duration-standard) var(--ease-product) both,
-      content-rise-in var(--motion-duration-standard) var(--ease-product) both;
-    animation-delay: var(--motion-delay-route-content);
-  }
-
-  .surface-route-content[data-route-enter='true'][data-route-kind='forward']
-    > .surface-page-stack:not(:has([data-route-content]))
-    > :not(.surface-viewport-reveal),
-  .surface-route-content[data-route-enter='true'][data-route-kind='forward']
-    :is([data-route-content], [data-route-content] > .surface-page-stack)
-    > :not(.surface-viewport-reveal, .surface-page-stack) {
-    animation:
-      content-fade-in var(--motion-duration-standard) var(--ease-product) both,
-      surface-enter-forward var(--motion-duration-standard) var(--ease-product) both;
-    animation-delay: var(--motion-delay-route-forward);
-  }
-
-  .surface-route-content[data-route-enter='true']
-    > .surface-page-stack:not(:has([data-route-content]))
-    > :not(.surface-viewport-reveal):nth-child(2),
-  .surface-route-content[data-route-enter='true']
-    :is([data-route-content], [data-route-content] > .surface-page-stack)
-    > :not(.surface-viewport-reveal, .surface-page-stack):nth-child(2) {
-    animation-delay: calc(var(--motion-delay-route-content) + var(--motion-duration-fast));
-  }
-
-  .surface-route-content[data-route-enter='true'][data-route-kind='forward']
-    > .surface-page-stack:not(:has([data-route-content]))
-    > :not(.surface-viewport-reveal):nth-child(2),
-  .surface-route-content[data-route-enter='true'][data-route-kind='forward']
-    :is([data-route-content], [data-route-content] > .surface-page-stack)
-    > :not(.surface-viewport-reveal, .surface-page-stack):nth-child(2) {
-    animation-delay: calc(var(--motion-delay-route-forward) + var(--motion-duration-fast));
-  }
-
-  .surface-route-content[data-route-enter='true']
-    > .surface-page-stack:not(:has([data-route-content]))
-    > :not(.surface-viewport-reveal):nth-child(n + 3),
-  .surface-route-content[data-route-enter='true']
-    :is([data-route-content], [data-route-content] > .surface-page-stack)
-    > :not(.surface-viewport-reveal, .surface-page-stack):nth-child(n + 3) {
-    animation-delay: calc(var(--motion-delay-route-content) + var(--motion-duration-standard));
-  }
-
-  .surface-route-content[data-route-enter='true'][data-route-kind='forward']
-    > .surface-page-stack:not(:has([data-route-content]))
-    > :not(.surface-viewport-reveal):nth-child(n + 3),
-  .surface-route-content[data-route-enter='true'][data-route-kind='forward']
-    :is([data-route-content], [data-route-content] > .surface-page-stack)
-    > :not(.surface-viewport-reveal, .surface-page-stack):nth-child(n + 3) {
-    animation-delay: calc(var(--motion-delay-route-forward) + var(--motion-duration-standard));
-  }
-
-  html[data-motion-screen='off']
-    .surface-route-content[data-route-enter='true']
-    > .surface-page-stack:not(:has([data-route-content]))
-    > :not(.surface-viewport-reveal),
-  html[data-motion-screen='off']
-    .surface-route-content[data-route-enter='true']
-    :is([data-route-content], [data-route-content] > .surface-page-stack)
-    > :not(.surface-viewport-reveal, .surface-page-stack) {
     animation-duration: 0.01ms;
     animation-delay: 0ms;
   }
 
+  /* Route switching owns only the title. Reading items own their viewport lifecycle. */
+  .surface-route-content[data-route-enter='true']
+    > .surface-page-stack:not(:has([data-route-content]))
+    > header {
+    animation: content-rise-in var(--motion-duration-fast) var(--ease-product) both;
+  }
+  .surface-route-content[data-route-enter='true'][data-route-kind='forward']
+    > .surface-page-stack:not(:has([data-route-content]))
+    > header {
+    animation: surface-enter-forward var(--motion-duration-fast) var(--ease-product) both;
+  }
+  html[data-motion-screen='off']
+    .surface-route-content[data-route-enter='true']
+    > .surface-page-stack:not(:has([data-route-content]))
+    > header {
+    animation: none;
+  }
   .surface-state-region:is(
       [data-state='ready'],
       [data-state='refreshing'],
@@ -276,9 +222,19 @@
 }
 
 /* Surface route-content 方向进入（forward）：克制右入，非手机重横滑；由 data-route-kind 选择。 */
+@keyframes surface-item-enter {
+  from {
+    opacity: var(--motion-opacity-reveal-start);
+    transform: translateY(var(--motion-distance-reveal));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @keyframes surface-enter-forward {
   from {
-    opacity: 0;
     transform: translateX(var(--motion-distance-enter));
   }
   to {

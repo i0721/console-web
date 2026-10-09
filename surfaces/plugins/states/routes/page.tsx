@@ -42,7 +42,7 @@ export default function StatesPage() {
         title={t('productStates.title')}
         description={t('productStates.description')}
       />
-      <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
+      <div data-reveal-items className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
         <Panel aria-busy="true" aria-label={t('productStates.loading.title')} className="p-5">
           <div className="flex items-center gap-3 text-info">
             <BusyIndicator label={t('productStates.loading.title')} showLabel />

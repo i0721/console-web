@@ -58,8 +58,8 @@ export function CommandMenu({
       {...(onOpenChange ? { onOpenChange } : {})}
     >
       {hideTrigger ? null : <OverlayTriggerAction>{triggerLabel}</OverlayTriggerAction>}
-      <Modal.Backdrop className="bg-scrim backdrop-blur-sm">
-        <Modal.Container placement="top" size="lg">
+      <Modal.Backdrop className="ui-overlay-motion bg-scrim backdrop-blur-sm">
+        <Modal.Container className="ui-overlay-motion" placement="top" size="lg">
           <Modal.Dialog className="ui-overlay-surface ui-dialog-layout w-full">
             <Modal.Heading className="border-b border-border px-5 py-4 text-base font-bold text-ink">
               {title}

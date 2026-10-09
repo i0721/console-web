@@ -8,7 +8,6 @@ import { RadioGroupField, SelectField, SwitchField } from '@community-go/ui-adap
 import { route, RouteLink } from '@community-go/plugin-framework/plugin';
 import { Children, isValidElement, type ReactNode } from 'react';
 import { Section } from '@community-go/surface-foundation/layout';
-import { ViewportReveal } from '@community-go/surface-foundation/viewport-reveal';
 import { SETTINGS_INDEX } from './settings-index';
 import { Sun, Moon, MonitorCog, SunMoon } from 'lucide-react';
 import {
@@ -51,15 +50,11 @@ function updateSetting<C extends keyof Preferences>(
   return ctx.port.updateCategory(category, candidate.value[category]);
 }
 
-function SectionShell({
-  title,
-  children,
-  progressive = false,
-}: Readonly<{ title: string; children: ReactNode; progressive?: boolean }>) {
+function SectionShell({ title, children }: Readonly<{ title: string; children: ReactNode }>) {
   const { t } = useFrontendTranslation();
   const section = (
     <Section title={title} appearance="outlined" contentInset>
-      <div className="grid gap-4">
+      <div data-reveal-items className="grid gap-4">
         {Children.toArray(children).map((child) => {
           if (!isValidElement<{ label?: string }>(child)) return child;
           const entry = SETTINGS_INDEX.find(
@@ -81,7 +76,7 @@ function SectionShell({
       </div>
     </Section>
   );
-  return progressive ? <ViewportReveal>{section}</ViewportReveal> : section;
+  return section;
 }
 
 /* ------------------------------------------------------------------ */
@@ -242,7 +237,7 @@ export function AppearanceSection({ ctx }: Readonly<{ ctx: Ctx }>) {
           onValueChange={(value) => updateSetting(ctx, 'appearance', { contentWidth: value })}
         />
       </SectionShell>
-      <SectionShell progressive title={t('settings.groups.comfort')}>
+      <SectionShell title={t('settings.groups.comfort')}>
         <RadioGroupField
           presentation="inline"
           hint={t('settings.appearance.motionDescription')}
@@ -372,7 +367,7 @@ export function NavigationSection({ ctx }: Readonly<{ ctx: Ctx }>) {
           onValueChange={(value) => updateSetting(ctx, 'navigation', { tabCloseBehavior: value })}
         />
       </SectionShell>
-      <SectionShell progressive title={t('settings.groups.memory')}>
+      <SectionShell title={t('settings.groups.memory')}>
         {switchRow(
           ctx,
           'navigation',
@@ -514,7 +509,7 @@ export function DataDisplaySection({ ctx }: Readonly<{ ctx: Ctx }>) {
           '',
         )}
       </SectionShell>
-      <SectionShell progressive title={t('settings.groups.reading')}>
+      <SectionShell title={t('settings.groups.reading')}>
         {switchRow(
           ctx,
           'dataDisplay',
@@ -896,7 +891,7 @@ export function ActionPreferencesSection({ ctx }: Readonly<{ ctx: Ctx }>) {
           '',
         )}
       </SectionShell>
-      <SectionShell progressive title={t('settings.groups.guidance')}>
+      <SectionShell title={t('settings.groups.guidance')}>
         {switchRow(
           ctx,
           'actionPreferences',
@@ -941,7 +936,7 @@ export function ActionPreferencesSection({ ctx }: Readonly<{ ctx: Ctx }>) {
           onValueChange={(value) => updateSetting(ctx, 'actionPreferences', { detailMode: value })}
         />
       </SectionShell>
-      <SectionShell progressive title={t('settings.groups.search')}>
+      <SectionShell title={t('settings.groups.search')}>
         <RadioGroupField
           presentation="inline"
           hint=""

@@ -60,9 +60,9 @@ export function DialogSurface({
       <Modal.Backdrop
         isDismissable={!pending}
         isKeyboardDismissDisabled={pending}
-        className="bg-scrim backdrop-blur-sm"
+        className="ui-overlay-motion bg-scrim backdrop-blur-sm"
       >
-        <Modal.Container placement="center" size="lg">
+        <Modal.Container className="ui-overlay-motion" placement="center" size="lg">
           <Modal.Dialog className="ui-overlay-surface ui-dialog-layout w-full">
             <Modal.Header className="shrink-0 border-b border-border px-6 py-5">
               <Modal.Heading className="text-lg font-bold text-ink">{title}</Modal.Heading>

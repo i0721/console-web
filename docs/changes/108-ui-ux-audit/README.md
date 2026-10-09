@@ -748,3 +748,23 @@ Swap、Disclosure、Feedback、Async readiness 与系统策略，不能简单判
 执行初始定位。Host 已复用站内搜索同源的 focusRouteAnchor，ready 后定位/聚焦初始
 hash；无 hash 与后续导航保持原策略，损坏编码不阻断 hydration。Reveal 焦点进入即
 取消位移；18 项专项及10项安全性单元通过，最终全量结果仍独立记录。
+
+## 21. 语义内容项滚动渐进呈现（2026-10-09）
+
+本轮用户要求取代§20中“字段/相关Card整组、不逐项”的取舍。实测设置五个独立
+字段没有自己的触发节点，末尾多个设置共用一个Reveal；总览、Foundation与UI
+Family也存在父区段带动多项内容同时出现的缺口。
+
+已扩展现役ViewportReveal items模式并由Page装配：Section标题、设置行、Card、
+阅读List Item分别触发；最小语义项与其祖先互斥，首屏按实际阅读位置短错峰，
+后续随滚动首次播放。错峰40ms、上限120ms；快滚、焦点、恢复和Reduced直接稳定。
+Host独占速度/恢复判断，交互与状态继续使用既有HeroUI/Adapter组件。
+
+修改清单、消费者、设计决策见[逐项专项](../109-ui-ux-optimization/design/scroll-reveal-review.md)，
+实际成绩见[本轮验证](../109-ui-ux-optimization/evidence/scroll-items-verification.md)。
+新增效果没有改变旧视觉基线的人工确认要求。
+
+人工确认前复验383单元、38真实入口审计及功能/Axe流程通过；301浏览器287通过、14项
+截图比较失败，共28个差异。动效期间的对比度、标题透明度与Breadcrumb颜色边界问题
+已修复。用户随后明确确认28项，限定范围更新基线；完整 `pnpm check` exit 0，
+383单元、301浏览器、生产构建、原性能预算及全部门禁通过。原审查对照与失败日志保留。

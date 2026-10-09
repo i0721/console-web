@@ -32,13 +32,19 @@ async function startTransitionWatcher(page: Page) {
         if (effect?.pseudoElement) continue; // 不再使用 View Transition pseudo 动画
         // 只观察页面内容转场动画（content-* / surface-enter-*），排除 progress-grow
         // 等非转场动画（Top Progress 1.1s 循环不属于页面过渡预算）。
-        if (!name.includes('content-') && !name.includes('surface-enter-')) continue;
+        if (
+          !name.includes('content-') &&
+          !name.includes('surface-enter-') &&
+          name !== 'surface-item-enter'
+        )
+          continue;
         // 只记录实际播放中的动画：fill:both 的 finished 动画会残留在
         // getAnimations() 中，若计入会污染后续用例（如后退不应出现 forward 动画）。
         if (animation.playState === 'finished') continue;
         if (!record.animationNames.includes(name)) record.animationNames.push(name);
         if (name.includes('surface-enter-forward')) record.sawDirectionEnter = true;
-        if (name.includes('content-')) record.sawRouteContentEnter = true;
+        if (name.includes('content-') || name === 'surface-item-enter')
+          record.sawRouteContentEnter = true;
         const duration = Number(effect?.getComputedTiming().duration ?? 0);
         if (Number.isFinite(duration)) {
           record.maxDurationMs = Math.max(record.maxDurationMs, duration);

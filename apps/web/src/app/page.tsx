@@ -18,7 +18,6 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { RouterTextLink } from '../host/router-text-link';
-import { ViewportReveal } from '@community-go/surface-foundation/viewport-reveal';
 import { useShellStore } from '../state/use-shell-store';
 import { useWorkbenchStore } from '../state/use-workbench-store';
 import { useWorkspaceStore } from '../state/use-workspace-store';
@@ -114,7 +113,11 @@ export default function OverviewPage() {
         </RouterTextLink>
       </div>
 
-      <div aria-label={t('overview.metricsLabel')} className="grid gap-4 sm:grid-cols-3">
+      <div
+        data-reveal-items
+        aria-label={t('overview.metricsLabel')}
+        className="grid gap-4 sm:grid-cols-3"
+      >
         {metrics.map(({ value, label, detail, icon: Icon }) => (
           <Card key={label} appearance="outlined">
             <CardContent>
@@ -141,7 +144,7 @@ export default function OverviewPage() {
         <div className={`grid gap-4 ${showWorkbench && showFavorites ? 'sm:grid-cols-2' : ''}`}>
           {showFavorites ? (
             <Section appearance="outlined" title={t('overview.favoritesTitle')}>
-              <ul className="flex flex-col gap-1 p-5">
+              <ul data-reveal-items className="flex flex-col gap-1 p-5">
                 {favorites.map((favorite) => (
                   <li key={favorite.pathname}>
                     <RouterTextLink href={favorite.pathname}>{favorite.title}</RouterTextLink>
@@ -152,7 +155,7 @@ export default function OverviewPage() {
           ) : null}
           {showWorkbench ? (
             <Section appearance="outlined" title={t('overview.recentsTitle')}>
-              <ul className="flex flex-col gap-1 p-5">
+              <ul data-reveal-items className="flex flex-col gap-1 p-5">
                 {recents.slice(0, 6).map((recent) => (
                   <li key={recent.pathname}>
                     <RouterTextLink href={recent.pathname}>{recent.title}</RouterTextLink>
@@ -164,87 +167,83 @@ export default function OverviewPage() {
         </div>
       )}
 
-      <ViewportReveal>
+      <Section
+        appearance="outlined"
+        id="overview-progress"
+        title={t('overview.progressTitle')}
+        description={t('overview.progressDescription')}
+        action={<StatusPill tone="success">4 / 4 tracked</StatusPill>}
+      >
+        <div data-reveal-items className="grid gap-4 p-5 sm:grid-cols-2">
+          {capabilityDefinitions.map(({ id, icon: Icon, status }) => (
+            <Card key={id} appearance="flat">
+              <CardContent>
+                <div className="flex items-start gap-3">
+                  <span className="grid size-10 shrink-0 place-items-center rounded-control bg-surface text-brand">
+                    <Icon className="size-4.5" />
+                  </span>
+                  <div className="min-w-0">
+                    <h3 className="text-sm font-bold text-ink">{t(`capability.${id}`)}</h3>
+                    <p className="mt-1 line-clamp-2 text-xs leading-5 text-ink-muted">
+                      {t(`capability.${id}Description`)}
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <StatusPill tone="info">{t(`capability.${status}`)}</StatusPill>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </Section>
+
+      <div className="grid gap-6 xl:grid-cols-2">
         <Section
           appearance="outlined"
-          id="overview-progress"
-          title={t('overview.progressTitle')}
-          description={t('overview.progressDescription')}
-          action={<StatusPill tone="success">4 / 4 tracked</StatusPill>}
+          id="overview-quality"
+          title={t('overview.qualityTitle')}
+          description={t('overview.qualityDescription')}
         >
-          <div className="grid gap-4 p-5 sm:grid-cols-2">
-            {capabilityDefinitions.map(({ id, icon: Icon, status }) => (
-              <Card key={id} appearance="flat">
-                <CardContent>
-                  <div className="flex items-start gap-3">
-                    <span className="grid size-10 shrink-0 place-items-center rounded-control bg-surface text-brand">
-                      <Icon className="size-4.5" />
-                    </span>
-                    <div className="min-w-0">
-                      <h3 className="text-sm font-bold text-ink">{t(`capability.${id}`)}</h3>
-                      <p className="mt-1 line-clamp-2 text-xs leading-5 text-ink-muted">
-                        {t(`capability.${id}Description`)}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="mt-4">
-                    <StatusPill tone="info">{t(`capability.${status}`)}</StatusPill>
-                  </div>
-                </CardContent>
-              </Card>
+          <ul data-reveal-items className="space-y-3 p-5">
+            {['imports', 'vendor', 'tokens', 'host'].map((gate) => (
+              <li
+                key={gate}
+                className="flex items-center gap-3 rounded-control bg-surface-muted px-3 py-2.5"
+              >
+                <CheckCircle2 className="size-4 shrink-0 text-success" />
+                <span className="min-w-0 flex-1 text-sm font-medium text-ink">
+                  {t(`overview.gates.${gate}`)}
+                </span>
+                <span className="text-xs font-semibold text-success">
+                  {t('overview.gates.active')}
+                </span>
+              </li>
             ))}
-          </div>
+          </ul>
         </Section>
-      </ViewportReveal>
 
-      <ViewportReveal>
-        <div className="grid gap-6 xl:grid-cols-2">
-          <Section
-            appearance="outlined"
-            id="overview-quality"
-            title={t('overview.qualityTitle')}
-            description={t('overview.qualityDescription')}
-          >
-            <ul className="space-y-3 p-5">
-              {['imports', 'vendor', 'tokens', 'host'].map((gate) => (
-                <li
-                  key={gate}
-                  className="flex items-center gap-3 rounded-control bg-surface-muted px-3 py-2.5"
-                >
-                  <CheckCircle2 className="size-4 shrink-0 text-success" />
-                  <span className="min-w-0 flex-1 text-sm font-medium text-ink">
-                    {t(`overview.gates.${gate}`)}
-                  </span>
-                  <span className="text-xs font-semibold text-success">
-                    {t('overview.gates.active')}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </Section>
-
-          <Section
-            appearance="outlined"
-            id="overview-activity"
-            title={t('overview.activityTitle')}
-            description={t('overview.activityDescription')}
-          >
-            <ol className="space-y-4 p-5">
-              {['tokens', 'host', 'adapter'].map((item, index) => (
-                <li key={item} className="flex gap-3">
-                  <span className="mt-1 grid size-5 shrink-0 place-items-center rounded-full bg-brand-soft text-xs font-bold text-brand">
-                    {index + 1}
-                  </span>
-                  <div className="flex min-w-0 flex-1 items-center justify-between gap-3 border-b border-border pb-4 text-sm font-medium text-ink last:border-0 last:pb-0">
-                    <span>{t(`overview.activity.${item}`)}</span>
-                    <ArrowRight className="size-4 shrink-0 text-ink-muted" />
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </Section>
-        </div>
-      </ViewportReveal>
+        <Section
+          appearance="outlined"
+          id="overview-activity"
+          title={t('overview.activityTitle')}
+          description={t('overview.activityDescription')}
+        >
+          <ol data-reveal-items className="space-y-4 p-5">
+            {['tokens', 'host', 'adapter'].map((item, index) => (
+              <li key={item} className="flex gap-3">
+                <span className="mt-1 grid size-5 shrink-0 place-items-center rounded-full bg-brand-soft text-xs font-bold text-brand">
+                  {index + 1}
+                </span>
+                <div className="flex min-w-0 flex-1 items-center justify-between gap-3 border-b border-border pb-4 text-sm font-medium text-ink last:border-0 last:pb-0">
+                  <span>{t(`overview.activity.${item}`)}</span>
+                  <ArrowRight className="size-4 shrink-0 text-ink-muted" />
+                </div>
+              </li>
+            ))}
+          </ol>
+        </Section>
+      </div>
     </Page>
   );
 }

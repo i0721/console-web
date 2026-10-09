@@ -1,6 +1,12 @@
 @import '@heroui/styles';
 
 @layer components {
+  /* Item owns a public vendor Link: map its semantic theme at the boundary. */
+  .ui-breadcrumbs {
+    --muted: var(--color-ink-muted);
+    --link: var(--color-ink);
+  }
+
   .ui-checkbox-field {
     --accent: var(--color-brand);
     --accent-hover: var(--color-brand-strong);
@@ -82,6 +88,14 @@
 
   .ui-overlay-surface {
     @apply rounded-panel border border-border bg-surface-raised text-ink shadow-overlay;
+  }
+
+  /* High contrast preserves foreground contrast throughout the overlay lifecycle. */
+  html[data-contrast='high'] .ui-overlay-motion[data-entering],
+  html[data-contrast='high'] .ui-overlay-motion[data-exiting],
+  html[data-contrast='system'][data-system-contrast='more'] .ui-overlay-motion[data-entering],
+  html[data-contrast='system'][data-system-contrast='more'] .ui-overlay-motion[data-exiting] {
+    animation: none;
   }
 
   .ui-anchored-overlay-match-trigger {

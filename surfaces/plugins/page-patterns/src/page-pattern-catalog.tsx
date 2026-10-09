@@ -61,7 +61,7 @@ export function PagePatternCatalog({ kind }: Readonly<{ kind: PagePatternKind }>
       ) : null}
       {kind === 'layout-navigation' ? (
         <Section title={t('pagePatterns.content.example3')}>
-          <div className="grid gap-5 p-5">
+          <div data-reveal-items className="grid gap-5 p-5">
             <Toolbar
               label={t('pagePatterns.content.example4')}
               primary={
@@ -133,7 +133,7 @@ export function PagePatternCatalog({ kind }: Readonly<{ kind: PagePatternKind }>
           />
         </div>
       ) : kind === 'forms-actions' ? (
-        <div className="space-y-5">
+        <div data-reveal-items className="space-y-5">
           <div id="pattern-name">
             <TextField
               label={t('pagePatterns.content.name')}

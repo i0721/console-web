@@ -1,9 +1,14 @@
 import { BreadcrumbTrail } from '@community-go/ui-adapter/navigation';
 import { Panel } from '@community-go/ui-adapter/panel';
 import type { ReactNode } from 'react';
+import { ViewportReveal } from './viewport-reveal';
 
 export function Page({ children }: Readonly<{ children: ReactNode }>) {
-  return <div className="surface-page-stack">{children}</div>;
+  return (
+    <ViewportReveal items className="surface-page-stack">
+      {children}
+    </ViewportReveal>
+  );
 }
 
 export type BreadcrumbItem = Readonly<{
@@ -30,7 +35,7 @@ export function PageHeader({
   actions,
 }: PageHeaderProps) {
   return (
-    <header className="surface-route-region space-y-4">
+    <header data-reveal-item className="surface-route-region space-y-4">
       {breadcrumbs && breadcrumbLabel ? (
         <BreadcrumbTrail
           items={breadcrumbs.map((item, index) => ({
@@ -119,7 +124,10 @@ export function Section({
 }: SectionProps) {
   const section = (
     <Panel appearance={appearance} className="surface-route-region overflow-hidden">
-      <div className="flex flex-wrap items-start justify-between gap-3 border-b border-border px-5 py-4">
+      <div
+        data-reveal-item
+        className="flex flex-wrap items-start justify-between gap-3 border-b border-border px-5 py-4"
+      >
         <div className="min-w-0">
           <h2 className="text-base font-bold text-ink">{title}</h2>
           {description ? (
@@ -128,7 +136,7 @@ export function Section({
         </div>
         {action}
       </div>
-      {contentInset ? <SectionBody>{children}</SectionBody> : <div>{children}</div>}
+      <div data-reveal-item>{contentInset ? <SectionBody>{children}</SectionBody> : children}</div>
     </Panel>
   );
 

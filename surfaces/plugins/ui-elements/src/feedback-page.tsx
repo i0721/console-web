@@ -41,7 +41,7 @@ export function FeedbackPage() {
             title={t('uiElements.feedbackTitle')}
             description={t('uiElements.feedbackDescription')}
           >
-            <div className="grid gap-4 p-5 lg:grid-cols-2">
+            <div data-reveal-items className="grid gap-4 p-5 lg:grid-cols-2">
               <ComponentPreview
                 fullWidth
                 name="AlertBanner"

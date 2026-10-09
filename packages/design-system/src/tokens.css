@@ -68,6 +68,9 @@
      与 content 档一致，保证页面切换响应快；方向感由位移本身表达。 */
   --motion-delay-route-forward: var(--motion-duration-feedback);
   --motion-delay-route-content: var(--motion-duration-feedback);
+  --motion-delay-reveal-step: calc(40ms * var(--motion-debug-scale));
+  --motion-delay-reveal-max: calc(120ms * var(--motion-debug-scale));
+  --motion-opacity-reveal-start: 0.96;
   --motion-duration-fast: calc(120ms * var(--motion-debug-scale));
   --motion-duration-standard: calc(180ms * var(--motion-debug-scale));
   --motion-duration-slow: calc(240ms * var(--motion-debug-scale));
@@ -308,6 +311,7 @@ html[data-content-width='wide'] #main-content {
 html[data-contrast='high'],
 html[data-contrast='system'][data-system-contrast='more'] {
   /* @ds-region:appearance-contrast-high:start */
+  --motion-opacity-reveal-start: 1;
   --spacing-focus-ring-width: 0.1875rem;
   --spacing-focus-ring-offset: 0.1875rem;
   /* @ds-region:appearance-contrast-high:end */

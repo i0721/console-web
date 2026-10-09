@@ -831,7 +831,7 @@ export function ReferenceWorkspacePage() {
         }
       />
 
-      <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+      <div data-reveal-items className="grid grid-cols-2 gap-3 xl:grid-cols-4">
         {metrics.map((metric) => (
           <Panel appearance="outlined" className="p-4 sm:p-5" key={metric.label}>
             <p className="text-xs font-semibold uppercase tracking-wider text-ink-muted">

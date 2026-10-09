@@ -75,10 +75,10 @@ Motion 主题的唯一当前权威文档是 [Motion Foundation 与语义动效�
 ### 4.4 Page Foundation 与页面进入体验
 
 - 权威页面抽象是 `packages/surface-foundation` 的 `Page`/`PageHeader`/`Section`/`Toolbar` 等。正常业务/展示页面顶层使用 `Page`（产出统一 section spacing），区段使用 Header/Section/Panel 等标准组合；禁止手写平行页面骨架（裸 `space-y-*` + 自绘 header 的整页结构）。
-- **Page Enter 是统一页面体验，由 Host 自动提供**：`RouteTransition` 在路由变化时对 `.surface-route-content` 设 `data-route-enter`，CSS 对 `Page` 的直接区段做 region 级 choreography（fade+rise stagger，不逐 DOM 元素）；正常页面无需、也不得手工为整页包裹 ViewportReveal 或自定义 page-enter 动画。
-- **方向过渡（forward/back 语义）由 `data-route-kind` + Motion Token 的纯 CSS 驱动**：导航前进时内容区段做克制右入淡入（`surface-enter-forward`，位移 `--motion-distance-enter`）；后退/无方向做上移淡入。**禁止依赖 React `ViewTransition` 组件**——stable react 不导出该 API（canary 专属），运行时为 undefined；方向语义一律走 token/recipe + data-route-kind。
+- **Page Enter 是统一页面体验，由 Host 自动提供**：`RouteTransition` 在路由变化时对 `.surface-route-content` 设 `data-route-enter`，CSS 仅对非持久 PageHeader 做轻量转场；Page 内语义内容项由统一 Scroll Reveal 按视口进入触发；正常页面无需、也不得手工为整页包裹 ViewportReveal 或自定义 page-enter 动画。
+- **方向过渡（forward/back 语义）由 `data-route-kind` + Motion Token 的纯 CSS 驱动**：导航前进时非持久 PageHeader 做克制右入（`surface-enter-forward`，位移 `--motion-distance-enter`）；后退/无方向做轻量抬升，标题保持可读。**禁止依赖 React `ViewTransition` 组件**——stable react 不导出该 API（canary 专属），运行时为 undefined；方向语义一律走 token/recipe + data-route-kind。
 - **同路由内容替换（TabsView 等）用 `ContentSwapTransition`**：contentKey 驱动子树重挂 + `.ui-content-swap-surface` CSS 淡入（`data-motion-swap` 门控）；不依赖 View Transition。
-- **ViewportReveal（Section Reveal）只用于长页面中真正 below-fold 的内容区域**，不承担、也不代替 Page Enter。reduced-motion 由项目级 Motion Policy（Host）统一控制，页面不自行判断。
+- **ViewportReveal 是统一语义内容项呈现能力**：Page 自动启用 items scope；首屏按阅读顺序短错峰，后续独立 Card、Settings Row、List Item 和信息模块首次进入视口时逐项呈现。Section 标题和内容项分别触发，禁止整个多项 Section 套一次 Reveal；恢复位置、快滚和焦点进入直接稳定，不承担、也不代替 Page Enter。reduced-motion 由项目级 Motion Policy（Host）统一控制，页面不自行判断。
 - Page/Pattern 只做组合（使用 Recipe 提供的动效），不定义第二套 animation system；业务/Plugin 页面禁内联硬编码 animation/transition 时长或自定义 keyframes（gate 强制）。
 
 ### 4.5 Design Token 分层消费与产品语言收敛

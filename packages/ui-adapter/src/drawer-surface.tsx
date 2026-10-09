@@ -38,8 +38,8 @@ export function DrawerSurface({
   return (
     <Drawer isOpen={open} onOpenChange={setOpen}>
       {controlled ? null : <OverlayTriggerAction>{triggerLabel}</OverlayTriggerAction>}
-      <Drawer.Backdrop className="bg-scrim backdrop-blur-sm">
-        <Drawer.Content placement={placement}>
+      <Drawer.Backdrop className="ui-overlay-motion bg-scrim backdrop-blur-sm">
+        <Drawer.Content className="ui-overlay-motion" placement={placement}>
           <Drawer.Dialog
             className={`ui-overlay-surface relative h-full w-full rounded-none ${composition === 'navigation' ? 'max-w-sm' : 'max-w-lg'}`}
           >

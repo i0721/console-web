@@ -83,9 +83,9 @@ export function ConfirmDialog({
       <AlertDialog.Backdrop
         isDismissable={!pending}
         isKeyboardDismissDisabled={pending}
-        className="bg-scrim backdrop-blur-sm"
+        className="ui-overlay-motion bg-scrim backdrop-blur-sm"
       >
-        <AlertDialog.Container placement="center" size="md">
+        <AlertDialog.Container className="ui-overlay-motion" placement="center" size="md">
           <AlertDialog.Dialog className="ui-overlay-surface ui-dialog-layout w-full">
             <AlertDialog.Header className="px-6 pt-6">
               <AlertDialog.Icon status={tone === 'danger' ? 'danger' : 'accent'} />
