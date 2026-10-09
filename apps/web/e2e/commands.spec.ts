@@ -3,6 +3,9 @@ import { expect, test } from '@playwright/test';
 test('命令菜单聚合插件注册命令：Ctrl+K → 新建资源命令执行跳转', async ({ page }) => {
   await page.goto('/reference-resources');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
+  await expect(
+    page.getByRole('heading', { level: 1, name: '参考资源', exact: true }),
+  ).toBeVisible();
   // Ctrl+K 打开命令菜单。
   await page.keyboard.press('Control+K');
   const search = page.getByRole('searchbox', { name: '搜索命令' });

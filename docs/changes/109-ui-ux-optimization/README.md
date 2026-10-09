@@ -112,3 +112,12 @@ evidence/semantic-final-check-current.txt。此结果是以下 Motion 专项实�
 Store、设置入口与导航确认，新增同源UI Overlay展示。用户确认本轮4项视觉差异后限定更新，
 383单元、310浏览器全部通过；完整命令末尾对照HTML格式问题修复后，格式/文档门禁复验
 通过。原对照、失败过程及前后hash保留，成绩与命令退出码详见验证记录。
+
+## Authentication专项
+
+布局隔离、统一会话/模式/服务、页面设计与完整验收方案见
+[认证审查](design/authentication-review.md)。Public/Auth/App 路由布局、登录/注册表单、
+统一模式/会话、账户身份与退出已接入；专项流程与五种宽度验证正在收尾，完整回归
+尚未完成。当前成绩见[认证验证](evidence/authentication-verification.md)，配置及 API
+契约见[Web Authentication](../../../apps/web/src/auth/README.md)。真实 Backend 待联调，
+受控契约浏览器验证不等于真实认证已接通。

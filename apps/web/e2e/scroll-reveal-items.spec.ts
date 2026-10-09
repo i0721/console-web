@@ -81,6 +81,10 @@ test('first viewport items have bounded stagger and offscreen items wait for scr
   await page.goto('/settings');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   const rows = page.locator('[id^=settings-appearance][data-reveal="revealed"]');
+  await expect(page.locator('#settings-appearance-density')).toHaveAttribute(
+    'data-reveal',
+    'revealed',
+  );
   expect(await rows.count()).toBeGreaterThan(1);
   const sample = await rows.evaluateAll((items) =>
     items.map((e) => ({

@@ -85,6 +85,13 @@ Feedback 解释刚发生的结果、风险或可恢复问题；Status 描述对�
 
 ## 6. Form Control Family
 
+`PasswordField` 经既有 `form-field` Contract 导出，复用 HeroUI TextField + InputGroup。
+`purpose=current|new` 映射密码自动填充；显示切换使用公开 Button suffix，保留输入值、
+Label/Hint/Error、禁用和键盘语义，不提交表单。`TextField` 的 `purpose=text|email`
+默认 text，普通消费者不改变行为。两者均在 `/ui-elements/forms` 展示，认证表单消费
+同一实现；密码内容不进入 Token、UI Store 或组件持久化。
+密码可见性切换支持图标呈现，按钮始终保留完整可访问名称；窄屏和大字号场景保留输入空间。
+
 所有 Form Control 共享以下不变量：
 
 - Control Height、Typography、Background、Border、Radius、Placeholder、Focus、Disabled 和 Invalid 来自同一语义样式。
@@ -127,6 +134,11 @@ Listbox 的滚动属于列表内部责任：Overlay Surface 提供外壳，Listb
 - 搜索、筛选、分页和 Footer 只有接入真实集合、总量和请求状态后才能进入 Pattern；禁止为展示完整度添加静态假分页或空操作列。
 
 ## 9. Overlay Surface 与 Option State
+
+分组菜单由 HeroUI 管理浮层可用高度，外部具名滚动区域负责短窗口滚动及键盘访问，
+不修改 Collection 的焦点契约。
+此区域的 `tabIndex=0` 对应 [W3C 可滚动内容键盘访问规则](https://www.w3.org/WAI/standards-guidelines/act/rules/0ssw9k)，
+与泛化的非交互元素 tabindex lint 规则冲突；仅该属性标注有依据的误报说明，保持全局规则、Axe 和键盘 End 验证。
 
 `ui-overlay-surface` 是 Dropdown、Select、Combobox、Popover、DatePicker、Dialog、Drawer 和 Command 共用的 Surface 语义，统一 Background、Border、Radius、Shadow 和文字颜色。不同 Overlay 只决定内容 Padding、宽度策略和结构，不复制一套 Surface。
 

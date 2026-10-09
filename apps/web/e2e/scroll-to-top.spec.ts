@@ -18,6 +18,7 @@ test('跳转后自动滚顶默认开：长页滚下后导航到设置 → 回到
   await resetPreferences(page);
   await page.goto('/page-archetypes/resource-list');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
+  await expect(page.getByRole('grid').getByRole('row')).toHaveCount(21);
   await page.evaluate(() => window.scrollTo(0, 800));
   await page.waitForTimeout(300);
   const before = await page.evaluate(() => window.scrollY);
@@ -42,6 +43,7 @@ test('关闭 跳转后自动滚顶：长页滚下后导航保持滚动位置', a
 
   await page.goto('/page-archetypes/resource-list');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
+  await expect(page.getByRole('grid').getByRole('row')).toHaveCount(21);
   await page.evaluate(() => window.scrollTo(0, 800));
   await page.waitForTimeout(300);
   await spaToSettings(page);

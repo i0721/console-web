@@ -68,6 +68,7 @@ for (const width of [1440, 390, 320]) {
     await page.goto('/settings/actions');
     await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
     const regions = page.locator('[id^=settings-][data-reveal]');
+    await expect(regions.first()).toBeAttached();
     expect(await regions.count()).toBeGreaterThan(10);
     await expect(regions.last()).toHaveAttribute('data-reveal', 'pending');
     await expect(regions.first()).toHaveCSS('opacity', '1');

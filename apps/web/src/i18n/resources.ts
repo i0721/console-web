@@ -2,6 +2,7 @@ export const resources = {
   'zh-CN': {
     translation: {
       brand: { name: 'Community', edition: '统一前端基座' },
+      auth: { loading: '正在加载…', logout: '退出登录' },
       common: {
         close: '关闭',
         cancel: '取消',
@@ -135,6 +136,7 @@ export const resources = {
   en: {
     translation: {
       brand: { name: 'Community', edition: 'Unified Frontend' },
+      auth: { loading: 'Loading…', logout: 'Sign out' },
       common: {
         close: 'Close',
         cancel: 'Cancel',

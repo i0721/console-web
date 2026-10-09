@@ -4,7 +4,7 @@ import { SkipLink } from '@community-go/ui-adapter/accessibility';
 
 import { AppErrorBoundary } from '../host/error-boundary';
 import { AppProviders } from '../host/providers';
-import { AppShell } from '../shell/app-shell';
+import { AuthProvider } from '../auth/provider';
 import '../styles.css';
 
 // App Router 要求 layout 默认导出组件的同时导出 metadata；该导出由框架消费，不参与 Fast Refresh。
@@ -20,8 +20,10 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
       <body>
         <AppErrorBoundary>
           <AppProviders>
-            <SkipLink href="#main-content" label="跳到主要内容 / Skip to content" />
-            <AppShell>{children}</AppShell>
+            <AuthProvider>
+              <SkipLink href="#main-content" label="跳到主要内容 / Skip to content" />
+              {children}
+            </AuthProvider>
           </AppProviders>
         </AppErrorBoundary>
       </body>

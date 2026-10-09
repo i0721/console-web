@@ -42,6 +42,7 @@ Application = Product Surface × Runtime Host
 | [Universal Frontend Foundation](frontend-foundation.md)        | Universal 层 workspace 职责与禁止项                                              |
 | [Surface Foundation](surface-foundation.md)                    | `surface-foundation` 的 Layout/Shell/Pattern/Collection/Detail/Form/State 能力   |
 | [Plugin Framework 与 Surface File Routes](plugin-framework.md) | Framework 契约、Registry、Surface 私有边界、File Route、Codegen、Host Capability |
+| [Web Authentication](../apps/web/src/auth/README.md)           | Web 布局隔离、模式配置、统一会话、账户边界与待联调 API                           |
 | [Foundation 扩展治理](foundation-extension-governance.md)      | 业务请求扩展 Foundation 的顺序与完整环节                                         |
 | [UI Element System](ui-element-system.md)                      | UI Element 分类、Form Control、Anchored Overlay、Composition 契约                |
 | [UI 视觉校准基线](ui-visual-calibration.md)                    | TailAdmin 外部校准基线、矩阵与复核触发器                                         |

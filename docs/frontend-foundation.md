@@ -66,3 +66,12 @@ Form Foundation 在异步校验与提交期间只接受一次提交，校验失�
 已经开始的业务操作由其 Owner 管理取消和资源清理；本地示例的 Browser Adapter
 清理定时器并结束等待，卸载后不发布旧 UI 反馈。消费者和行为证据见
 [109 提交回归](changes/109-ui-ux-optimization/tasks.md)。
+
+### 按需语言资源
+
+`FrontendI18nRuntime.addResources(TranslationResources)` 通过 i18n 内部公开的资源
+注册能力深合并文案，保持单一运行时、原资源与当前语言，不向 Host/Feature 暴露
+i18next 实例。所有语言在写入前按 supportedLocales 校验，非法资源不部分写入。
+用于独立加载的产品界面和 Plugin 文案；目前 Web Authentication 在界面加载时注册，
+后台启动仅保留加载/退出文案。原启动静态 resources 与语言切换 API 不变。
+验证见 i18n 单元及认证双语言/两模式浏览器；不引入第二套翻译 Provider。

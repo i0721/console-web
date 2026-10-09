@@ -1,4 +1,6 @@
 const previewStateLabels = {
+  Visible: '密码可见',
+  Autocomplete: '自动填充',
   Group: '分组',
   Submenu: '二级菜单',
   Touch: '触摸',
@@ -315,6 +317,10 @@ export const pluginI18nResources = {
         fieldsTitle: 'Fields 与 Pickers',
         fieldsDescription: '同时覆盖默认、错误、禁用、Popup、选中和长文本状态。',
         textField: '文本输入',
+        password: '密码输入',
+        showPassword: '显示密码',
+        hidePassword: '隐藏密码',
+        passwordDescription: '复用 HeroUI InputGroup，提供密码显示、自动填充、错误与禁用语义。',
         errorField: '错误输入',
         disabledField: '禁用输入',
         fieldHint: '帮助文本必须与输入状态保持可读关联。',
@@ -695,6 +701,11 @@ export const pluginI18nResources = {
         fieldsDescription:
           'Covers default, error, disabled, popup, selected, and long-text states together.',
         textField: 'Text field',
+        password: 'Password input',
+        showPassword: 'Show password',
+        hidePassword: 'Hide password',
+        passwordDescription:
+          'HeroUI InputGroup provides password visibility, autocomplete, error and disabled semantics.',
         errorField: 'Error field',
         disabledField: 'Disabled field',
         fieldHint: 'Help text remains legibly associated with the control.',

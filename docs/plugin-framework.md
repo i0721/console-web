@@ -265,7 +265,7 @@ Discovery → Framework Contract Validation → Static Framework Descriptors
   - (A) `surfaces/generated/plugin-routes/<dirName>/<rel>/<kind>.ts` —— surface
     公共 shim（因 `plugins/*` 是 private，Host 只能经 exports wildcard 公共 subpath
     访问）；内容 `export { default } from '<源>'`。
-  - (B) `apps/web/src/app/<mount>/<rel>/<kind>.tsx` —— Host Next adapter，只
+  - (B) `apps/web/src/app/(app)/<mount>/<rel>/<kind>.tsx` —— Host Next adapter，只
     re-export (A)：`export { default } from '@community-go/surface/plugin-routes/…'`。
   - 两层都不出现：`'use client'`（除非 Plugin 模块自身）、params 拦截、Context 包装、
     children 包装、生命周期逻辑、第二套匹配器。

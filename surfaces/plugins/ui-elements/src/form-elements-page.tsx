@@ -10,6 +10,7 @@ import {
   SwitchField,
   TextAreaField,
   TextField,
+  PasswordField,
 } from '@community-go/ui-adapter/form-field';
 import { SearchBox } from '@community-go/ui-adapter/search-box';
 import { FormErrorSummary } from '@community-go/ui-adapter/form-error-summary';
@@ -19,7 +20,7 @@ import { useFrontendTranslation } from '@community-go/i18n';
 import { Section } from '@community-go/surface-foundation/layout';
 import { ComponentPreview } from './component-preview';
 import { UiElementsFamilyPage } from './family-page';
-import { Eye, Compass, Sparkles } from 'lucide-react';
+import { Eye, EyeOff, Compass, Sparkles } from 'lucide-react';
 
 const ownerOptions = [
   'Lin Chen',
@@ -62,6 +63,10 @@ export function FormElementsPage({
   const [checked, setChecked] = useState(true);
   const [selected, setSelected] = useState('guided');
   const [searchValue, setSearchValue] = useState('UI');
+  const visibilityIcons = {
+    show: <Eye aria-hidden="true" className="size-4" />,
+    hide: <EyeOff aria-hidden="true" className="size-4" />,
+  };
   return (
     <UiElementsFamilyPage
       familyId="forms"
@@ -97,6 +102,39 @@ export function FormElementsPage({
                     label={t('uiElements.disabledField')}
                     disabled
                     defaultValue="readonly"
+                  />
+                </div>
+              </ComponentPreview>
+              <ComponentPreview
+                fullWidth
+                name="PasswordField"
+                description={t('uiElements.passwordDescription')}
+                states={['Default', 'Visible', 'Invalid', 'Disabled', 'Keyboard', 'Autocomplete']}
+              >
+                <div className="surface-filter-grid">
+                  <PasswordField
+                    label={t('uiElements.password')}
+                    visibilityIcons={visibilityIcons}
+                    purpose="current"
+                    hint={t('uiElements.fieldHint')}
+                    showLabel={t('uiElements.showPassword')}
+                    hideLabel={t('uiElements.hidePassword')}
+                  />
+                  <PasswordField
+                    label={t('uiElements.errorField')}
+                    purpose="new"
+                    visibilityIcons={visibilityIcons}
+                    error={t('uiElements.errorMessage')}
+                    showLabel={t('uiElements.showPassword')}
+                    hideLabel={t('uiElements.hidePassword')}
+                  />
+                  <PasswordField
+                    label={t('uiElements.disabledField')}
+                    purpose="current"
+                    visibilityIcons={visibilityIcons}
+                    disabled
+                    showLabel={t('uiElements.showPassword')}
+                    hideLabel={t('uiElements.hidePassword')}
                   />
                 </div>
               </ComponentPreview>

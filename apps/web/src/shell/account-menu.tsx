@@ -3,7 +3,8 @@
 import { useFrontendTranslation } from '@community-go/i18n';
 import { Avatar, UserIdentity } from '@community-go/ui-adapter/identity';
 import { MenuButton } from '@community-go/ui-adapter/menu-button';
-import { ChevronDown, Languages, Monitor, Moon, Settings, Sun } from 'lucide-react';
+import { ChevronDown, Languages, LogOut, Monitor, Moon, Settings, Sun } from 'lucide-react';
+import { useAuth } from '../auth/context';
 import { useShellStore } from '../state/use-shell-store';
 
 export function AccountMenu({
@@ -11,6 +12,8 @@ export function AccountMenu({
   onNavigate,
 }: Readonly<{ compact: boolean; onNavigate: () => void }>) {
   const { t } = useFrontendTranslation();
+  const auth = useAuth();
+  const user = auth.session?.user;
   const locale = useShellStore((state) => state.locale);
   const themeMode = useShellStore((state) => state.preferences.appearance.themeMode);
   const setLocale = useShellStore((state) => state.setLocale);
@@ -23,6 +26,7 @@ export function AccountMenu({
     dark: t('shell.accountMenu.dark'),
     system: t('shell.accountMenu.system'),
   };
+  if (!user) return null;
   return (
     <MenuButton
       ariaLabel={t('shell.account')}
@@ -30,10 +34,10 @@ export function AccountMenu({
       label={
         <>
           <span className="md:hidden">
-            <Avatar name="Rin" size="sm" />
+            <Avatar name={user.name} size="sm" />
           </span>
           <span className="hidden md:inline-flex">
-            <UserIdentity avatarSize="sm" name="Rin" />
+            <UserIdentity avatarSize="sm" name={user.name} />
           </span>
           <ChevronDown aria-hidden="true" className="hidden size-3.5 text-ink-muted md:block" />
         </>
@@ -41,13 +45,11 @@ export function AccountMenu({
       header={
         <div className="flex items-center gap-3">
           <span aria-hidden="true">
-            <Avatar name="Rin" size="sm" />
+            <Avatar name={user.name} size="sm" />
           </span>
           <div className="min-w-0">
-            <p className="truncate text-sm font-semibold text-ink">Rin</p>
-            <p className="mt-0.5 truncate text-xs font-normal text-ink-muted">
-              {t('shell.productOwner')}
-            </p>
+            <p className="truncate text-sm font-semibold text-ink">{user.name}</p>
+            <p className="mt-0.5 truncate text-xs font-normal text-ink-muted">{user.email}</p>
           </div>
         </div>
       }
@@ -97,6 +99,7 @@ export function AccountMenu({
           label: t('shell.accountMenu.application'),
           items: [
             { id: 'settings', label: t('nav.settings'), icon: <Settings className="size-4" /> },
+            { id: 'logout', label: t('auth.logout'), icon: <LogOut className="size-4" /> },
           ],
         },
       ]}
@@ -108,6 +111,10 @@ export function AccountMenu({
             themeMode: id === 'theme:system' ? 'system' : id === 'theme:dark' ? 'dark' : 'light',
           });
         else if (id === 'settings') onNavigate();
+        else if (id === 'logout')
+          void auth.logout().then((success) => {
+            if (success) window.location.replace('/login');
+          });
       }}
     />
   );

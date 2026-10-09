@@ -12,6 +12,8 @@ async function resetPreferences(page: Page) {
 }
 
 async function fullRowCount(page: Page): Promise<number> {
+  // Preference hydration precedes session restoration; wait for the protected data surface.
+  await expect(page.getByRole('grid')).toBeVisible();
   return page.getByRole('grid').getByRole('row').count();
 }
 
@@ -19,6 +21,7 @@ test('记住筛选条件默认关：状态筛选后重载回默认全部', async
   await resetPreferences(page);
   await page.goto('/page-archetypes/resource-list');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
+  await expect(page.getByRole('grid').getByRole('row')).toHaveCount(21);
   const full = await fullRowCount(page);
   // 状态 = 需关注。
   await page.getByRole('button', { name: '全部 状态', exact: true }).click();

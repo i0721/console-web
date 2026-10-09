@@ -229,6 +229,9 @@ test('UI Elements 根路径进入默认子级且旧 Showcase 不再匹配', asyn
   await page.goto('/ui-elements');
   await expect(page).toHaveURL(/\/ui-elements\/actions-selection$/);
 
-  await page.goto('/showcase');
-  await expect(page.getByText('404 Not Found')).toBeVisible();
+  const response = await page.goto('/showcase');
+  expect(response?.status()).toBe(404);
+  await expect(page.getByRole('heading', { name: '页面不存在', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: '进入工作台', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: '当前用户', exact: true })).toHaveCount(0);
 });

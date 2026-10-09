@@ -13,6 +13,8 @@ export type TextFieldProps = FieldTextProps &
     ref?: Ref<HTMLInputElement>;
     placeholder?: string;
     disabled?: boolean;
+    purpose?: 'text' | 'email';
+    autoComplete?: 'name' | 'email' | 'username' | 'off';
     onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
     onBlur?: (event: FocusEvent<HTMLInputElement>) => void;
   }>;
@@ -25,6 +27,7 @@ export function TextField({
   name,
   value,
   defaultValue,
+  purpose = 'text',
   ...inputProps
 }: TextFieldProps) {
   return (
@@ -37,7 +40,7 @@ export function TextField({
       {...(defaultValue !== undefined ? { defaultValue } : {})}
     >
       <Label className="ui-field-label">{label}</Label>
-      <Input className="ui-field-control" {...inputProps} />
+      <Input className="ui-field-control" type={purpose} {...inputProps} />
       {error ? (
         <FieldError className="ui-field-error">{error}</FieldError>
       ) : hint ? (

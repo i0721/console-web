@@ -668,9 +668,9 @@ function surfaceShimSourceSpecifier(pluginDirName, routeRelDir, kind) {
   return `${up}plugins/${pluginDirName}/routes/${relDir}${kind}`;
 }
 
-/** (B) Host Next adapter 的本地文件路径（apps/web/src/app/<mount 相对>）。 */
+/** Host owns the authenticated route-group layout; Plugin contracts remain layout-agnostic. */
 function hostAdapterPath(descriptor, kind) {
-  return join(hostAppRoot, descriptor.pattern.replace(/^\//, ''), `${kind}.tsx`);
+  return join(hostAppRoot, '(app)', descriptor.pattern.replace(/^\//, ''), `${kind}.tsx`);
 }
 
 /** (A) shim 经 package exports 的公共 subpath（Host import 用）。 */

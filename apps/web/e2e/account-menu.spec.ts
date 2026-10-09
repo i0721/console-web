@@ -58,7 +58,7 @@ for (const width of [320, 390, 1440, 2048]) {
     await page.goto('/');
     await expectHydrated(page);
     await openAccount(page);
-    await expect(page.getByText('产品负责人', { exact: true })).toBeVisible();
+    await expect(page.getByText('demo@community.test', { exact: true })).toBeVisible();
     await expect(page.getByText('偏好设置', { exact: true })).toBeVisible();
     await page.getByRole('menuitem', { name: '语言 简体中文', exact: true }).click();
     await expect(
@@ -175,6 +175,15 @@ test('Dark English expanded text and Reduced Motion keep preference overlays acc
     .analyze();
   expect(result.violations).toEqual([]);
   await page.screenshot({ path: `${evidence}/dark-en-expanded-reduced.png` });
+  await page.keyboard.press('Escape');
+  await openAccount(page);
+  const region = page.getByRole('region', { name: 'Current user', exact: true });
+  await region.focus();
+  await expect(region).toBeFocused();
+  await page.keyboard.press('End');
+  await expect(page.getByRole('menuitem', { name: 'Sign out', exact: true })).toBeInViewport({
+    ratio: 1,
+  });
 });
 
 test('Hover crosses into submenu safely; a sticky header remains anchored after scrolling', async ({

@@ -3,8 +3,6 @@
 import { FeedbackProvider } from '@community-go/ui-adapter/feedback-provider';
 import { AlertBanner } from '@community-go/ui-adapter/feedback';
 import { AlertTriangle } from 'lucide-react';
-import { NotificationAlerts } from './notification-alerts';
-import { useDesktopNotificationGate } from './use-desktop-notification';
 import { FrontendI18nProvider, useFrontendTranslation } from '@community-go/i18n';
 import { CommandsProvider } from '@community-go/plugin-framework/commands';
 import { LeaveConfirmProvider } from '@community-go/plugin-framework/leave-confirm';
@@ -67,8 +65,6 @@ function RuntimeProviders({ children }: Readonly<{ children: ReactNode }>) {
   const accent = preferences.appearance.accent;
   const locale = preferences.localeRegion.language;
   const toastDurationMs = TOAST_DURATION_MS[preferences.notifications.toastDuration];
-  // 桌面通知偏好开启时请求权限（拒绝/不支持 → 回退偏好，避免无效开关）。
-  useDesktopNotificationGate();
   // themeMode=system → 跟随系统深浅色；显式 light|dark 直接使用（旧用户值经 migrate 保留）。
   const resolvedTheme = themeMode === 'system' ? (systemDark ? 'dark' : 'light') : themeMode;
 
@@ -199,7 +195,6 @@ function RuntimeProviders({ children }: Readonly<{ children: ReactNode }>) {
                         />
                       </div>
                     ) : null}
-                    <NotificationAlerts />
                     {children}
                   </FeedbackProvider>
                 </LeaveConfirmationGuard>

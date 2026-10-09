@@ -5,7 +5,9 @@ import { ShellRoot } from '@community-go/surface-foundation/shell-navigation';
 import { PluginLocaleProvider } from '@community-go/plugin-framework/plugin';
 import type { NavigationNode } from '@community-go/types';
 import { IconAction } from '@community-go/ui-adapter/icon-action';
-import { AccountMenu } from './account-menu';
+import { Skeleton } from '@community-go/ui-adapter/skeleton';
+import { NotificationAlerts } from '../host/notification-alerts';
+import { useDesktopNotificationGate } from '../host/use-desktop-notification';
 import {
   Languages,
   Menu,
@@ -45,6 +47,11 @@ const subscribeDesktop = (notify: () => void) => {
   return () => window.removeEventListener('resize', notify);
 };
 const desktopSnapshot = () => window.innerWidth >= 768;
+
+const AccountMenu = dynamic(() => import('./account-menu').then((module) => module.AccountMenu), {
+  ssr: false,
+  loading: () => <Skeleton className="h-control w-control md:w-28" />,
+});
 
 const CommandMenu = dynamic(
   () => import('@community-go/ui-adapter/command-menu').then((module) => module.CommandMenu),
@@ -101,6 +108,7 @@ function NavigationContent({
 }
 
 export function AppShell({ children }: Readonly<{ children: ReactNode }>) {
+  useDesktopNotificationGate();
   const shellRef = useRef<HTMLDivElement>(null);
   const chromeRef = useRef<HTMLDivElement>(null);
   const pageTabsPinned = useShellStore((state) => state.preferences.navigation.pageTabsPinned);
@@ -213,6 +221,7 @@ export function AppShell({ children }: Readonly<{ children: ReactNode }>) {
 
   return (
     <ShellRoot collapsed={sidebarCollapsed}>
+      <NotificationAlerts />
       <TopProgress />
       <aside className="sticky top-0 hidden h-screen flex-col border-r border-border bg-surface lg:flex">
         <NavigationContent compact={sidebarCollapsed} />

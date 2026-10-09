@@ -16,6 +16,7 @@ export type FrontendI18nRuntime = Readonly<{
   locale: () => string;
   changeLocale: (locale: string) => Promise<void>;
   translate: (key: string, values?: Readonly<Record<string, unknown>>) => string;
+  addResources: (resources: TranslationResources) => void;
 }>;
 
 const runtimeInstances = new WeakMap<FrontendI18nRuntime, I18nextInstance>();
@@ -45,6 +46,14 @@ export function createFrontendI18n({
       await instance.changeLanguage(locale);
     },
     translate: (key, values) => (values ? instance.t(key, values) : instance.t(key)),
+    addResources: (additional) => {
+      for (const locale of Object.keys(additional)) {
+        if (!supportedLocales.includes(locale)) throw new Error(`Unsupported locale: ${locale}`);
+      }
+      for (const [locale, resource] of Object.entries(additional)) {
+        instance.addResourceBundle(locale, 'translation', resource.translation, true, true);
+      }
+    },
   };
   runtimeInstances.set(runtime, instance);
   return runtime;

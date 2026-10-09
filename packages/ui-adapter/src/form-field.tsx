@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 
 export { type TextFieldProps, TextField } from './text-field';
+export { type PasswordFieldProps, PasswordField } from './password-field';
 export { type TextAreaFieldProps, TextAreaField } from './text-area-field';
 export { type SelectOption, type SelectFieldProps, SelectField } from './select-field';
 export { type ComboFieldProps, ComboField } from './combo-field';
