@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { normalizeSearchTerm, searchSettings, SETTINGS_INDEX } from './settings-index';
+import { pluginI18nResources } from '../i18n';
 
 /** 简易 i18n resolve：key → zh 文案（仅覆盖测试涉及键；用直出词表保证可读）。 */
 function zhResolver(key: string): string {
@@ -58,10 +59,44 @@ describe('settings-index 搜索目录', () => {
 
   it('目录覆盖八分类且每条含 category/fieldId', () => {
     const categories = new Set(SETTINGS_INDEX.map((e) => e.category));
-    expect(categories.size).toBeGreaterThanOrEqual(6);
+    expect(categories.size).toBe(8);
     for (const entry of SETTINGS_INDEX) {
       expect(entry.category.length).toBeGreaterThan(0);
       expect(entry.fieldId.length).toBeGreaterThan(0);
     }
+  });
+
+  it('所有搜索入口使用唯一字段标识，名称在中英文都可解析', () => {
+    const identities = SETTINGS_INDEX.map((entry) => `${entry.category}.${entry.fieldId}`);
+    expect(new Set(identities).size).toBe(identities.length);
+    for (const locale of ['zh-CN', 'en'] as const) {
+      for (const entry of SETTINGS_INDEX) {
+        const resolve = (key: string): unknown =>
+          key.split('.').reduce<unknown>((value, part) => {
+            if (value !== null && typeof value === 'object' && part in value) {
+              return Reflect.get(value, part);
+            }
+            return undefined;
+          }, pluginI18nResources[locale].translation);
+        expect(resolve(entry.nameKey), `${locale}: ${entry.nameKey}`).toBeTypeOf('string');
+        if (entry.descriptionKey) {
+          expect(resolve(entry.descriptionKey), `${locale}: ${entry.descriptionKey}`).toBeTypeOf(
+            'string',
+          );
+        }
+      }
+    }
+  });
+
+  it('新增目的地、时区和提示时长均能通过同义词发现', () => {
+    expect(searchSettings('保存去向', zhResolver).entries.map((entry) => entry.fieldId)).toContain(
+      'editSuccessDestination',
+    );
+    expect(searchSettings('timezone', zhResolver).entries.map((entry) => entry.fieldId)).toContain(
+      'timeZone',
+    );
+    expect(searchSettings('提示时长', zhResolver).entries.map((entry) => entry.fieldId)).toContain(
+      'toastDuration',
+    );
   });
 });

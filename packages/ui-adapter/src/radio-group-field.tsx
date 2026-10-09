@@ -72,7 +72,7 @@ export function RadioGroupField({
             : comparison
               ? 'grid grid-cols-1 gap-3 @sm:grid-cols-3'
               : presentation === 'tiles'
-                ? 'grid grid-cols-3 gap-3'
+                ? 'grid grid-cols-1 gap-3 @sm:grid-cols-3'
                 : compact
                   ? 'flex flex-wrap gap-2'
                   : 'surface-filter-grid'
@@ -88,7 +88,7 @@ export function RadioGroupField({
             {...(option.disabled ? { isDisabled: true } : {})}
           >
             <Radio.Content
-              className={`ui-choice-content border border-border bg-surface group-data-[selected]:border-brand group-data-[selected]:bg-brand-soft ${comparison ? 'h-full min-h-24 gap-3 rounded-control p-3 text-ink group-data-[selected]:text-brand @sm:flex-col @sm:justify-between @sm:gap-4 @sm:rounded-panel @sm:p-4' : presentation === 'rows' || compact ? 'rounded-control px-3 py-2' : presentation === 'tiles' ? 'h-full flex-col justify-between gap-4 rounded-panel min-h-24 p-3 text-ink group-data-[selected]:text-brand sm:p-4' : 'rounded-panel min-h-20 p-4'}`}
+              className={`ui-choice-content border border-border bg-surface group-data-[selected]:border-brand group-data-[selected]:bg-brand-soft ${comparison ? 'h-full min-h-24 gap-3 rounded-control p-3 text-ink group-data-[selected]:text-brand @sm:flex-col @sm:justify-between @sm:gap-4 @sm:rounded-panel @sm:p-4' : presentation === 'rows' || compact ? 'rounded-control px-3 py-2' : presentation === 'tiles' ? 'h-full min-h-control gap-3 rounded-control p-3 text-ink group-data-[selected]:text-brand @sm:min-h-24 @sm:flex-col @sm:justify-between @sm:gap-4 @sm:rounded-panel @sm:p-4' : 'rounded-panel min-h-20 p-4'}`}
             >
               {option.preview ? (
                 <span
@@ -125,7 +125,7 @@ export function RadioGroupField({
                 </Radio.Control>
               ) : null}
               <span
-                className={`flex min-w-0 flex-col items-start ${comparison ? 'flex-1 @sm:w-full' : presentation === 'tiles' ? 'w-full' : ''}`}
+                className={`flex min-w-0 flex-col items-start ${comparison || presentation === 'tiles' ? 'flex-1 @sm:w-full' : ''}`}
               >
                 <span
                   className={`block max-w-full wrap-break-word font-semibold ${presentation === 'tiles' || comparison ? 'text-current' : compact && option.icon ? 'text-ink group-data-[selected]:text-brand' : 'text-ink'}`}

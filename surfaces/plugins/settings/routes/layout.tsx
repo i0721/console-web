@@ -61,7 +61,9 @@ export default function SettingsShellLayout({ children }: Readonly<{ children: R
         <SettingsContentFrame banner={banner}>
           {/* 路由内容容器（SET-012）：随分类路由替换的内容区，走主 Shell 同源进入编排。 */}
           <div data-route-content>
-            <SettingsShellProvider ctx={ctx}>{children}</SettingsShellProvider>
+            <Page>
+              <SettingsShellProvider ctx={ctx}>{children}</SettingsShellProvider>
+            </Page>
           </div>
           <SettingsRestoreActions meta={activeMeta} onResult={setLastResult} />
         </SettingsContentFrame>

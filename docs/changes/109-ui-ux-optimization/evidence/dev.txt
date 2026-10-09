@@ -10006,3 +10006,12 @@ Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allow
  GET /settings/actions 200 in 35ms (next.js: 6ms, application-code: 29ms)
  GET /settings/data-display 200 in 33ms (next.js: 5ms, application-code: 28ms)
  GET / 200 in 31ms (next.js: 5ms, application-code: 25ms)
+ GET / 200 in 169ms (next.js: 58ms, application-code: 111ms)
+[browser] A PressResponder was rendered without a pressable child. Either call the usePress hook, or wrap your DOM node with <Pressable> component.
+[browser] A PressResponder was rendered without a pressable child. Either call the usePress hook, or wrap your DOM node with <Pressable> component.
+ GET /settings 200 in 62ms (next.js: 24ms, application-code: 38ms)
+[browser] A PressResponder was rendered without a pressable child. Either call the usePress hook, or wrap your DOM node with <Pressable> component.
+ GET / 200 in 160ms (next.js: 8ms, application-code: 152ms)
+ GET / 200 in 173ms (next.js: 5ms, application-code: 168ms)
+ GET / 200 in 72ms (next.js: 5ms, application-code: 67ms)
+ GET / 200 in 77ms (next.js: 5ms, application-code: 72ms)

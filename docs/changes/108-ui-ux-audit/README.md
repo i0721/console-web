@@ -699,3 +699,26 @@ semantic-category-scroll-fixed-390、semantic-locale-en-390、semantic-notificat
 完整pnpm check在包管理器用户目录锁访问处失败，直接Playwright在worker fork处spawn EPERM，
 均未进入断言。完整构建/产物预算、浏览器/Axe矩阵与历史视觉复核尚未完成；日志见109
 evidence/semantic-check-attempt.txt与semantic-browser-attempt.txt。本轮不能声明全绿或目标完成。
+
+## 19. 2026-10-09 设置信息架构与语义续审
+
+承接§18和已提交的b058b66，不重复创建选择器。实际体验八分类，核对67个可编辑字段与
+固定/引用说明，六个较长分类按用户任务组合正式Section，短分类保留简洁结构。标题补充
+即时生效与当前浏览器保存说明；字段值、偏好key与分类路由保持既有契约。
+
+新增确认R19-01任务分组不足（P2）、R19-02搜索漏39字段（P1）、R19-03紧凑侧栏状态
+覆盖手机单列规则导致main只有88px（P1）、R19-04深色Dialog确认白字对比度2.76:1
+（P1）。已修复在对应Owner；具体字段清单、七项外观方案、组件决策、跨项目范围与证据
+见[设置语义设计](../109-ui-ux-optimization/design/settings-semantic-review.md)。
+
+R19-05（P2）：人工查看320英文大字号截图进一步确认主题三列逐字换行、分类操作截断。
+已用容器响应式tiles与去重操作文案修复，加入文本行数与入口可见回归；无溢出和Axe通过
+不代表视觉可读性已经合格。
+
+本轮增加完整八分类的桌面/320深色英文大字号Axe与字段定位覆盖、共享控件高对比度、
+四强调色明暗Dialog打开态、紧凑侧栏连续resize，以及新增字段搜索路径。旧测试关闭辅助
+开关就清除系统对比度的假设已按独立外观system契约修正，保留两入口均关闭后清除的断言。
+预览测试使用公开键盘路径并等待hydration，不提高超时或视觉差异阈值。
+
+最终状态见[本轮验证](../109-ui-ux-optimization/evidence/semantic-final-verification.md)。历史
+成绩不替代本轮结果，原视觉基线不自动批准；构建、预算、行为、Axe与视觉验收分别记录。

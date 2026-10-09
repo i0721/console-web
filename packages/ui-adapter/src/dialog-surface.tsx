@@ -83,7 +83,7 @@ export function DialogSurface({
                 {cancelLabel}
               </Modal.CloseTrigger>
               <HeroButton
-                className="inline-flex min-h-control items-center justify-center rounded-control bg-brand px-4 text-sm font-semibold text-white hover:bg-brand-strong"
+                className="inline-flex min-h-control items-center justify-center rounded-control bg-brand px-4 text-sm font-semibold text-on-brand hover:bg-brand-strong"
                 isDisabled={confirmDisabled || pending}
                 isPending={pending}
                 onPress={() => void confirm()}

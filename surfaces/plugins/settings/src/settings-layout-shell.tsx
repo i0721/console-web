@@ -226,7 +226,7 @@ export function SettingsResponsiveNavigation({ meta }: Readonly<{ meta: Settings
       </div>
       <div className="xl:hidden">
         <Action fullWidth variant="secondary" onPress={() => setOpen(true)}>
-          {t(meta.labelKey)} · {t('settings.switchCategory')}
+          {t('settings.switchCategory')}
         </Action>
         <DrawerSurface
           triggerLabel={t('settings.switchCategory')}
@@ -255,7 +255,9 @@ export function SettingsCategoryHeader({ meta }: Readonly<{ meta: SettingsCatego
     <PageHeader
       eyebrow={t('settings.eyebrow')}
       title={t(meta.labelKey)}
-      description={t(`settings.categoryIntro.${meta.shortId}`)}
+      description={t('settings.categoryDescription', {
+        scope: t(`settings.categoryIntro.${meta.shortId}`),
+      })}
     />
   );
 }

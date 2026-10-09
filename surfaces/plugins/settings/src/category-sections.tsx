@@ -86,167 +86,184 @@ export function AppearanceSection({ ctx }: Readonly<{ ctx: Ctx }>) {
   const { t } = useFrontendTranslation();
   const appearance = ctx.prefs.appearance;
   return (
-    <SectionShell title={t('settings.categories.appearance')}>
-      <RadioGroupField
-        presentation="tiles"
-        labelIcon={<SunMoon className="size-5" />}
-        hint={t('settings.appearance.themeModeDescription')}
-        label={t('settings.appearance.themeMode')}
-        options={[
-          {
-            label: t('settings.appearance.themeLight'),
-            value: 'light',
-            icon: <Sun className="size-5" />,
-          },
-          {
-            label: t('settings.appearance.themeDark'),
-            value: 'dark',
-            icon: <Moon className="size-5" />,
-          },
-          {
-            label: t('settings.appearance.themeSystem'),
-            value: 'system',
-            icon: <MonitorCog className="size-5" />,
-          },
-        ]}
-        value={appearance.themeMode}
-        onValueChange={(value) => updateSetting(ctx, 'appearance', { themeMode: value })}
-      />
-      <RadioGroupField
-        presentation="inline"
-        hint={t('settings.appearance.accentDescription')}
-        label={t('settings.appearance.accent')}
-        options={[
-          {
-            label: t('settings.appearance.accentPurple'),
-            value: 'purple',
-            icon: (
-              <span className="ds-accent-swatch size-5 rounded-full" data-accent-preview="purple" />
-            ),
-          },
-          {
-            label: t('settings.appearance.accentBlue'),
-            value: 'blue',
-            icon: (
-              <span className="ds-accent-swatch size-5 rounded-full" data-accent-preview="blue" />
-            ),
-          },
-          {
-            label: t('settings.appearance.accentGreen'),
-            value: 'green',
-            icon: (
-              <span className="ds-accent-swatch size-5 rounded-full" data-accent-preview="green" />
-            ),
-          },
-          {
-            label: t('settings.appearance.accentOrange'),
-            value: 'orange',
-            icon: (
-              <span className="ds-accent-swatch size-5 rounded-full" data-accent-preview="orange" />
-            ),
-          },
-        ]}
-        value={appearance.accent}
-        onValueChange={(value) => updateSetting(ctx, 'appearance', { accent: value })}
-      />
-      <RadioGroupField
-        presentation="previews"
-        hint={t('settings.appearance.densityDescription')}
-        label={t('settings.appearance.density')}
-        options={[
-          {
-            label: t('settings.appearance.densityCompact'),
-            value: 'compact',
-            preview: <DensityPreview density="compact" />,
-          },
-          {
-            label: t('settings.appearance.densityStandard'),
-            value: 'standard',
-            preview: <DensityPreview density="standard" />,
-          },
-          {
-            label: t('settings.appearance.densityComfortable'),
-            value: 'comfortable',
-            preview: <DensityPreview density="comfortable" />,
-          },
-        ]}
-        value={appearance.density}
-        onValueChange={(value) => updateSetting(ctx, 'appearance', { density: value })}
-      />
-      <RadioGroupField
-        presentation="previews"
-        hint={t('settings.appearance.fontScaleDescription')}
-        label={t('settings.appearance.fontScale')}
-        options={[
-          {
-            label: t('settings.appearance.fontSmall'),
-            value: 'small',
-            preview: <FontPreview scale="small" sample={t('settings.appearance.fontSample')} />,
-          },
-          {
-            label: t('settings.appearance.fontStandard'),
-            value: 'standard',
-            preview: <FontPreview scale="standard" sample={t('settings.appearance.fontSample')} />,
-          },
-          {
-            label: t('settings.appearance.fontLarge'),
-            value: 'large',
-            preview: <FontPreview scale="large" sample={t('settings.appearance.fontSample')} />,
-          },
-        ]}
-        value={appearance.fontScale}
-        onValueChange={(value) => updateSetting(ctx, 'appearance', { fontScale: value })}
-      />
-      <RadioGroupField
-        presentation="previews"
-        hint={t('settings.appearance.contentWidthDescription')}
-        label={t('settings.appearance.contentWidth')}
-        options={[
-          {
-            label: t('settings.appearance.widthAuto'),
-            value: 'auto',
-            preview: <WidthPreview width="auto" />,
-          },
-          {
-            label: t('settings.appearance.widthStandard'),
-            value: 'standard',
-            preview: <WidthPreview width="standard" />,
-          },
-          {
-            label: t('settings.appearance.widthWide'),
-            value: 'wide',
-            preview: <WidthPreview width="wide" />,
-          },
-        ]}
-        value={appearance.contentWidth}
-        onValueChange={(value) => updateSetting(ctx, 'appearance', { contentWidth: value })}
-      />
-      <RadioGroupField
-        presentation="inline"
-        hint={t('settings.appearance.motionDescription')}
-        label={t('settings.appearance.motion')}
-        options={[
-          { label: t('settings.appearance.motionSystem'), value: 'system' },
-          { label: t('settings.appearance.motionStandard'), value: 'standard' },
-          { label: t('settings.appearance.motionReduced'), value: 'reduced' },
-        ]}
-        value={appearance.motion}
-        onValueChange={(value) => updateSetting(ctx, 'appearance', { motion: value })}
-      />
-      <RadioGroupField
-        presentation="inline"
-        hint={t('settings.appearance.contrastDescription')}
-        label={t('settings.appearance.contrast')}
-        options={[
-          { label: t('settings.appearance.contrastSystem'), value: 'system' },
-          { label: t('settings.appearance.contrastStandard'), value: 'standard' },
-          { label: t('settings.appearance.contrastHigh'), value: 'high' },
-        ]}
-        value={appearance.contrast}
-        onValueChange={(value) => updateSetting(ctx, 'appearance', { contrast: value })}
-      />
-      <AppearanceFeedback />
-    </SectionShell>
+    <>
+      <SectionShell title={t('settings.groups.theme')}>
+        <RadioGroupField
+          presentation="tiles"
+          labelIcon={<SunMoon className="size-5" />}
+          hint={t('settings.appearance.themeModeDescription')}
+          label={t('settings.appearance.themeMode')}
+          options={[
+            {
+              label: t('settings.appearance.themeLight'),
+              value: 'light',
+              icon: <Sun className="size-5" />,
+            },
+            {
+              label: t('settings.appearance.themeDark'),
+              value: 'dark',
+              icon: <Moon className="size-5" />,
+            },
+            {
+              label: t('settings.appearance.themeSystem'),
+              value: 'system',
+              icon: <MonitorCog className="size-5" />,
+            },
+          ]}
+          value={appearance.themeMode}
+          onValueChange={(value) => updateSetting(ctx, 'appearance', { themeMode: value })}
+        />
+        <RadioGroupField
+          presentation="inline"
+          hint={t('settings.appearance.accentDescription')}
+          label={t('settings.appearance.accent')}
+          options={[
+            {
+              label: t('settings.appearance.accentPurple'),
+              value: 'purple',
+              icon: (
+                <span
+                  className="ds-accent-swatch size-5 rounded-full"
+                  data-accent-preview="purple"
+                />
+              ),
+            },
+            {
+              label: t('settings.appearance.accentBlue'),
+              value: 'blue',
+              icon: (
+                <span className="ds-accent-swatch size-5 rounded-full" data-accent-preview="blue" />
+              ),
+            },
+            {
+              label: t('settings.appearance.accentGreen'),
+              value: 'green',
+              icon: (
+                <span
+                  className="ds-accent-swatch size-5 rounded-full"
+                  data-accent-preview="green"
+                />
+              ),
+            },
+            {
+              label: t('settings.appearance.accentOrange'),
+              value: 'orange',
+              icon: (
+                <span
+                  className="ds-accent-swatch size-5 rounded-full"
+                  data-accent-preview="orange"
+                />
+              ),
+            },
+          ]}
+          value={appearance.accent}
+          onValueChange={(value) => updateSetting(ctx, 'appearance', { accent: value })}
+        />
+      </SectionShell>
+      <SectionShell title={t('settings.groups.space')}>
+        <RadioGroupField
+          presentation="previews"
+          hint={t('settings.appearance.densityDescription')}
+          label={t('settings.appearance.density')}
+          options={[
+            {
+              label: t('settings.appearance.densityCompact'),
+              value: 'compact',
+              preview: <DensityPreview density="compact" />,
+            },
+            {
+              label: t('settings.appearance.densityStandard'),
+              value: 'standard',
+              preview: <DensityPreview density="standard" />,
+            },
+            {
+              label: t('settings.appearance.densityComfortable'),
+              value: 'comfortable',
+              preview: <DensityPreview density="comfortable" />,
+            },
+          ]}
+          value={appearance.density}
+          onValueChange={(value) => updateSetting(ctx, 'appearance', { density: value })}
+        />
+        <RadioGroupField
+          presentation="previews"
+          hint={t('settings.appearance.fontScaleDescription')}
+          label={t('settings.appearance.fontScale')}
+          options={[
+            {
+              label: t('settings.appearance.fontSmall'),
+              value: 'small',
+              preview: <FontPreview scale="small" sample={t('settings.appearance.fontSample')} />,
+            },
+            {
+              label: t('settings.appearance.fontStandard'),
+              value: 'standard',
+              preview: (
+                <FontPreview scale="standard" sample={t('settings.appearance.fontSample')} />
+              ),
+            },
+            {
+              label: t('settings.appearance.fontLarge'),
+              value: 'large',
+              preview: <FontPreview scale="large" sample={t('settings.appearance.fontSample')} />,
+            },
+          ]}
+          value={appearance.fontScale}
+          onValueChange={(value) => updateSetting(ctx, 'appearance', { fontScale: value })}
+        />
+        <RadioGroupField
+          presentation="previews"
+          hint={t('settings.appearance.contentWidthDescription')}
+          label={t('settings.appearance.contentWidth')}
+          options={[
+            {
+              label: t('settings.appearance.widthAuto'),
+              value: 'auto',
+              preview: <WidthPreview width="auto" />,
+            },
+            {
+              label: t('settings.appearance.widthStandard'),
+              value: 'standard',
+              preview: <WidthPreview width="standard" />,
+            },
+            {
+              label: t('settings.appearance.widthWide'),
+              value: 'wide',
+              preview: <WidthPreview width="wide" />,
+            },
+          ]}
+          value={appearance.contentWidth}
+          onValueChange={(value) => updateSetting(ctx, 'appearance', { contentWidth: value })}
+        />
+      </SectionShell>
+      <SectionShell title={t('settings.groups.comfort')}>
+        <RadioGroupField
+          presentation="inline"
+          hint={t('settings.appearance.motionDescription')}
+          label={t('settings.appearance.motion')}
+          options={[
+            { label: t('settings.appearance.motionSystem'), value: 'system' },
+            { label: t('settings.appearance.motionStandard'), value: 'standard' },
+            { label: t('settings.appearance.motionReduced'), value: 'reduced' },
+          ]}
+          value={appearance.motion}
+          onValueChange={(value) => updateSetting(ctx, 'appearance', { motion: value })}
+        />
+        <RadioGroupField
+          presentation="inline"
+          hint={t('settings.appearance.contrastDescription')}
+          label={t('settings.appearance.contrast')}
+          options={[
+            { label: t('settings.appearance.contrastSystem'), value: 'system' },
+            { label: t('settings.appearance.contrastStandard'), value: 'standard' },
+            { label: t('settings.appearance.contrastHigh'), value: 'high' },
+          ]}
+          value={appearance.contrast}
+          onValueChange={(value) => updateSetting(ctx, 'appearance', { contrast: value })}
+        />
+        <AppearanceFeedback />
+      </SectionShell>
+    </>
   );
 }
 
@@ -277,119 +294,125 @@ export function NavigationSection({ ctx }: Readonly<{ ctx: Ctx }>) {
   const { t } = useFrontendTranslation();
   const nav = ctx.prefs.navigation;
   return (
-    <SectionShell title={t('settings.categories.navigation')}>
-      {switchRow(
-        ctx,
-        'navigation',
-        'scrollToTopOnNavigate',
-        nav.scrollToTopOnNavigate,
-        t('settings.navigation.scrollToTopOnNavigate'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'navigation',
-        'breadcrumbs',
-        nav.breadcrumbs,
-        t('settings.navigation.breadcrumbs'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'navigation',
-        'pageTabsEnabled',
-        nav.pageTabsEnabled,
-        t('settings.navigation.pageTabsEnabled'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'navigation',
-        'restoreLastTabs',
-        nav.restoreLastTabs,
-        t('settings.navigation.restoreLastTabs'),
-        '',
-      )}
-      <SwitchField
-        presentation="row"
-        checked={nav.pageTabsPinned}
-        disabled={!nav.pageTabsEnabled}
-        label={t('settings.navigation.pageTabsPinned')}
-        description={t(
-          nav.pageTabsEnabled
-            ? 'settings.navigation.pageTabsPinnedDescription'
-            : 'settings.navigation.pageTabsPinnedUnavailable',
+    <>
+      <SectionShell title={t('settings.groups.wayfinding')}>
+        {switchRow(
+          ctx,
+          'navigation',
+          'scrollToTopOnNavigate',
+          nav.scrollToTopOnNavigate,
+          t('settings.navigation.scrollToTopOnNavigate'),
+          '',
         )}
-        onCheckedChange={(pageTabsPinned) => updateSetting(ctx, 'navigation', { pageTabsPinned })}
-      />
-      <SelectField
-        hint={t('settings.navigation.tabCloseBehaviorHint')}
-        label={t('settings.navigation.tabCloseBehavior')}
-        options={[
-          { label: t('settings.navigation.tabCloseRecent'), value: 'recent' },
-          { label: t('settings.navigation.tabCloseRight'), value: 'right' },
-          { label: t('settings.navigation.tabCloseLeft'), value: 'left' },
-        ]}
-        value={nav.tabCloseBehavior}
-        onValueChange={(value) => updateSetting(ctx, 'navigation', { tabCloseBehavior: value })}
-      />
-      {switchRow(
-        ctx,
-        'navigation',
-        'menuMemory',
-        nav.menuMemory,
-        t('settings.navigation.menuMemory'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'navigation',
-        'rememberRecents',
-        nav.rememberRecents,
-        t('settings.navigation.rememberRecents'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'navigation',
-        'showRecents',
-        nav.showRecents,
-        t('settings.navigation.showRecents'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'navigation',
-        'autoRestoreWorkspace',
-        nav.autoRestoreWorkspace,
-        t('settings.navigation.autoRestoreWorkspace'),
-        '',
-      )}
-      <RadioGroupField
-        presentation="inline"
-        hint=""
-        label={t('settings.navigation.sidebarBehavior')}
-        options={[
-          { label: t('settings.appearance.sidebarExpanded'), value: 'expanded' },
-          { label: t('settings.appearance.sidebarCollapsed'), value: 'collapsed' },
-          { label: t('settings.appearance.sidebarRemember'), value: 'remember' },
-        ]}
-        value={nav.sidebarBehavior}
-        onValueChange={(value) => updateSetting(ctx, 'navigation', { sidebarBehavior: value })}
-      />
-      <RadioGroupField
-        presentation="inline"
-        hint={t('settings.navigation.newPageOpenModeHint')}
-        label={t('settings.navigation.newPageOpenMode')}
-        options={[
-          { label: t('settings.navigation.newPageCurrent'), value: 'current' },
-          { label: t('settings.navigation.newPageBrowserTab'), value: 'browser-tab' },
-          { label: t('settings.navigation.newPagePageTab'), value: 'page-tab' },
-        ]}
-        value={nav.newPageOpenMode}
-        onValueChange={(value) => updateSetting(ctx, 'navigation', { newPageOpenMode: value })}
-      />
-    </SectionShell>
+        {switchRow(
+          ctx,
+          'navigation',
+          'breadcrumbs',
+          nav.breadcrumbs,
+          t('settings.navigation.breadcrumbs'),
+          '',
+        )}
+        <RadioGroupField
+          presentation="inline"
+          hint={t('settings.navigation.newPageOpenModeHint')}
+          label={t('settings.navigation.newPageOpenMode')}
+          options={[
+            { label: t('settings.navigation.newPageCurrent'), value: 'current' },
+            { label: t('settings.navigation.newPageBrowserTab'), value: 'browser-tab' },
+            { label: t('settings.navigation.newPagePageTab'), value: 'page-tab' },
+          ]}
+          value={nav.newPageOpenMode}
+          onValueChange={(value) => updateSetting(ctx, 'navigation', { newPageOpenMode: value })}
+        />
+      </SectionShell>
+      <SectionShell title={t('settings.groups.tabs')}>
+        {switchRow(
+          ctx,
+          'navigation',
+          'pageTabsEnabled',
+          nav.pageTabsEnabled,
+          t('settings.navigation.pageTabsEnabled'),
+          '',
+        )}
+        {switchRow(
+          ctx,
+          'navigation',
+          'restoreLastTabs',
+          nav.restoreLastTabs,
+          t('settings.navigation.restoreLastTabs'),
+          '',
+        )}
+        <SwitchField
+          presentation="row"
+          checked={nav.pageTabsPinned}
+          disabled={!nav.pageTabsEnabled}
+          label={t('settings.navigation.pageTabsPinned')}
+          description={t(
+            nav.pageTabsEnabled
+              ? 'settings.navigation.pageTabsPinnedDescription'
+              : 'settings.navigation.pageTabsPinnedUnavailable',
+          )}
+          onCheckedChange={(pageTabsPinned) => updateSetting(ctx, 'navigation', { pageTabsPinned })}
+        />
+        <SelectField
+          hint={t('settings.navigation.tabCloseBehaviorHint')}
+          label={t('settings.navigation.tabCloseBehavior')}
+          options={[
+            { label: t('settings.navigation.tabCloseRecent'), value: 'recent' },
+            { label: t('settings.navigation.tabCloseRight'), value: 'right' },
+            { label: t('settings.navigation.tabCloseLeft'), value: 'left' },
+          ]}
+          value={nav.tabCloseBehavior}
+          onValueChange={(value) => updateSetting(ctx, 'navigation', { tabCloseBehavior: value })}
+        />
+      </SectionShell>
+      <SectionShell title={t('settings.groups.memory')}>
+        {switchRow(
+          ctx,
+          'navigation',
+          'menuMemory',
+          nav.menuMemory,
+          t('settings.navigation.menuMemory'),
+          '',
+        )}
+        {switchRow(
+          ctx,
+          'navigation',
+          'rememberRecents',
+          nav.rememberRecents,
+          t('settings.navigation.rememberRecents'),
+          '',
+        )}
+        {switchRow(
+          ctx,
+          'navigation',
+          'showRecents',
+          nav.showRecents,
+          t('settings.navigation.showRecents'),
+          '',
+        )}
+        {switchRow(
+          ctx,
+          'navigation',
+          'autoRestoreWorkspace',
+          nav.autoRestoreWorkspace,
+          t('settings.navigation.autoRestoreWorkspace'),
+          '',
+        )}
+        <RadioGroupField
+          presentation="inline"
+          hint=""
+          label={t('settings.navigation.sidebarBehavior')}
+          options={[
+            { label: t('settings.appearance.sidebarExpanded'), value: 'expanded' },
+            { label: t('settings.appearance.sidebarCollapsed'), value: 'collapsed' },
+            { label: t('settings.appearance.sidebarRemember'), value: 'remember' },
+          ]}
+          value={nav.sidebarBehavior}
+          onValueChange={(value) => updateSetting(ctx, 'navigation', { sidebarBehavior: value })}
+        />
+      </SectionShell>
+    </>
   );
 }
 
@@ -401,107 +424,113 @@ export function DataDisplaySection({ ctx }: Readonly<{ ctx: Ctx }>) {
   const { t } = useFrontendTranslation();
   const data = ctx.prefs.dataDisplay;
   return (
-    <SectionShell title={t('settings.categories.dataDisplay')}>
-      <SelectField
-        hint=""
-        label={t('settings.dataDisplay.pageSize')}
-        options={[10, 20, 50, 100].map((size) => ({ label: String(size), value: String(size) }))}
-        value={String(data.pageSize)}
-        onValueChange={(value) => updateSetting(ctx, 'dataDisplay', { pageSize: Number(value) })}
-      />
-      <RadioGroupField
-        presentation="previews"
-        hint={t('settings.appearance.comparisonHint')}
-        label={t('settings.dataDisplay.tableDensity')}
-        options={[
-          {
-            label: t('settings.appearance.densityCompact'),
-            value: 'compact',
-            preview: <DensityPreview density="compact" />,
-          },
-          {
-            label: t('settings.appearance.densityStandard'),
-            value: 'standard',
-            preview: <DensityPreview density="standard" />,
-          },
-          {
-            label: t('settings.appearance.densityComfortable'),
-            value: 'comfortable',
-            preview: <DensityPreview density="comfortable" />,
-          },
-        ]}
-        value={data.tableDensity}
-        onValueChange={(value) => updateSetting(ctx, 'dataDisplay', { tableDensity: value })}
-      />
-      {switchRow(
-        ctx,
-        'dataDisplay',
-        'rowSeparators',
-        data.rowSeparators,
-        t('settings.dataDisplay.rowSeparators'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'dataDisplay',
-        'stickyHeader',
-        data.stickyHeader,
-        t('settings.dataDisplay.stickyHeader'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'dataDisplay',
-        'rememberColumnLayout',
-        data.rememberColumnLayout,
-        t('settings.dataDisplay.rememberColumnLayout'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'dataDisplay',
-        'rememberSort',
-        data.rememberSort,
-        t('settings.dataDisplay.rememberSort'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'dataDisplay',
-        'rememberFilters',
-        data.rememberFilters,
-        t('settings.dataDisplay.rememberFilters'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'dataDisplay',
-        'rememberPagination',
-        data.rememberPagination,
-        t('settings.dataDisplay.rememberPagination'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'dataDisplay',
-        'emptyStateHint',
-        data.emptyStateHint,
-        t('settings.dataDisplay.emptyStateHint'),
-        '',
-      )}
-      <RadioGroupField
-        presentation="inline"
-        hint=""
-        label={t('settings.dataDisplay.longText')}
-        options={[
-          { label: t('settings.dataDisplay.truncate'), value: 'truncate' },
-          { label: t('settings.dataDisplay.wrap'), value: 'wrap' },
-        ]}
-        value={data.longText}
-        onValueChange={(value) => updateSetting(ctx, 'dataDisplay', { longText: value })}
-      />
-      <LongTextFeedback mode={data.longText} />
-    </SectionShell>
+    <>
+      <SectionShell title={t('settings.groups.table')}>
+        <SelectField
+          hint=""
+          label={t('settings.dataDisplay.pageSize')}
+          options={[10, 20, 50, 100].map((size) => ({ label: String(size), value: String(size) }))}
+          value={String(data.pageSize)}
+          onValueChange={(value) => updateSetting(ctx, 'dataDisplay', { pageSize: Number(value) })}
+        />
+        <RadioGroupField
+          presentation="previews"
+          hint={t('settings.appearance.comparisonHint')}
+          label={t('settings.dataDisplay.tableDensity')}
+          options={[
+            {
+              label: t('settings.appearance.densityCompact'),
+              value: 'compact',
+              preview: <DensityPreview density="compact" />,
+            },
+            {
+              label: t('settings.appearance.densityStandard'),
+              value: 'standard',
+              preview: <DensityPreview density="standard" />,
+            },
+            {
+              label: t('settings.appearance.densityComfortable'),
+              value: 'comfortable',
+              preview: <DensityPreview density="comfortable" />,
+            },
+          ]}
+          value={data.tableDensity}
+          onValueChange={(value) => updateSetting(ctx, 'dataDisplay', { tableDensity: value })}
+        />
+        {switchRow(
+          ctx,
+          'dataDisplay',
+          'rowSeparators',
+          data.rowSeparators,
+          t('settings.dataDisplay.rowSeparators'),
+          '',
+        )}
+        {switchRow(
+          ctx,
+          'dataDisplay',
+          'stickyHeader',
+          data.stickyHeader,
+          t('settings.dataDisplay.stickyHeader'),
+          '',
+        )}
+      </SectionShell>
+      <SectionShell title={t('settings.groups.tableMemory')}>
+        {switchRow(
+          ctx,
+          'dataDisplay',
+          'rememberColumnLayout',
+          data.rememberColumnLayout,
+          t('settings.dataDisplay.rememberColumnLayout'),
+          '',
+        )}
+        {switchRow(
+          ctx,
+          'dataDisplay',
+          'rememberSort',
+          data.rememberSort,
+          t('settings.dataDisplay.rememberSort'),
+          '',
+        )}
+        {switchRow(
+          ctx,
+          'dataDisplay',
+          'rememberFilters',
+          data.rememberFilters,
+          t('settings.dataDisplay.rememberFilters'),
+          '',
+        )}
+        {switchRow(
+          ctx,
+          'dataDisplay',
+          'rememberPagination',
+          data.rememberPagination,
+          t('settings.dataDisplay.rememberPagination'),
+          '',
+        )}
+      </SectionShell>
+      <SectionShell title={t('settings.groups.reading')}>
+        {switchRow(
+          ctx,
+          'dataDisplay',
+          'emptyStateHint',
+          data.emptyStateHint,
+          t('settings.dataDisplay.emptyStateHint'),
+          '',
+        )}
+        <RadioGroupField
+          presentation="inline"
+          hint=""
+          label={t('settings.dataDisplay.longText')}
+          options={[
+            { label: t('settings.dataDisplay.truncate'), value: 'truncate' },
+            { label: t('settings.dataDisplay.wrap'), value: 'wrap' },
+          ]}
+          value={data.longText}
+          onValueChange={(value) => updateSetting(ctx, 'dataDisplay', { longText: value })}
+        />
+        <LongTextFeedback mode={data.longText} />
+      </SectionShell>
+    </>
   );
 }
 
@@ -513,86 +542,90 @@ export function LocaleRegionSection({ ctx }: Readonly<{ ctx: Ctx }>) {
   const { t } = useFrontendTranslation();
   const region = ctx.prefs.localeRegion;
   return (
-    <SectionShell title={t('settings.categories.localeRegion')}>
-      <RadioGroupField
-        presentation="inline"
-        hint=""
-        label={t('settings.localeRegion.language')}
-        options={[
-          { label: '简体中文', value: 'zh-CN' },
-          { label: 'English', value: 'en' },
-        ]}
-        value={region.language}
-        onValueChange={(value) => updateSetting(ctx, 'localeRegion', { language: value })}
-      />
-      <SelectField
-        hint=""
-        label={t('settings.localeRegion.dateFormat')}
-        options={['YYYY-MM-DD', 'MM/DD/YYYY', 'DD/MM/YYYY'].map((format) => ({
-          label: format,
-          value: format,
-        }))}
-        value={region.dateFormat}
-        onValueChange={(value) => updateSetting(ctx, 'localeRegion', { dateFormat: value })}
-      />
-      <SelectField
-        hint={t('settings.localeRegion.timeZoneHint')}
-        label={t('settings.localeRegion.timeZone')}
-        options={TIME_ZONE_OPTIONS.map((zone) => ({
-          label: zone === 'auto' ? t('settings.localeRegion.timeZoneAuto') : zone,
-          value: zone,
-        }))}
-        value={region.timeZone}
-        onValueChange={(value) => updateSetting(ctx, 'localeRegion', { timeZone: value })}
-      />
-      <RadioGroupField
-        presentation="inline"
-        hint=""
-        label={t('settings.localeRegion.hourCycle')}
-        options={[
-          { label: t('settings.localeRegion.h24'), value: 'h24' },
-          { label: t('settings.localeRegion.h12'), value: 'h12' },
-        ]}
-        value={region.hourCycle}
-        onValueChange={(value) => updateSetting(ctx, 'localeRegion', { hourCycle: value })}
-      />
-      {switchRow(
-        ctx,
-        'localeRegion',
-        'showSeconds',
-        region.showSeconds,
-        t('settings.localeRegion.showSeconds'),
-        '',
-      )}
-      <RadioGroupField
-        presentation="inline"
-        hint=""
-        label={t('settings.localeRegion.relativeTime')}
-        options={[
-          { label: t('settings.localeRegion.relative'), value: 'relative' },
-          { label: t('settings.localeRegion.exact'), value: 'exact' },
-        ]}
-        value={region.relativeTime}
-        onValueChange={(value) => updateSetting(ctx, 'localeRegion', { relativeTime: value })}
-      />
-      <RadioGroupField
-        presentation="inline"
-        hint=""
-        label={t('settings.localeRegion.weekStart')}
-        options={[
-          { label: t('settings.localeRegion.monday'), value: 'monday' },
-          { label: t('settings.localeRegion.sunday'), value: 'sunday' },
-        ]}
-        value={region.weekStart}
-        onValueChange={(value) => updateSetting(ctx, 'localeRegion', { weekStart: value })}
-      />
-      {/* numbersFollowLocale 产品固定：说明 + disabled（不渲染可关开关）。 */}
-      <div className="rounded-panel border border-border bg-surface-muted p-4 text-sm text-ink-muted">
-        {t('settings.localeRegion.numbersFollowLocale')}：
-        {t('settings.localeRegion.numbersFollowLocaleFixed')}
-      </div>
-      <LocaleFeedback region={region} />
-    </SectionShell>
+    <>
+      <SectionShell title={t('settings.groups.language')}>
+        <RadioGroupField
+          presentation="inline"
+          hint=""
+          label={t('settings.localeRegion.language')}
+          options={[
+            { label: '简体中文', value: 'zh-CN' },
+            { label: 'English', value: 'en' },
+          ]}
+          value={region.language}
+          onValueChange={(value) => updateSetting(ctx, 'localeRegion', { language: value })}
+        />
+      </SectionShell>
+      <SectionShell title={t('settings.groups.dateTime')}>
+        <SelectField
+          hint=""
+          label={t('settings.localeRegion.dateFormat')}
+          options={['YYYY-MM-DD', 'MM/DD/YYYY', 'DD/MM/YYYY'].map((format) => ({
+            label: format,
+            value: format,
+          }))}
+          value={region.dateFormat}
+          onValueChange={(value) => updateSetting(ctx, 'localeRegion', { dateFormat: value })}
+        />
+        <SelectField
+          hint={t('settings.localeRegion.timeZoneHint')}
+          label={t('settings.localeRegion.timeZone')}
+          options={TIME_ZONE_OPTIONS.map((zone) => ({
+            label: zone === 'auto' ? t('settings.localeRegion.timeZoneAuto') : zone,
+            value: zone,
+          }))}
+          value={region.timeZone}
+          onValueChange={(value) => updateSetting(ctx, 'localeRegion', { timeZone: value })}
+        />
+        <RadioGroupField
+          presentation="inline"
+          hint=""
+          label={t('settings.localeRegion.hourCycle')}
+          options={[
+            { label: t('settings.localeRegion.h24'), value: 'h24' },
+            { label: t('settings.localeRegion.h12'), value: 'h12' },
+          ]}
+          value={region.hourCycle}
+          onValueChange={(value) => updateSetting(ctx, 'localeRegion', { hourCycle: value })}
+        />
+        {switchRow(
+          ctx,
+          'localeRegion',
+          'showSeconds',
+          region.showSeconds,
+          t('settings.localeRegion.showSeconds'),
+          '',
+        )}
+        <RadioGroupField
+          presentation="inline"
+          hint=""
+          label={t('settings.localeRegion.relativeTime')}
+          options={[
+            { label: t('settings.localeRegion.relative'), value: 'relative' },
+            { label: t('settings.localeRegion.exact'), value: 'exact' },
+          ]}
+          value={region.relativeTime}
+          onValueChange={(value) => updateSetting(ctx, 'localeRegion', { relativeTime: value })}
+        />
+        <RadioGroupField
+          presentation="inline"
+          hint=""
+          label={t('settings.localeRegion.weekStart')}
+          options={[
+            { label: t('settings.localeRegion.monday'), value: 'monday' },
+            { label: t('settings.localeRegion.sunday'), value: 'sunday' },
+          ]}
+          value={region.weekStart}
+          onValueChange={(value) => updateSetting(ctx, 'localeRegion', { weekStart: value })}
+        />
+        {/* numbersFollowLocale 产品固定：说明 + disabled（不渲染可关开关）。 */}
+        <div className="rounded-panel border border-border bg-surface-muted p-4 text-sm text-ink-muted">
+          {t('settings.localeRegion.numbersFollowLocale')}：
+          {t('settings.localeRegion.numbersFollowLocaleFixed')}
+        </div>
+        <LocaleFeedback region={region} />
+      </SectionShell>
+    </>
   );
 }
 
@@ -604,62 +637,66 @@ export function NotificationsSection({ ctx }: Readonly<{ ctx: Ctx }>) {
   const { t } = useFrontendTranslation();
   const n = ctx.prefs.notifications;
   return (
-    <SectionShell title={t('settings.categories.notifications')}>
-      {switchRow(
-        ctx,
-        'notifications',
-        'inAppNotifications',
-        n.inAppNotifications,
-        t('settings.notifications.inAppNotifications'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'notifications',
-        'unreadReminder',
-        n.unreadReminder,
-        t('settings.notifications.unreadReminder'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'notifications',
-        'showBadge',
-        n.showBadge,
-        t('settings.notifications.showBadge'),
-        '',
-      )}
-      {switchRow(ctx, 'notifications', 'sound', n.sound, t('settings.notifications.sound'), '')}
-      {switchRow(
-        ctx,
-        'notifications',
-        'desktopNotifications',
-        n.desktopNotifications,
-        t('settings.notifications.desktopNotifications'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'notifications',
-        'collectNonCriticalToCenter',
-        n.collectNonCriticalToCenter,
-        t('settings.notifications.collectNonCriticalToCenter'),
-        '',
-      )}
-      <RadioGroupField
-        presentation="inline"
-        hint=""
-        label={t('settings.notifications.toastDuration')}
-        options={[
-          { label: t('settings.notifications.toastShort'), value: 'short' },
-          { label: t('settings.notifications.toastStandard'), value: 'standard' },
-          { label: t('settings.notifications.toastLong'), value: 'long' },
-        ]}
-        value={n.toastDuration}
-        onValueChange={(value) => updateSetting(ctx, 'notifications', { toastDuration: value })}
-      />
-      <NotificationFeedback duration={n.toastDuration} />
-    </SectionShell>
+    <>
+      <SectionShell title={t('settings.groups.delivery')}>
+        {switchRow(
+          ctx,
+          'notifications',
+          'inAppNotifications',
+          n.inAppNotifications,
+          t('settings.notifications.inAppNotifications'),
+          '',
+        )}
+        {switchRow(
+          ctx,
+          'notifications',
+          'unreadReminder',
+          n.unreadReminder,
+          t('settings.notifications.unreadReminder'),
+          '',
+        )}
+        {switchRow(
+          ctx,
+          'notifications',
+          'showBadge',
+          n.showBadge,
+          t('settings.notifications.showBadge'),
+          '',
+        )}
+        {switchRow(ctx, 'notifications', 'sound', n.sound, t('settings.notifications.sound'), '')}
+        {switchRow(
+          ctx,
+          'notifications',
+          'desktopNotifications',
+          n.desktopNotifications,
+          t('settings.notifications.desktopNotifications'),
+          '',
+        )}
+      </SectionShell>
+      <SectionShell title={t('settings.groups.feedback')}>
+        {switchRow(
+          ctx,
+          'notifications',
+          'collectNonCriticalToCenter',
+          n.collectNonCriticalToCenter,
+          t('settings.notifications.collectNonCriticalToCenter'),
+          '',
+        )}
+        <RadioGroupField
+          presentation="inline"
+          hint=""
+          label={t('settings.notifications.toastDuration')}
+          options={[
+            { label: t('settings.notifications.toastShort'), value: 'short' },
+            { label: t('settings.notifications.toastStandard'), value: 'standard' },
+            { label: t('settings.notifications.toastLong'), value: 'long' },
+          ]}
+          value={n.toastDuration}
+          onValueChange={(value) => updateSetting(ctx, 'notifications', { toastDuration: value })}
+        />
+        <NotificationFeedback duration={n.toastDuration} />
+      </SectionShell>
+    </>
   );
 }
 
@@ -774,179 +811,189 @@ export function ActionPreferencesSection({ ctx }: Readonly<{ ctx: Ctx }>) {
   const { t } = useFrontendTranslation();
   const p = ctx.prefs.actionPreferences;
   return (
-    <SectionShell title={t('settings.categories.actionPreferences')}>
-      <RadioGroupField
-        presentation="rows"
-        hint=""
-        label={t('settings.actionPreferences.editSuccessDestination')}
-        options={[
-          { label: t('settings.actionPreferences.stay'), value: 'stay' },
-          { label: t('settings.actionPreferences.list'), value: 'list' },
-          { label: t('settings.actionPreferences.detail'), value: 'detail' },
-        ]}
-        value={p.editSuccessDestination}
-        onValueChange={(value) =>
-          updateSetting(ctx, 'actionPreferences', { editSuccessDestination: value })
-        }
-      />
-      <RadioGroupField
-        presentation="rows"
-        hint=""
-        label={t('settings.actionPreferences.createSuccessDestination')}
-        options={[
-          { label: t('settings.actionPreferences.list'), value: 'list' },
-          { label: t('settings.actionPreferences.continueCreating'), value: 'continue' },
-          {
-            description: t('settings.actionPreferences.detailNotApplicableHint'),
-            label: t('settings.actionPreferences.detail'),
-            value: 'detail',
-          },
-        ]}
-        value={p.createSuccessDestination}
-        onValueChange={(value) =>
-          updateSetting(ctx, 'actionPreferences', {
-            createSuccessDestination: value,
-          })
-        }
-      />
-      {switchRow(
-        ctx,
-        'actionPreferences',
-        'autosaveDrafts',
-        p.autosaveDrafts,
-        t('settings.actionPreferences.autosaveDrafts'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'actionPreferences',
-        'confirmLeave',
-        p.confirmLeave,
-        t('settings.actionPreferences.confirmLeave'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'actionPreferences',
-        'confirmReset',
-        p.confirmReset,
-        t('settings.actionPreferences.confirmReset'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'actionPreferences',
-        'confirmDelete',
-        p.confirmDelete,
-        t('settings.actionPreferences.confirmDelete'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'actionPreferences',
-        'confirmBulk',
-        p.confirmBulk,
-        t('settings.actionPreferences.confirmBulk'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'actionPreferences',
-        'focusFirstField',
-        p.focusFirstField,
-        t('settings.actionPreferences.focusFirstField'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'actionPreferences',
-        'focusFirstError',
-        p.focusFirstError,
-        t('settings.actionPreferences.focusFirstError'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'actionPreferences',
-        'copyFeedback',
-        p.copyFeedback,
-        t('settings.actionPreferences.copyFeedback'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'actionPreferences',
-        'expandDetailInfo',
-        p.expandDetailInfo,
-        t('settings.actionPreferences.expandDetailInfo'),
-        '',
-      )}
-      <RadioGroupField
-        presentation="inline"
-        hint={t('settings.actionPreferences.detailModeHint')}
-        label={t('settings.actionPreferences.detailMode')}
-        options={[
-          { label: t('settings.actionPreferences.detailCompact'), value: 'compact' },
-          { label: t('settings.actionPreferences.detailFull'), value: 'full' },
-        ]}
-        value={p.detailMode}
-        onValueChange={(value) => updateSetting(ctx, 'actionPreferences', { detailMode: value })}
-      />
-      <RadioGroupField
-        presentation="rows"
-        hint=""
-        label={t('settings.actionPreferences.refreshMode')}
-        options={[
-          { label: t('settings.actionPreferences.refreshOff'), value: 'off' },
-          { label: t('settings.actionPreferences.refreshOnEnter'), value: 'on-enter' },
-          { label: t('settings.actionPreferences.refreshPeriodic'), value: 'periodic' },
-        ]}
-        value={p.refreshMode}
-        onValueChange={(value) => updateSetting(ctx, 'actionPreferences', { refreshMode: value })}
-      />
-      <RadioGroupField
-        presentation="inline"
-        hint=""
-        label={t('settings.actionPreferences.searchTrigger')}
-        options={[
-          { label: t('settings.actionPreferences.searchAuto'), value: 'auto' },
-          { label: t('settings.actionPreferences.searchEnter'), value: 'enter' },
-        ]}
-        value={p.searchTrigger}
-        onValueChange={(value) => updateSetting(ctx, 'actionPreferences', { searchTrigger: value })}
-      />
-      {switchRow(
-        ctx,
-        'actionPreferences',
-        'rememberSearchHistory',
-        p.rememberSearchHistory,
-        t('settings.actionPreferences.rememberSearchHistory'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'actionPreferences',
-        'showSearchHistory',
-        p.showSearchHistory,
-        t('settings.actionPreferences.showSearchHistory'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'actionPreferences',
-        'showSearchSuggestions',
-        p.showSearchSuggestions,
-        t('settings.actionPreferences.showSearchSuggestions'),
-        '',
-      )}
-      {switchRow(
-        ctx,
-        'actionPreferences',
-        'keepLastSearchPerPage',
-        p.keepLastSearchPerPage,
-        t('settings.actionPreferences.keepLastSearchPerPage'),
-        '',
-      )}
-    </SectionShell>
+    <>
+      <SectionShell title={t('settings.groups.destinations')}>
+        <RadioGroupField
+          presentation="inline"
+          hint=""
+          label={t('settings.actionPreferences.editSuccessDestination')}
+          options={[
+            { label: t('settings.actionPreferences.stay'), value: 'stay' },
+            { label: t('settings.actionPreferences.list'), value: 'list' },
+            { label: t('settings.actionPreferences.detail'), value: 'detail' },
+          ]}
+          value={p.editSuccessDestination}
+          onValueChange={(value) =>
+            updateSetting(ctx, 'actionPreferences', { editSuccessDestination: value })
+          }
+        />
+        <RadioGroupField
+          presentation="rows"
+          hint=""
+          label={t('settings.actionPreferences.createSuccessDestination')}
+          options={[
+            { label: t('settings.actionPreferences.list'), value: 'list' },
+            { label: t('settings.actionPreferences.continueCreating'), value: 'continue' },
+            {
+              description: t('settings.actionPreferences.detailNotApplicableHint'),
+              label: t('settings.actionPreferences.detail'),
+              value: 'detail',
+            },
+          ]}
+          value={p.createSuccessDestination}
+          onValueChange={(value) =>
+            updateSetting(ctx, 'actionPreferences', {
+              createSuccessDestination: value,
+            })
+          }
+        />
+      </SectionShell>
+      <SectionShell title={t('settings.groups.protection')}>
+        {switchRow(
+          ctx,
+          'actionPreferences',
+          'autosaveDrafts',
+          p.autosaveDrafts,
+          t('settings.actionPreferences.autosaveDrafts'),
+          '',
+        )}
+        {switchRow(
+          ctx,
+          'actionPreferences',
+          'confirmLeave',
+          p.confirmLeave,
+          t('settings.actionPreferences.confirmLeave'),
+          '',
+        )}
+        {switchRow(
+          ctx,
+          'actionPreferences',
+          'confirmReset',
+          p.confirmReset,
+          t('settings.actionPreferences.confirmReset'),
+          '',
+        )}
+        {switchRow(
+          ctx,
+          'actionPreferences',
+          'confirmDelete',
+          p.confirmDelete,
+          t('settings.actionPreferences.confirmDelete'),
+          '',
+        )}
+        {switchRow(
+          ctx,
+          'actionPreferences',
+          'confirmBulk',
+          p.confirmBulk,
+          t('settings.actionPreferences.confirmBulk'),
+          '',
+        )}
+      </SectionShell>
+      <SectionShell title={t('settings.groups.guidance')}>
+        {switchRow(
+          ctx,
+          'actionPreferences',
+          'focusFirstField',
+          p.focusFirstField,
+          t('settings.actionPreferences.focusFirstField'),
+          '',
+        )}
+        {switchRow(
+          ctx,
+          'actionPreferences',
+          'focusFirstError',
+          p.focusFirstError,
+          t('settings.actionPreferences.focusFirstError'),
+          '',
+        )}
+        {switchRow(
+          ctx,
+          'actionPreferences',
+          'copyFeedback',
+          p.copyFeedback,
+          t('settings.actionPreferences.copyFeedback'),
+          '',
+        )}
+        {switchRow(
+          ctx,
+          'actionPreferences',
+          'expandDetailInfo',
+          p.expandDetailInfo,
+          t('settings.actionPreferences.expandDetailInfo'),
+          '',
+        )}
+        <RadioGroupField
+          presentation="inline"
+          hint={t('settings.actionPreferences.detailModeHint')}
+          label={t('settings.actionPreferences.detailMode')}
+          options={[
+            { label: t('settings.actionPreferences.detailCompact'), value: 'compact' },
+            { label: t('settings.actionPreferences.detailFull'), value: 'full' },
+          ]}
+          value={p.detailMode}
+          onValueChange={(value) => updateSetting(ctx, 'actionPreferences', { detailMode: value })}
+        />
+      </SectionShell>
+      <SectionShell title={t('settings.groups.search')}>
+        <RadioGroupField
+          presentation="inline"
+          hint=""
+          label={t('settings.actionPreferences.refreshMode')}
+          options={[
+            { label: t('settings.actionPreferences.refreshOff'), value: 'off' },
+            { label: t('settings.actionPreferences.refreshOnEnter'), value: 'on-enter' },
+            { label: t('settings.actionPreferences.refreshPeriodic'), value: 'periodic' },
+          ]}
+          value={p.refreshMode}
+          onValueChange={(value) => updateSetting(ctx, 'actionPreferences', { refreshMode: value })}
+        />
+        <RadioGroupField
+          presentation="inline"
+          hint=""
+          label={t('settings.actionPreferences.searchTrigger')}
+          options={[
+            { label: t('settings.actionPreferences.searchAuto'), value: 'auto' },
+            { label: t('settings.actionPreferences.searchEnter'), value: 'enter' },
+          ]}
+          value={p.searchTrigger}
+          onValueChange={(value) =>
+            updateSetting(ctx, 'actionPreferences', { searchTrigger: value })
+          }
+        />
+        {switchRow(
+          ctx,
+          'actionPreferences',
+          'rememberSearchHistory',
+          p.rememberSearchHistory,
+          t('settings.actionPreferences.rememberSearchHistory'),
+          '',
+        )}
+        {switchRow(
+          ctx,
+          'actionPreferences',
+          'showSearchHistory',
+          p.showSearchHistory,
+          t('settings.actionPreferences.showSearchHistory'),
+          '',
+        )}
+        {switchRow(
+          ctx,
+          'actionPreferences',
+          'showSearchSuggestions',
+          p.showSearchSuggestions,
+          t('settings.actionPreferences.showSearchSuggestions'),
+          '',
+        )}
+        {switchRow(
+          ctx,
+          'actionPreferences',
+          'keepLastSearchPerPage',
+          p.keepLastSearchPerPage,
+          t('settings.actionPreferences.keepLastSearchPerPage'),
+          '',
+        )}
+      </SectionShell>
+    </>
   );
 }

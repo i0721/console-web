@@ -5,6 +5,7 @@ import { defaultPreferences, PREFERENCES_VERSION } from '@community-go/surface/p
 async function setup(page: Page, pinned = true) {
   await page.addInitScript(
     ({ preferences, version, pinned }) => {
+      if (localStorage.getItem('community-go.shell')) return;
       localStorage.setItem(
         'community-go.shell',
         JSON.stringify({
@@ -36,11 +37,11 @@ async function chooseCategory(page: Page, name: string) {
   await expect(page.getByRole('heading', { level: 1, name, exact: true })).toBeVisible();
 }
 
-test('Theme tiles retain horizontal hierarchy, pointer and keyboard selection and persistence', async ({
-  browser,
-}) => {
-  for (const width of [1440, 390, 320]) {
-    for (const language of ['zh-CN', 'en']) {
+for (const width of [1440, 390, 320]) {
+  for (const language of ['zh-CN', 'en']) {
+    test(`Theme tiles adapt while retaining pointer, keyboard and persistence: ${width}, ${language}`, async ({
+      browser,
+    }) => {
       const context = await browser.newContext({
         viewport: { width, height: 900 },
         colorScheme: 'light',
@@ -82,9 +83,18 @@ test('Theme tiles retain horizontal hierarchy, pointer and keyboard selection an
       const firstBox = boxes[0];
       if (!firstBox) throw new Error('Theme tiles missing');
       for (const box of boxes) {
-        expect(Math.abs(box.y - firstBox.y)).toBeLessThan(1);
+        if (width >= 768) expect(Math.abs(box.y - firstBox.y)).toBeLessThan(1);
+        else expect(Math.abs(box.x - firstBox.x)).toBeLessThan(1);
         expect(box.width).toBeGreaterThanOrEqual(44);
         expect(box.height).toBeGreaterThanOrEqual(44);
+      }
+      if (width < 768) {
+        for (let index = 1; index < boxes.length; index++) {
+          const previous = boxes[index - 1];
+          const current = boxes[index];
+          if (!previous || !current) throw new Error('Theme choice missing');
+          expect(current.y).toBeGreaterThanOrEqual(previous.y + previous.height);
+        }
       }
       const dark = group.getByRole('radio', { name: names[1], exact: true });
       const darkIcon = group
@@ -101,7 +111,7 @@ test('Theme tiles retain horizontal hierarchy, pointer and keyboard selection an
       ).toEqual([]);
       await page.screenshot({
         animations: 'disabled',
-        path: `docs/changes/109-ui-ux-optimization/evidence/review-2026-10-08/theme-tiles-${width}-${language}-dark.png`,
+        path: `docs/changes/109-ui-ux-optimization/evidence/semantic-final/theme-tiles-${width}-${language}-dark.png`,
       });
       await dark.focus();
       await page.keyboard.press('ArrowRight');
@@ -127,12 +137,12 @@ test('Theme tiles retain horizontal hierarchy, pointer and keyboard selection an
       await page.getByRole('heading', { level: 1 }).click();
       await page.screenshot({
         animations: 'disabled',
-        path: `docs/changes/109-ui-ux-optimization/evidence/review-2026-10-08/theme-tiles-${width}-${language}-system.png`,
+        path: `docs/changes/109-ui-ux-optimization/evidence/semantic-final/theme-tiles-${width}-${language}-system.png`,
       });
       await context.close();
-    }
+    });
   }
-});
+}
 
 test('Choice tiles authority retains disabled state and keyboard focus on the card', async ({
   page,
@@ -216,18 +226,18 @@ test('Switch thumb endpoint inset matches vertical inset in row, card and disabl
       await page.getByRole('heading', { level: 1 }).click();
       await page.screenshot({
         animations: 'disabled',
-        path: `docs/changes/109-ui-ux-optimization/evidence/review-2026-10-08/switch-geometry-${width}-${colorScheme}.png`,
+        path: `docs/changes/109-ui-ux-optimization/evidence/semantic-final/switch-geometry-${width}-${colorScheme}.png`,
       });
     }
   }
 });
 
-test('Switch row hover surface encloses text and control with clickable horizontal inset', async ({
-  page,
-}) => {
-  for (const width of [1440, 390, 320]) {
-    await page.setViewportSize({ width, height: 900 });
-    for (const density of ['紧凑', '标准', '宽松']) {
+for (const width of [1440, 390, 320]) {
+  for (const density of ['紧凑', '标准', '宽松']) {
+    test(`Switch row hover encloses text and control with clickable inset: ${width}, ${density}`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height: 900 });
       await page.goto('/settings');
       await page
         .getByRole('radiogroup', { name: '界面密度', exact: true })
@@ -257,11 +267,11 @@ test('Switch row hover surface encloses text and control with clickable horizont
       await row.hover();
       await page.screenshot({
         animations: 'disabled',
-        path: `docs/changes/109-ui-ux-optimization/evidence/review-2026-10-08/switch-row-hover-${width}-${density}.png`,
+        path: `docs/changes/109-ui-ux-optimization/evidence/semantic-final/switch-row-hover-${width}-${density}.png`,
       });
-    }
+    });
   }
-});
+}
 
 test('Sticky consumers resolve actual chrome height across live tabs and viewport changes', async ({
   page,
@@ -310,7 +320,7 @@ test('Sticky consumers resolve actual chrome height across live tabs and viewpor
         width,
       );
       await page.screenshot({
-        path: `docs/changes/109-ui-ux-optimization/evidence/review-2026-10-08/layout-${width}-${state}.png`,
+        path: `docs/changes/109-ui-ux-optimization/evidence/semantic-final/layout-${width}-${state}.png`,
       });
       await page.evaluate(() => window.scrollTo(0, 0));
     }
@@ -360,7 +370,7 @@ test('Short desktop window retains access to the last settings category', async 
   await expect(page.getByRole('heading', { name: '快捷键', level: 2, exact: true })).toBeVisible();
   await page.screenshot({
     animations: 'disabled',
-    path: 'docs/changes/109-ui-ux-optimization/evidence/review-2026-10-08/layout-short-desktop.png',
+    path: 'docs/changes/109-ui-ux-optimization/evidence/semantic-final/layout-short-desktop.png',
   });
 });
 
@@ -384,25 +394,25 @@ test('Settings switches share one pointer and keyboard press boundary', async ({
 test('Radio indicator and card edge select the same option and arrows retain selection', async ({
   page,
 }) => {
-  await page.goto('/settings');
-  const group = page.getByRole('radiogroup', { name: '界面密度', exact: true });
-  const compact = group.getByRole('radio', { name: '紧凑', exact: true });
+  await page.goto('/ui-elements/forms#element-radiogroupfield');
+  const group = page.getByRole('radiogroup', { name: '反馈密度', exact: true });
+  const compact = group.getByRole('radio', { name: '仅观察', exact: true });
   const compactLabel = group
     .locator('label')
-    .filter({ has: page.getByRole('radio', { name: '紧凑', exact: true }) });
+    .filter({ has: page.getByRole('radio', { name: '仅观察', exact: true }) });
   await compactLabel.locator('[data-slot="radio-control"]').click();
   await expect(compact).toBeChecked();
-  const comfortable = group.getByRole('radio', { name: '宽松', exact: true });
+  const comfortable = group.getByRole('radio', { name: '引导执行', exact: true });
   const card = group
     .locator('label')
-    .filter({ has: page.getByRole('radio', { name: '宽松', exact: true }) });
+    .filter({ has: page.getByRole('radio', { name: '引导执行', exact: true }) });
   const size = await card.boundingBox();
   expect(size).not.toBeNull();
   await card.click({ position: { x: (size?.width ?? 30) - 5, y: 5 } });
   await expect(comfortable).toBeChecked();
   await comfortable.focus();
   await page.keyboard.press('ArrowLeft');
-  await expect(group.getByRole('radio', { name: '标准', exact: true })).toBeChecked();
+  await expect(compact).toBeChecked();
 });
 
 test('Checkbox indicator works in the shared form authority and disabled option stays disabled', async ({
@@ -450,7 +460,7 @@ for (const width of [320, 390, 430, 768, 1024, 1279]) {
       width,
     );
     await page.screenshot({
-      path: `docs/changes/109-ui-ux-optimization/evidence/review-2026-10-08/settings-${width}.png`,
+      path: `docs/changes/109-ui-ux-optimization/evidence/semantic-final/settings-${width}.png`,
     });
   });
 }
@@ -459,11 +469,14 @@ test('Pinned page tabs track the header; unpinned tabs scroll and persist after 
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
+  await setup(page);
   await page.goto('/settings/navigation');
-  await page.getByText('顶部页面标签', { exact: true }).first().click();
+  await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
+  await expect(page.getByRole('switch', { name: '顶部页面标签', exact: true })).toBeChecked();
   const pinned = page.getByRole('switch', { name: '固定页面标签', exact: true });
   await expect(pinned).toBeChecked();
   const tabs = page.getByRole('navigation', { name: '页面标签' });
+  await expect(tabs).toBeVisible();
   await page.evaluate(() => window.scrollTo(0, 700));
   const pinnedBounds = await tabs.boundingBox();
   expect(pinnedBounds?.y).toBe(80);
@@ -526,7 +539,7 @@ test('Settings drawer and form authority retain WCAG AA semantics in dark Englis
       .violations,
   ).toEqual([]);
   await page.screenshot({
-    path: 'docs/changes/109-ui-ux-optimization/evidence/review-2026-10-08/settings-dark-en.png',
+    path: 'docs/changes/109-ui-ux-optimization/evidence/semantic-final/settings-dark-en.png',
   });
 });
 

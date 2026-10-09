@@ -253,7 +253,8 @@
   }
 
   @media (width < 64rem) {
-    .surface-shell-grid {
+    .surface-shell-grid,
+    .surface-shell-grid[data-sidebar='collapsed'] {
       grid-template-columns: minmax(0, 1fr);
     }
   }

@@ -56,3 +56,18 @@ Checkbox选中颜色在Adapter局部映射到项目语义Token。
 均为截图；18项设置专项通过，包含三宽度×三密度hover与留白点击。源码治理、类型、lint、
 构建和原预算通过。完整命令仍exit 1，原基线未更新。
 见[本次最终日志](evidence/hover-spacing-check.txt)与[本次视觉对照](evidence/review-2026-10-08/hover-visual-differences/index.html)。
+
+## 2026-10-09 设置语义任务续审
+
+承接已提交的主题卡片、inline/previews与设置预览。完整审查67字段，按任务重组长分类，
+补齐39个搜索入口，并修复紧凑侧栏手机双列与深色Dialog固定白字两项公共问题。
+复用现有Page、Section、Radio、Select、Switch、Motion与Feedback，不新增公共组件或
+独立样式体系。具体方案见[设计审查](design/settings-semantic-review.md)和108报告§19；
+最终完整检查、专项及视觉复核见[验证记录](evidence/semantic-final-verification.md)。
+320英文大字号人工复核进一步修复主题卡逐字换行和分类入口截断；tiles容器响应式
+同时用于设置与UI Elements。当前八分类见[实际画面](evidence/semantic-final/index.html)。
+
+完整产品检查374单元及生产构建/原预算通过；272浏览器254通过/18失败，其中14项为27个
+截图差异，四项旧测试问题修复后整个设置UX套件34项通过。新增产品审查25项和语义七项
+在完整运行中通过。实际状态、复测与[视觉对照](evidence/semantic-final/visual-differences/index.html)
+独立记录；未修改原基线或阈值，人工视觉确认仍是剩余验收项。

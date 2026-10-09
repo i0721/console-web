@@ -12,7 +12,9 @@ for (const width of [1440, 320]) {
     try {
       const page = await context.newPage();
       await page.goto('/ui-elements/forms');
-      await page.getByRole('switch', { name: '扩展文本', exact: true }).first().check();
+      const longText = page.getByRole('switch', { name: '扩展文本', exact: true }).first();
+      await longText.press('Space');
+      await expect(longText).toBeChecked();
       const group = page.getByRole('radiogroup', { name: '比较预览', exact: true });
       const cards = await group.locator('label').evaluateAll((elements) =>
         elements.map((element) => {
@@ -51,7 +53,12 @@ test('System contrast responds independently of the assistive-settings toggle', 
   try {
     const page = await context.newPage();
     await page.goto('/settings/accessibility');
-    await page.getByRole('switch', { name: '跟随操作系统辅助功能设置', exact: true }).uncheck();
+    const followSystem = page.getByRole('switch', {
+      name: '跟随操作系统辅助功能设置',
+      exact: true,
+    });
+    await followSystem.press('Space');
+    await expect(followSystem).not.toBeChecked();
     await page.goto('/settings');
     await expect(page.locator('html')).toHaveAttribute('data-system-contrast', 'more');
     const group = page.getByRole('radiogroup', { name: '高对比度', exact: true });
@@ -101,7 +108,12 @@ test('Mobile category navigation honors scroll preference after drawer focus res
     if (!title || !header) throw new Error('Missing navigation geometry');
     expect(title.y).toBeGreaterThanOrEqual(header.y + header.height);
     await choose('导航');
-    await page.getByRole('switch', { name: '跳转后自动滚动到顶部', exact: true }).uncheck();
+    const scrollPreference = page.getByRole('switch', {
+      name: '跳转后自动滚动到顶部',
+      exact: true,
+    });
+    await scrollPreference.press('Space');
+    await expect(scrollPreference).not.toBeChecked();
     await page.getByRole('button', { name: '恢复全部默认', exact: true }).press('End');
     expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
     await choose('外观');
@@ -124,7 +136,9 @@ for (const width of [1440, 390, 320]) {
     try {
       const page = await context.newPage();
       await page.goto('/settings');
+      await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
       const accent = page.getByRole('radiogroup', { name: '强调色', exact: true });
+      await expect(accent.locator('[data-accent-preview]')).toHaveCount(4);
       const swatches = await accent
         .locator('[data-accent-preview]')
         .evaluateAll((elements) =>
