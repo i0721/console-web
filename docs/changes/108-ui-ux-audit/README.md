@@ -725,6 +725,11 @@ R19-05（P2）：人工查看320英文大字号截图进一步确认主题三列
 
 ## 20. 2026-10-09 Motion 与渐进信息呈现专项
 
+最终完整检查382单元/生产构建/原预算通过；297浏览器282通过、15失败。
+14项对应27个旧视觉差异，SET-012旧整页动画断言按语义区段修正后，完整设置路由与
+新增动效24项独立复测全部通过。原基线未更新，完整命令仍exit 1，详见
+[最终验证](../109-ui-ux-optimization/evidence/motion-final-verification.md)。
+
 实际浏览全部八设置分类、九 UI Family、五 Pattern、七 Archetype，以及总览、参考资源、
 状态、基座、图标与 Motion 页面。当前已存在 Route region、Viewport Reveal、Content
 Swap、Disclosure、Feedback、Async readiness 与系统策略，不能简单判定为整页动画系统。

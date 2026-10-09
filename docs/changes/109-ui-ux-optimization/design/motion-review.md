@@ -8,18 +8,18 @@
 浏览器在独立 IAB 标签体验，保留用户已打开的视觉差异审阅页。默认视口
 1280 × 720，真实 DOM 高度与区段结构如下；此表记录改造前状态。
 
-| 页面                                                        |              文档高度 px | 结论与策略                                                                       |
-| ----------------------------------------------------------- | -----------------------: | -------------------------------------------------------------------------------- |
-| 总览                                                        |                     1509 | 指标及工作入口立即显示；进度已有 Reveal，后续质量/活动分组应沿用同一语义         |
-| 参考资源                                                    |                      782 | 集合与筛选直接显示，不增加行级入场                                               |
-| Archetypes overview/detail/master-detail/settings/operation |      720/720/720/734/806 | 简短操作结构保留；主从详情替换可复用 Content Swap                                |
-| Archetypes resource-list/create-edit                        |                2245/1106 | 表格滚动与表单输入效率优先，保留直接显示和局部反馈                               |
-| Patterns layout/collections/forms/detail/states             |      720/720/720/720/788 | 不强加滚动呈现；Bulk、State、Form、Disclosure 保留现役实现                       |
-| UI actions/feedback/status/identity                         |      1319/1652/1912/1586 | 功能状态比较保留同屏，不为每个测试控件添加动画                                   |
-| UI navigation/data/surfaces/forms/overlays                  | 3204/1304/1863/2977/1625 | navigation 的内容 Section 高 2446；目录锚点与可操作示例优先直接可用              |
-| states/foundations/icons                                    |            1038/1256/720 | foundations 已有 below-fold Reveal；states readiness 与 icons 搜索不添加滚动等待 |
-| 设置 appearance/navigation/data/actions                     |      1997/1530/1546/2179 | 分组明确，但嵌套 Page 被父选择器整体动画；修复命中粒度                           |
-| 设置 locale/notifications/accessibility/shortcuts           |        1366/1055/918/758 | 保留分类壳；短分类不额外拆动画，长分类只按语义分组                               |
+| 页面                                                        |              文档高度 px | 结论与策略                                                                           |
+| ----------------------------------------------------------- | -----------------------: | ------------------------------------------------------------------------------------ |
+| 总览                                                        |                     1509 | 指标及工作入口立即显示；进度已有 Reveal，后续质量/活动分组应沿用同一语义             |
+| 参考资源                                                    |                      782 | 集合与筛选直接显示，不增加行级入场                                                   |
+| Archetypes overview/detail/master-detail/settings/operation |      720/720/720/734/806 | 简短操作结构保留；主从详情替换可复用 Content Swap                                    |
+| Archetypes resource-list/create-edit                        |                2245/1106 | 表格滚动与表单输入效率优先，保留直接显示和局部反馈                                   |
+| Patterns layout/collections/forms/detail/states             |      720/720/720/720/788 | 不强加滚动呈现；Bulk、State、Form、Disclosure 保留现役实现                           |
+| UI actions/feedback/status/identity                         |      1319/1652/1912/1586 | 功能状态比较保留同屏，不为每个测试控件添加动画                                       |
+| UI navigation/data/surfaces/forms/overlays                  | 3204/1304/1863/2977/1625 | navigation 的内容 Section 高 2446；目录锚点与可操作示例优先直接可用                  |
+| states/foundations/icons                                    |            1038/1256/720 | foundations 已有 below-fold Reveal；states readiness 与 icons 词汇列表不添加滚动等待 |
+| 设置 appearance/navigation/data/actions                     |      1997/1530/1546/2179 | 分组明确，但嵌套 Page 被父选择器整体动画；修复命中粒度                               |
+| 设置 locale/notifications/accessibility/shortcuts           |        1366/1055/918/758 | 保留分类壳；短分类不额外拆动画，长分类只按语义分组                                   |
 
 实际 `/motion` 向下滚动后，Reveal 从 pending 变为 revealed，opacity 从 0
 变为 1。源码确认 Provider 使用单例 Observer，结束后 unobserve；CSS pending
@@ -99,7 +99,10 @@ Surface；这不是 Reveal 隐藏，也不能宣称整应用支持无 JS 操作�
 模拟不替代真实低端手机、软键盘或屏幕阅读器。性能证据检查单例、无额外滚动高度、
 无横向溢出、transform-only、无逐帧测量以及原产物预算，不声称获得真实设备帧率。
 
-最终源码已冻结，完整 `pnpm check` 正在运行；运行结束前不将专项成绩称为全量通过。
+完整 `pnpm check` 已结束：382单元、生产构建与原预算通过；297浏览器282通过、
+15失败。14项对应27个旧视觉差异，另一个旧 SET-012 检查整容器动画，与本轮
+region 契约冲突；已修正为直接语义区段进入、内层 Page 不动画、Shell 静止的断言。
+完整日志与测试修正后的独立回归分别保留，不将专项成绩称为全量通过。
 视觉基线保持人工审阅门禁。
 
 补强后的证据：motion-unit-final.txt 10 项通过（含正确 Provider 下的服务端输出）；

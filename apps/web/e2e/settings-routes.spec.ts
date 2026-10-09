@@ -152,7 +152,7 @@ test('分类切换复用主 Shell route-enter 动效：内容区段淡入、壳�
   expect(await page.evaluate(() => Boolean(document.querySelector('[data-route-content]')))).toBe(
     true,
   );
-  // 切到另一分类：动画采样期内容区段应命中 route-enter recipe（content-fade-in），
+  // 切到另一分类：动画采样期直接语义区段应命中 route-enter recipe，
   // 壳（PageHeader）opacity 恒 1（不参与 route-enter、不闪）。
   let sawFade = false;
   const shellOpacities: number[] = [];
@@ -162,14 +162,17 @@ test('分类切换复用主 Shell route-enter 动效：内容区段淡入、壳�
   for (let i = 0; i < 40; i++) {
     const sample = await page.evaluate(() => {
       const content = document.querySelector('[data-route-content]');
-      const first = content?.firstElementChild;
+      const stack = content?.querySelector(':scope > .surface-page-stack');
+      const first = stack?.querySelector(':scope > .surface-route-region');
       const header = document.querySelector('.surface-route-region');
       return {
         anim: first ? getComputedStyle(first).animationName : '',
+        stackAnim: stack ? getComputedStyle(stack).animationName : '',
         op: header ? parseFloat(getComputedStyle(header).opacity) : -1,
       };
     });
-    if (sample.anim.includes('content-fade-in')) sawFade = true;
+    if (sample.anim.includes('surface-enter-forward')) sawFade = true;
+    expect(sample.stackAnim).toBe('none');
     shellOpacities.push(sample.op);
     await page.waitForTimeout(16);
   }

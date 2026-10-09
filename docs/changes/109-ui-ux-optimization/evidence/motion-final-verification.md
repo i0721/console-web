@@ -34,9 +34,17 @@ motion-check-unit-attempt.txt。所有失败保持记录，不降低门禁、Axe
 
 ## 完整运行
 
-`motion-check-final.txt` 是最终完整 `pnpm check`，当前执行中。
+`motion-check-final.txt` 是完整 `pnpm check`，已执行结束，exit 1。
 前置治理/架构/依赖/生成物/Lint/类型、382单元、生产构建和原性能预算已经通过。
-297项浏览器回归结果尚待收齐，不将专项成绩叠加为完整通过。
+297项浏览器回归：282通过、15失败，耗时26.5分钟。14个失败用例仅为原有27项
+截图断言差异，与动效前的视觉待确认范围一致；另一个 SET-012 仍读取内层 Page
+的整容器动画，与新的 region 契约冲突。已改为检查直接语义区段 forward recipe，
+并新增内层 Page animation=none 断言，保留 Shell opacity 恒定的检查。
+生产代码在此完整运行后未改动；测试修正后的独立回归记录于
+`motion-final-regression.txt`，不改写完整命令的失败历史。
+该独立回归24项全部通过（1.3分钟）：完整 settings-routes 12项和新增动效12项，
+包含修正后的 SET-012。因此行为失败已解决，尚待人工确认的为14个用例的27组视觉差异；
+没有把这一复测改写为重新执行的全量297项通过。
 
 gzip：initial=371626B，最大路由resource-list=434107B，union=903851B，CSS=47687B。
 相比动效前，initial增加292B，CSS增加7B；沿用原预算，没有改变性能门禁。
@@ -51,3 +59,15 @@ gzip：initial=371626B，最大路由resource-list=434107B，union=903851B，CSS
 
 原视觉基线与阈值未修改；任何最终失败必须区分行为、Axe、构建/预算与视觉。旧视觉
 差异仍按AGENTS.md §10“视觉基线只能在人工确认变化合理后更新”处理，不能自动批准。
+
+本次完整运行的27组 expected/actual/diff 在后续测试前已独立归档，见
+[最终视觉对照](motion-final/visual-differences/index.html)。该对照来自本次运行，
+不复用设置专项的旧实际截图。格式与文档尾部检查单独执行，因为浏览器失败使
+`pnpm check` 短路，结果见 `motion-format-final.txt`、`motion-docs-final.txt`。
+两项尾部检查均通过；SET-012测试文件独立ESLint通过。`git diff --check`通过，
+原Playwright快照目录没有变更。
+
+续轮核验见 `motion-visual-integrity.json`：27个截图名称与上一轮完全一致，81张
+归档图片完整；每个 expected 同时逐字节匹配上一轮对照和当前仓库 golden。
+20张 actual 与上一轮逐字节相同，7张有差异，因此名称范围一致不等于本次画面
+完全未变；人工确认应使用本次对照。当前仍未收到基线更新确认。

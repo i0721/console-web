@@ -82,3 +82,9 @@ evidence/semantic-final-check-current.txt。此结果是以下 Motion 专项实�
 降级、焦点中断与单次滚动呈现；修复设置内层 Page 的 region 命中，并复用既有组件为
 总览后续阅读组和主从详情补充连续性。表格、表单、短操作页面保持直接可用。
 设计清单、边界及取舍见[Motion 审查](design/motion-review.md)和108报告§20。
+
+完整检查382单元、构建和原预算通过；297浏览器282通过/15失败，其中14项是
+27个旧视觉差异，另一项旧整页动画测试已按区段契约修正并独立复测。
+详见[最终验证](evidence/motion-final-verification.md)与
+[本次视觉对照](evidence/motion-final/visual-differences/index.html)。原基线未更新，
+完整检查尚未全绿；人工视觉确认是剩余验收项。
