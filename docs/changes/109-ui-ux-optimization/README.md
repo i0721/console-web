@@ -71,3 +71,14 @@ Checkbox选中颜色在Adapter局部映射到项目语义Token。
 截图差异，四项旧测试问题修复后整个设置UX套件34项通过。新增产品审查25项和语义七项
 在完整运行中通过。实际状态、复测与[视觉对照](evidence/semantic-final/visual-differences/index.html)
 独立记录；未修改原基线或阈值，人工视觉确认仍是剩余验收项。
+
+最终测试源码的完整回归已完成：374 单元、生产构建与原预算通过；285 浏览器中
+271 通过、14 视觉失败，四项旧测试问题均在完整运行中通过，日志为
+evidence/semantic-final-check-current.txt。此结果是以下 Motion 专项实施前的基线状态。
+
+## 2026-10-09 Motion 与信息呈现专项
+
+基于现役 Motion System 实测全项目主要页面，补齐默认可见 Reveal、首屏/恢复/快滚
+降级、焦点中断与单次滚动呈现；修复设置内层 Page 的 region 命中，并复用既有组件为
+总览后续阅读组和主从详情补充连续性。表格、表单、短操作页面保持直接可用。
+设计清单、边界及取舍见[Motion 审查](design/motion-review.md)和108报告§20。

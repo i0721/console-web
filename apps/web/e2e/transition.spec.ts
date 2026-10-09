@@ -135,14 +135,10 @@ test('无 Suspense 页面深入导航播放方向进入并恢复稳定', async (
   expect(record.maxDurationMs).toBeLessThanOrEqual(500);
 
   // 转场结束后内容必须可见且无残留动画（不 opacity:0 卡死）。
-  // 排除 .surface-viewport-reveal：below-fold Section 未滚入时 opacity:0 是 reveal 语义，非卡死。
+  // Reveal 是默认可见增强：未滚入的 below-fold 区域同样不能被隐藏。
   const settled = await page.evaluate(() => {
     const rc = document.querySelector('.surface-route-content');
-    const regions = rc
-      ? [...rc.querySelectorAll(':scope > .surface-page-stack > *')].filter(
-          (r) => !r.classList.contains('surface-viewport-reveal'),
-        )
-      : [];
+    const regions = rc ? [...rc.querySelectorAll(':scope > .surface-page-stack > *')] : [];
     return regions.every((r) => getComputedStyle(r).opacity === '1');
   });
   expect(settled).toBe(true);

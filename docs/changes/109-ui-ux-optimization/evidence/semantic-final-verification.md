@@ -28,8 +28,8 @@
 
 ## 最终结果
 
-恢复目标后补强最终测试源码的完整运行证据：`pnpm check`正在执行，日志为
-semantic-final-check-current.txt。原基线未更新；运行完成前不得引用本次日志为通过证据。
+恢复后的最终源码完整运行已完成：semantic-final-check-current.txt，374 单元通过、
+285 浏览器 271 通过/14 视觉失败；原基线未更新，完整命令 exit 1。
 之前的完整运行及专项结果保留如下，不覆盖历史记录。
 
 - 最终产品代码完整命令：semantic-final-check-readable.txt，`pnpm check` exit 1。
@@ -55,6 +55,11 @@ semantic-final-types.txt（全部workspace），semantic-final-format.txt（全�
 semantic-final-docs.txt（8 authority/15 changes）均exit 0。最终Lint同样exit 0，见semantic-final-lint.txt。
 
 ## 视觉与证据边界
+
+2026-10-09 恢复后的最终源码全量结果已收齐（semantic-final-check-current.txt）：
+374 单元通过，全部源码前置门禁、生产构建与原预算通过；285 浏览器中 271 通过、
+14 失败，27 个断言均为旧视觉基线差异。此前四项行为/测试问题在此完整运行中通过，
+不再依赖拼接专项成绩。完整命令 exit 1，未更新视觉基线；该结果属于动效专项实施前。
 
 semantic-final/包含八分类1440浅色与320深色英文大字号、Dialog四色明暗、紧凑侧栏
 手机画面。它们是当前实际结果，尚不是批准后的自动视觉基线。浏览器模拟覆盖触摸、

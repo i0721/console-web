@@ -14,15 +14,15 @@ Semantic Component 绑定真实生命周期，决定为什么动、何时动
 
 ## 2. 生命周期与所有权
 
-| 生命周期                 | 当前组件                     | 所有权                                | 规则                                                                                                         |
-| ------------------------ | ---------------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| Router / Suspense        | Host `RouteTransition`       | `apps/web/src/host`                   | `nav-forward` 使用 Surface screen recipe；无导航类型使用克制的 `content.enter`；hydration 不重复播放页面滑动 |
-| 数据 readiness           | `AsyncRegion`、`StateRegion` | Universal / Product Surface           | initial 才替换 Skeleton；refresh 保留旧内容；background 静默                                                 |
-| 首次进入视口             | Host `ViewportReveal`        | Host 生命周期 + Surface reveal recipe | 仅显式 below-fold Region，单例 Observer，reveal-once                                                         |
-| 同路由内容切换           | `ContentSwapTransition`      | UI Adapter                            | 使用稳定 `contentKey`；`TabsView` 默认接入；筛选刷新不使用它                                                 |
-| Inline Feedback Presence | `FeedbackPresence`           | UI Adapter                            | exit 期间立即退出辅助技术与交互树；支持快速反转；Toast 不接入                                                |
-| 非 Avatar 图片 readiness | `ReadyImage`                 | UI Adapter                            | width/height 预留空间，load + decode 后 crossfade，error 保持尺寸                                            |
-| Overlay                  | HeroUI compound lifecycle    | UI Adapter                            | 禁止再套 Presence 或页面动画容器                                                                             |
+| 生命周期                 | 当前组件                     | 所有权                                        | 规则                                                                                                         |
+| ------------------------ | ---------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Router / Suspense        | Host `RouteTransition`       | `apps/web/src/host`                           | `nav-forward` 使用 Surface screen recipe；无导航类型使用克制的 `content.enter`；hydration 不重复播放页面滑动 |
+| 数据 readiness           | `AsyncRegion`、`StateRegion` | Universal / Product Surface                   | initial 才替换 Skeleton；refresh 保留旧内容；background 静默                                                 |
+| 首次进入视口             | `ViewportReveal`             | 已登记浏览器适配 + Host 装配 + Surface recipe | 仅显式 below-fold Region，单例 Observer，默认可见，reveal-once                                               |
+| 同路由内容切换           | `ContentSwapTransition`      | UI Adapter                                    | 使用稳定 `contentKey`；`TabsView` 默认接入；筛选刷新不使用它                                                 |
+| Inline Feedback Presence | `FeedbackPresence`           | UI Adapter                                    | exit 期间立即退出辅助技术与交互树；支持快速反转；Toast 不接入                                                |
+| 非 Avatar 图片 readiness | `ReadyImage`                 | UI Adapter                                    | width/height 预留空间，load + decode 后 crossfade，error 保持尺寸                                            |
+| Overlay                  | HeroUI compound lifecycle    | UI Adapter                                    | 禁止再套 Presence 或页面动画容器                                                                             |
 
 冷启动与路由挂起统一使用 `PageLoadingSurface`。根 `loading.tsx` 与各路由 Suspense 都必须提供 `page/catalog/collection/form` 结构化 Skeleton；禁止 `fallback={null}` 和居中卡片整屏替换 Shell。
 
@@ -41,7 +41,7 @@ Universal recipe 的单一登记文件是 `packages/design-system/src/motion.css
 | ------------------- | ------------------------------------ | ---------------------------------------- |
 | `content.enter`     | Route fallback、Async 无内容→有内容  | 全局 Policy 缩短并取消非必要位移         |
 | `content.swap`      | `ContentSwapTransition` / `TabsView` | `swap` 分类关闭时禁用                    |
-| `viewport.reveal`   | Host `ViewportReveal`                | reduced、off、不支持 Observer 时直接显示 |
+| `viewport.reveal`   | `ViewportReveal`                     | reduced、off、不支持 Observer 时直接显示 |
 | `feedback.presence` | `FeedbackPresence`                   | `feedback` 分类关闭时禁用                |
 | `media.ready`       | `ReadyImage`                         | `media` 分类关闭时直接显示               |
 
@@ -52,6 +52,10 @@ Surface `screen.enter/exit`、Shell 锚定、Route content、Viewport 与 State 
 外层壳，使 Settings 标题/导航保持稳定，分类区段只进入一次。普通 Page 仍由 Host
 自动提供进入体验，不需要页面声明动画类型或绕过 Page。109 回归证明修复的是重复
 进入范围，Duration/Easing Token 保持原值。
+
+持久布局内容包含内层 `Page` 时，route recipe 命中该 Page 的直接语义区段，
+不对 Page wrapper 与子区段双重动画。ViewportReveal 不参加 route 错峰，避免同一
+区域同时由路由和滚动生命周期控制。
 
 ### Schema-Controlled 生成（Design System 单一 Schema）
 
@@ -91,17 +95,30 @@ Design System Token 与 Motion Language facts 的唯一 Source 是
 
 `MotionPolicyProvider` 是 `matchMedia`、system preference、development override 与 DOM policy attribute 的唯一入口：
 
-- production 固定 `System`，不渲染 Inspector，不读取或写入调试偏好。
+- production 的调试策略固定 `System`，不渲染 Inspector，不读取或写入调试偏好。
 - development 提供 `System/Full/Reduced/Off`，`Screen/Async/Reveal/Swap/Feedback/Media` 分类开关，以及 `1×/2×/4×` 慢速。
 - 调试状态只存 `sessionStorage`；Feature props、业务 Store 与持久配置不得感知它。
-- `Full` 只用于开发检查；用户生产环境的 reduced-motion 始终由系统策略统一解析。
+- Inspector 的 `Full` 只用于开发检查；正式外观偏好仍按既有 `system/standard/reduced`
+  契约参与解析。`system` 跟随 OS，显式 `reduced` 不能被 Inspector 覆盖，显式
+  `standard` 使用标准动效。页面不另建 matchMedia 判断。
 
-页面和 Feature 禁止调用 `matchMedia`、创建 `IntersectionObserver`、写入 `data-motion-*` 或手工调用 `startViewTransition`。React `<ViewTransition>` 只协调 Router、Suspense 和稳定 `contentKey` 生命周期。
+页面和 Feature 禁止调用 `matchMedia`、创建 `IntersectionObserver`、写入 `data-motion-*` 或手工调用 `startViewTransition`。当前稳定 React 不使用实验性 `<ViewTransition>`；Host 路由与稳定 `contentKey` 分别绑定现役 CSS recipe。
+
+`packages/surface-foundation/src/viewport-reveal.tsx` 是 boundary-policy 已明确登记的
+浏览器适配位置，由 Web Host 装配 Provider。这不是允许其它 Surface/Feature 使用
+Browser API 的一般豁免。新增平台生命周期仍优先在 Host 或明确 Adapter 承载。
 
 ## 6. 组合规则
 
 - Screen Transition 只表达已经进入另一个 Screen，不等待全部数据后整页 reveal。
 - Above-fold Shell/Region 立即稳定；below-fold 只有显式 Region 使用 `ViewportReveal`。
+- Reveal 内容在 SSR、pending、Observer 不支持/失败/无回调时始终可见。Observer
+  只提供增强：首次回调已在视口或已越过的区域直接完成，从视口外进入才播放一次。
+  使用 viewport root、零边界 margin 与零比例阈值；不设 scroll listener 或每帧测量。
+- Reveal 使用现役位移 Token 的短 rise，保持 opacity 为 1，无错峰等待队列；焦点
+  进入取消位移。区域超高、快速滚动、反向浏览和锚点定位均不影响内容可用性。
+- Card 只有本身是独立阅读单元时才作为 Reveal 粒度；相关 Card 优先整体 Section。
+  表格行、表单字段、短设置分类、目录控件不以动画覆盖率为由强制 Reveal。
 - Async Region 各自 progressive ready；不得 Wait-all → Reveal-all。
 - `refreshing → ready`、`background → ready` 保留同一内容实例，不重播整块进场。
 - `TabsView` 的键盘、Selection 和 Focus 仍由 HeroUI 主持，Content Swap 只主持面板视觉切换。
@@ -125,3 +142,16 @@ Design System Token 与 Motion Language facts 的唯一 Source 是
 - Feature 写入 `data-motion-*`。
 
 新增动效先识别生命周期并复用上表现役组件。没有现役语义时，先证明真实用例、所有权、中断语义和验证方式；不得以 fade、slide、scale 等实现名称扩展业务 Contract。
+
+## 9. 选择决策树
+
+1. 路由改变 → Host RouteTransition；不包整页 Reveal。
+2. 数据首次就绪/刷新/后台更新 → AsyncRegion 或 StateRegion；刷新保留旧内容。
+3. 真正 below-fold 的独立阅读分组 → ViewportReveal；首屏与高频操作直接显示。
+4. 同一路由替换一个内容域 → ContentSwapTransition，稳定 contentKey；TabsView 已集成。
+5. 展开折叠 → Disclosure；浮层 → Adapter/HeroUI Overlay，禁止第二层 Presence。
+6. 流内反馈挂载/退出 → FeedbackPresence；Toast 仍由现有 FeedbackController 管理。
+7. 控件 Hover/Press/Focus → 控件本身；不以路由或 Reveal 表达操作状态。
+
+判定没有明确生命周期或可用性收益时直接显示，不新建动画抽象。已选用途只能消费
+对应 Recipe 与 Motion Policy；页面不自行指定实现名称、时长或缓动。

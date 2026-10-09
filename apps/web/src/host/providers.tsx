@@ -14,7 +14,7 @@ import { WorkspaceProvider } from '@community-go/plugin-framework/workspace';
 import { WorkbenchProvider } from '@community-go/plugin-framework/workbench';
 import { rehydrateStore } from '@community-go/state-foundation';
 import { ViewportRevealProvider } from '@community-go/surface-foundation/viewport-reveal';
-import { useEffect, useMemo, useSyncExternalStore, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useSyncExternalStore, type ReactNode } from 'react';
 
 import { appI18n } from '../i18n/i18n';
 import { TOAST_DURATION_MS } from '@community-go/surface/preferences-model';
@@ -32,6 +32,7 @@ import { createHostNotificationsPort } from './notifications-port';
 import { createHostPreferencesPort } from './preferences-port';
 import { createHostWorkbenchPort } from './workbench-port';
 import { createHostWorkspacePort } from './workspace-port';
+import { focusRouteAnchor } from './anchor-focus';
 
 const darkSchemeQuery = '(prefers-color-scheme: dark)';
 
@@ -51,6 +52,15 @@ function RuntimeProviders({ children }: Readonly<{ children: ReactNode }>) {
   const hasHydrated = useShellStore((state) => state.hasHydrated);
   const workspaceHasHydrated = useWorkspaceStore((state) => state.hasHydrated);
   const hydrationIssue = useShellStore((state) => state.hydrationIssue);
+  const initialAnchorHandled = useRef(false);
+
+  useEffect(() => {
+    if (!hasHydrated || !workspaceHasHydrated || initialAnchorHandled.current) return;
+    initialAnchorHandled.current = true;
+    // 冷启动的 DOM 在 hydration 后才出现；复用导航 Port 的同源定位/焦点机制。
+    // 仅初始 hash，不重置无锚点页面，也不接管后退或之后的分类导航。
+    if (location.hash) focusRouteAnchor(location.href);
+  }, [hasHydrated, workspaceHasHydrated]);
 
   const systemDark = useSyncExternalStore(subscribeSystemDark, readSystemDark, () => false);
   const themeMode = preferences.appearance.themeMode;

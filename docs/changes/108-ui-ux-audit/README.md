@@ -722,3 +722,24 @@ R19-05（P2）：人工查看320英文大字号截图进一步确认主题三列
 
 最终状态见[本轮验证](../109-ui-ux-optimization/evidence/semantic-final-verification.md)。历史
 成绩不替代本轮结果，原视觉基线不自动批准；构建、预算、行为、Axe与视觉验收分别记录。
+
+## 20. 2026-10-09 Motion 与渐进信息呈现专项
+
+实际浏览全部八设置分类、九 UI Family、五 Pattern、七 Archetype，以及总览、参考资源、
+状态、基座、图标与 Motion 页面。当前已存在 Route region、Viewport Reveal、Content
+Swap、Disclosure、Feedback、Async readiness 与系统策略，不能简单判定为整页动画系统。
+
+新增 M20-01 pending 隐藏的可用性风险、M20-02 长区域比例阈值与快滚等待、M20-03
+设置嵌套 Page 导致 region 合并、M20-04 总览后续阅读分组缺滚动节奏、M20-05 首屏与
+滚动恢复重播、M20-06 authority 与稳定 React/浏览器边界实现叙述不一致。详情切换实测
+也缺少局部连续性提示，优先复用现役 ContentSwapTransition。
+
+完整页面清单、实测高度、取舍、组件复用和待验矩阵见
+[Motion 专项设计](../109-ui-ux-optimization/design/motion-review.md)。表格行、表单字段、
+短 Pattern 和操作示例保持直接可用；不以全局动画覆盖率作为验收指标。实施与验证结果
+由该记录后续补齐，审查结论本身不代表代码已经通过。
+
+补充 M20-07（P1）：浏览器实际刷新书签字段链接停在页面顶部，偏好 hydration 后未
+执行初始定位。Host 已复用站内搜索同源的 focusRouteAnchor，ready 后定位/聚焦初始
+hash；无 hash 与后续导航保持原策略，损坏编码不阻断 hydration。Reveal 焦点进入即
+取消位移；18 项专项及10项安全性单元通过，最终全量结果仍独立记录。

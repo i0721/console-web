@@ -14,6 +14,7 @@ import { SwitchField, TextField } from '@community-go/ui-adapter/form-field';
 import { Panel } from '@community-go/ui-adapter/panel';
 import { TextLink } from '@community-go/ui-adapter/navigation';
 import { StateSurface } from '@community-go/ui-adapter/state-surface';
+import { ContentSwapTransition } from '@community-go/ui-adapter/content-swap-transition';
 import { Clock3, FileText } from 'lucide-react';
 export type PageArchetypeKind = 'overview' | 'detail' | 'settings' | 'master-detail' | 'operation';
 export function PageArchetypeShowcase({ kind }: Readonly<{ kind: PageArchetypeKind }>) {
@@ -177,7 +178,11 @@ export function PageArchetypeShowcase({ kind }: Readonly<{ kind: PageArchetypeKi
               }
             />
           }
-          detail={<EntitySummary title={text(selected)} description={text(`detail.${selected}`)} />}
+          detail={
+            <ContentSwapTransition contentKey={selected}>
+              <EntitySummary title={text(selected)} description={text(`detail.${selected}`)} />
+            </ContentSwapTransition>
+          }
         />
       ) : (
         <>

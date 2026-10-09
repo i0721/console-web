@@ -146,14 +146,16 @@
         "./periodic-refresh",
         "./use-periodic-refresh"
       ],
-      "authorityRoutes": ["/page-patterns", "/page-archetypes"],
+      "authorityRoutes": ["/page-patterns", "/page-archetypes", "/motion"],
       "evidence": [
         "packages/surface-foundation/src/contracts.test.tsx",
         "apps/web/e2e/settings-ux-review.spec.ts",
         "apps/web/e2e/settings-product-review.spec.ts",
         "apps/web/e2e/design-contract.spec.ts",
         "apps/web/e2e/ui-ux-109.spec.ts",
-        "docs/changes/109-ui-ux-optimization/README.md"
+        "docs/changes/109-ui-ux-optimization/README.md",
+        "apps/web/src/test/motion-reveal.test.tsx",
+        "apps/web/e2e/motion-progressive.spec.ts"
       ]
     },
     "@community-go/plugin-framework": {

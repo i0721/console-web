@@ -6,7 +6,13 @@ export function focusRouteAnchor(href: string, resetScroll = false): void {
   cancelPending?.();
   cancelPending = undefined;
   if (!target.hash && !resetScroll) return;
-  const id = decodeURIComponent(target.hash.slice(1));
+  let id: string;
+  try {
+    id = decodeURIComponent(target.hash.slice(1));
+  } catch {
+    // 外部书签可能带无效编码；定位失败不能阻断页面 hydration。
+    return;
+  }
   let frame = 0;
   const dispose = () => {
     observer.disconnect();

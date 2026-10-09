@@ -114,15 +114,13 @@
     background: var(--ds-danger);
   }
 
-  .surface-viewport-reveal[data-reveal='pending'] {
-    opacity: 0;
-    transform: translateY(var(--motion-distance-reveal));
+  /* Default-visible enhancement: observer failure/SSR never hides reading or controls. */
+  .surface-viewport-reveal[data-reveal-entry='true'] {
+    animation: content-rise-in var(--motion-duration-feedback) var(--ease-product) both;
   }
 
-  .surface-viewport-reveal[data-reveal='revealed'] {
-    animation:
-      content-fade-in var(--motion-duration-feedback) var(--ease-product) both,
-      content-rise-in var(--motion-duration-feedback) var(--ease-product) both;
+  .surface-viewport-reveal:focus-within {
+    animation: none;
   }
 
   html[data-motion-reveal='off'] .surface-viewport-reveal {
@@ -145,8 +143,8 @@
     > .surface-page-stack:not(:has([data-route-content]))
     > :not(.surface-viewport-reveal),
   .surface-route-content[data-route-enter='true']
-    [data-route-content]
-    > :not(.surface-viewport-reveal) {
+    :is([data-route-content], [data-route-content] > .surface-page-stack)
+    > :not(.surface-viewport-reveal, .surface-page-stack) {
     animation:
       content-fade-in var(--motion-duration-standard) var(--ease-product) both,
       content-rise-in var(--motion-duration-standard) var(--ease-product) both;
@@ -157,8 +155,8 @@
     > .surface-page-stack:not(:has([data-route-content]))
     > :not(.surface-viewport-reveal),
   .surface-route-content[data-route-enter='true'][data-route-kind='forward']
-    [data-route-content]
-    > :not(.surface-viewport-reveal) {
+    :is([data-route-content], [data-route-content] > .surface-page-stack)
+    > :not(.surface-viewport-reveal, .surface-page-stack) {
     animation:
       content-fade-in var(--motion-duration-standard) var(--ease-product) both,
       surface-enter-forward var(--motion-duration-standard) var(--ease-product) both;
@@ -169,8 +167,8 @@
     > .surface-page-stack:not(:has([data-route-content]))
     > :not(.surface-viewport-reveal):nth-child(2),
   .surface-route-content[data-route-enter='true']
-    [data-route-content]
-    > :not(.surface-viewport-reveal):nth-child(2) {
+    :is([data-route-content], [data-route-content] > .surface-page-stack)
+    > :not(.surface-viewport-reveal, .surface-page-stack):nth-child(2) {
     animation-delay: calc(var(--motion-delay-route-content) + var(--motion-duration-fast));
   }
 
@@ -178,8 +176,8 @@
     > .surface-page-stack:not(:has([data-route-content]))
     > :not(.surface-viewport-reveal):nth-child(2),
   .surface-route-content[data-route-enter='true'][data-route-kind='forward']
-    [data-route-content]
-    > :not(.surface-viewport-reveal):nth-child(2) {
+    :is([data-route-content], [data-route-content] > .surface-page-stack)
+    > :not(.surface-viewport-reveal, .surface-page-stack):nth-child(2) {
     animation-delay: calc(var(--motion-delay-route-forward) + var(--motion-duration-fast));
   }
 
@@ -187,8 +185,8 @@
     > .surface-page-stack:not(:has([data-route-content]))
     > :not(.surface-viewport-reveal):nth-child(n + 3),
   .surface-route-content[data-route-enter='true']
-    [data-route-content]
-    > :not(.surface-viewport-reveal):nth-child(n + 3) {
+    :is([data-route-content], [data-route-content] > .surface-page-stack)
+    > :not(.surface-viewport-reveal, .surface-page-stack):nth-child(n + 3) {
     animation-delay: calc(var(--motion-delay-route-content) + var(--motion-duration-standard));
   }
 
@@ -196,8 +194,8 @@
     > .surface-page-stack:not(:has([data-route-content]))
     > :not(.surface-viewport-reveal):nth-child(n + 3),
   .surface-route-content[data-route-enter='true'][data-route-kind='forward']
-    [data-route-content]
-    > :not(.surface-viewport-reveal):nth-child(n + 3) {
+    :is([data-route-content], [data-route-content] > .surface-page-stack)
+    > :not(.surface-viewport-reveal, .surface-page-stack):nth-child(n + 3) {
     animation-delay: calc(var(--motion-delay-route-forward) + var(--motion-duration-standard));
   }
 
@@ -207,8 +205,8 @@
     > :not(.surface-viewport-reveal),
   html[data-motion-screen='off']
     .surface-route-content[data-route-enter='true']
-    [data-route-content]
-    > :not(.surface-viewport-reveal) {
+    :is([data-route-content], [data-route-content] > .surface-page-stack)
+    > :not(.surface-viewport-reveal, .surface-page-stack) {
     animation-duration: 0.01ms;
     animation-delay: 0ms;
   }

@@ -197,52 +197,54 @@ export default function OverviewPage() {
         </Section>
       </ViewportReveal>
 
-      <div className="grid gap-6 xl:grid-cols-2">
-        <Section
-          appearance="outlined"
-          id="overview-quality"
-          title={t('overview.qualityTitle')}
-          description={t('overview.qualityDescription')}
-        >
-          <ul className="space-y-3 p-5">
-            {['imports', 'vendor', 'tokens', 'host'].map((gate) => (
-              <li
-                key={gate}
-                className="flex items-center gap-3 rounded-control bg-surface-muted px-3 py-2.5"
-              >
-                <CheckCircle2 className="size-4 shrink-0 text-success" />
-                <span className="min-w-0 flex-1 text-sm font-medium text-ink">
-                  {t(`overview.gates.${gate}`)}
-                </span>
-                <span className="text-xs font-semibold text-success">
-                  {t('overview.gates.active')}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </Section>
+      <ViewportReveal>
+        <div className="grid gap-6 xl:grid-cols-2">
+          <Section
+            appearance="outlined"
+            id="overview-quality"
+            title={t('overview.qualityTitle')}
+            description={t('overview.qualityDescription')}
+          >
+            <ul className="space-y-3 p-5">
+              {['imports', 'vendor', 'tokens', 'host'].map((gate) => (
+                <li
+                  key={gate}
+                  className="flex items-center gap-3 rounded-control bg-surface-muted px-3 py-2.5"
+                >
+                  <CheckCircle2 className="size-4 shrink-0 text-success" />
+                  <span className="min-w-0 flex-1 text-sm font-medium text-ink">
+                    {t(`overview.gates.${gate}`)}
+                  </span>
+                  <span className="text-xs font-semibold text-success">
+                    {t('overview.gates.active')}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </Section>
 
-        <Section
-          appearance="outlined"
-          id="overview-activity"
-          title={t('overview.activityTitle')}
-          description={t('overview.activityDescription')}
-        >
-          <ol className="space-y-4 p-5">
-            {['tokens', 'host', 'adapter'].map((item, index) => (
-              <li key={item} className="flex gap-3">
-                <span className="mt-1 grid size-5 shrink-0 place-items-center rounded-full bg-brand-soft text-xs font-bold text-brand">
-                  {index + 1}
-                </span>
-                <div className="flex min-w-0 flex-1 items-center justify-between gap-3 border-b border-border pb-4 text-sm font-medium text-ink last:border-0 last:pb-0">
-                  <span>{t(`overview.activity.${item}`)}</span>
-                  <ArrowRight className="size-4 shrink-0 text-ink-muted" />
-                </div>
-              </li>
-            ))}
-          </ol>
-        </Section>
-      </div>
+          <Section
+            appearance="outlined"
+            id="overview-activity"
+            title={t('overview.activityTitle')}
+            description={t('overview.activityDescription')}
+          >
+            <ol className="space-y-4 p-5">
+              {['tokens', 'host', 'adapter'].map((item, index) => (
+                <li key={item} className="flex gap-3">
+                  <span className="mt-1 grid size-5 shrink-0 place-items-center rounded-full bg-brand-soft text-xs font-bold text-brand">
+                    {index + 1}
+                  </span>
+                  <div className="flex min-w-0 flex-1 items-center justify-between gap-3 border-b border-border pb-4 text-sm font-medium text-ink last:border-0 last:pb-0">
+                    <span>{t(`overview.activity.${item}`)}</span>
+                    <ArrowRight className="size-4 shrink-0 text-ink-muted" />
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </Section>
+        </div>
+      </ViewportReveal>
     </Page>
   );
 }
