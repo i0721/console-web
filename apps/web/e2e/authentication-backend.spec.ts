@@ -45,8 +45,14 @@ test('Backend mode uses CSRF/session API for login, restore and logout without M
   await page.reload();
   await page.getByRole('button', { name: '当前用户', exact: true }).click();
   await expect(page.getByRole('menu').getByText('Backend Review', { exact: true })).toBeVisible();
+  const otherTab = await context.newPage();
+  await otherTab.goto('http://127.0.0.1:4174/settings');
+  await expect(otherTab.getByRole('button', { name: '当前用户', exact: true })).toBeVisible();
   await page.getByRole('menuitem', { name: '退出登录', exact: true }).click();
   await expect(page).toHaveURL('http://127.0.0.1:4174/login');
+  await expect(otherTab).toHaveURL(/\/login\?returnTo=/);
+  await expect(otherTab.getByRole('button', { name: '当前用户', exact: true })).toHaveCount(0);
+  await otherTab.close();
   expect(writes.map((write) => write.path)).toEqual(['/api/auth/login', '/api/auth/logout']);
   expect(writes.every((write) => write.csrf === 'contract-csrf')).toBe(true);
   expect(writes[0]?.body).toBe(

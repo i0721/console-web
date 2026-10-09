@@ -18,6 +18,23 @@ const viewports = [
   { width: 390, height: 844 },
 ] as const;
 
+test('Initial detail content stays readable; tab selection alone triggers content swap', async ({
+  page,
+}) => {
+  await page.goto('/page-archetypes/resource-list');
+  const detail = page.locator('.surface-split-detail');
+  const content = detail.locator('[data-motion-recipe="content-swap"]');
+  await expect(content).toHaveAttribute('data-swap-entry', 'false');
+  await expect(content).toHaveCSS('animation-name', 'none');
+  const tabs = detail.getByRole('tab');
+  await tabs.nth(1).click();
+  await expect(tabs.nth(1)).toBeFocused();
+  await expect(content).toHaveAttribute('data-swap-entry', 'true');
+  await expect(content).toHaveCSS('animation-name', 'content-fade-in');
+  await tabs.first().click();
+  await expect(content).toHaveAttribute('data-swap-entry', 'true');
+});
+
 test('七类 Page Archetype 在四级视口可直接验收', async ({ page }) => {
   test.setTimeout(120_000);
   for (const viewport of viewports) {

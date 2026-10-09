@@ -222,7 +222,7 @@
 
   /* content.swap recipe：同路由内容替换（key 重挂）时新内容淡入；
      data-motion-swap=off 由全局 Motion Policy 降级（0.01ms）。 */
-  .ui-content-swap-surface {
+  .ui-content-swap-surface[data-swap-entry='true'] {
     animation: content-fade-in var(--motion-duration-feedback) var(--ease-product) both;
   }
 

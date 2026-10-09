@@ -130,6 +130,12 @@ export function TabsView({
     items.find((item) => item.id === candidate && !item.disabled)?.id ??
     items.find((item) => !item.disabled)?.id ??
     '';
+  const [selectionEntry, setSelectionEntry] = useState({
+    id: resolvedSelectedId,
+    changed: false,
+  });
+  if (selectionEntry.id !== resolvedSelectedId)
+    setSelectionEntry({ id: resolvedSelectedId, changed: true });
   const listClass = buildTabListClass(variant, resolvedOrientation);
   const tabClass = buildTabClass(variant, resolvedOrientation);
   const isVertical = resolvedOrientation === 'vertical';
@@ -190,7 +196,10 @@ export function TabsView({
           id={item.id}
           key={item.id}
         >
-          <ContentSwapTransition contentKey={resolvedSelectedId}>
+          <ContentSwapTransition
+            contentKey={resolvedSelectedId}
+            initialChange={selectionEntry.changed}
+          >
             {item.content}
           </ContentSwapTransition>
         </Tabs.Panel>

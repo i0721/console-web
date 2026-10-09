@@ -12,6 +12,9 @@ test('Alt+Shift+N：参考列表执行"新建参考资源"命令（同一 run/�
   await resetPreferences(page);
   await page.goto('/reference-resources');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
+  await expect(
+    page.getByRole('heading', { level: 1, name: '参考资源', exact: true }),
+  ).toBeVisible();
   await page.keyboard.press('Alt+Shift+n');
   await expect(page).toHaveURL(/\/reference-resources\/create/);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('创建参考资源');

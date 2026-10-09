@@ -1,6 +1,11 @@
 # Authentication 实施进度与证据
 
-2026-10-09，目标尚未完成，真实后端待联调。
+2026-10-09，前端目标完成验收，真实后端待联调。
+
+最终 `auth-check-approved-final.txt` 完整 `pnpm check` exit 0：403 单元、329 浏览器、
+生产构建、原性能预算及全部治理/类型/Lint/格式/文档门禁通过。329 项含 15 项 Mock
+认证与 3 项 Backend 受控协议、全部共享组件与既有流程、已批准 7 张新/变更基线。
+预算 initial 374019、maxRoute 439158、CSS 47963；没有放宽阈值或规则。
 
 已阅读完整目标并审查Next root布局、Plugin codegen、Store/Provider/Form和Adapter边界。
 浏览器实际查看TailAdmin React登录及注册，方案与契约见
@@ -47,7 +52,42 @@ CSS 47957B。328 项全量浏览器回归进行中，不提前记作全部通过
 `authentication/auth-menu-keyboard-scroll-final.txt`。仅滚动区域属性有 W3C ACT
 依据的 lint 误报注释，未修改全局 lint、Axe、截图阈值或预算。
 
-仍需：当前源码完整pnpm check、额外状态矩阵与新视觉人工确认。此前28项Scroll Reveal
-和4项账户菜单批准不自动覆盖认证造成的新变化。配置与待联调API契约见
+`auth-check-final-retry.txt` 最终为 300/328 通过、28 失败（exit 1），不是完整通过。
+失败包含旧 404 文案、会话恢复前提前读取/快捷键/滚动，首次 Tabs 内容重复淡入的
+对比度问题，以及服务短暂拒绝连接导致的末段截图与工作台检查失败。原失败 PNG/MD
+归档在 `authentication/full-regression-failures/`，原日志保留。
+就绪判断改为等待真实内容，未增加超时；`auth-browser-regression-retry.txt` 74/78
+通过，剩余为新就绪断言中错误的设置标题、Tabs 对比度与两项新 Form 截图差异。
+设置标题按实际“外观”修正；Tabs 初始不再替换淡入，仅选择变化播放。
+`auth-tabs-initial-verify.txt` 23 项通过（exit 0），含四级视口全部七类 Archetype Axe、
+初始/切换/返回 Tab、设置预览及原 Motion 流程。随后已纳入当前源码完整复验。
+
+新增认证桌面/移动端和英文深色大字号共 5 项视觉比较；全局 `updateSnapshots:none`
+禁止未确认的首次基线自动写入。授权前仅归档候选，不创建或更新 golden。
+
+当前 `auth-check-pre-visual-review.txt` 与 `auth-check-pre-visual-review-retry.txt`
+两次都通过源码门禁、类型、403 单元、生产编译与静态页面生成，但 export 删除
+`apps/web/dist` 时报 EBUSY，exit 1，未进入预算及浏览器阶段。只读进程检查确认
+PowerShell 30312 的当前目录停留在该输出目录；已请求用户切回根目录，没有终止
+用户进程或更改构建/预算规则。用户确认已切回根目录后，
+`auth-build-after-directory-release.txt` 生产构建通过（exit 0）；
+`auth-performance-after-directory-release.txt` 预算通过（exit 0）：initial 374019、
+maxRoute 439158、CSS 47963，未修改预算。
+
+`auth-browser-pre-visual-review.txt` 完整 329 项复验为 323 通过、6 个用例失败（exit 1）。
+其中 5 个用例仅涉及 5 张新认证基线缺失与 2 张 Form 展示页预期变化；另一个进度条
+布局检查在会话恢复完成前读取 Header，before 为 null。改为等待 Header 可见后再
+测量，保持原尺寸相等断言；`auth-top-progress-restoration-verify.txt` 全部 8 项通过（exit 0）。
+全部 Backend 受控协议 3 项通过，包含新增跨标签退出检查。
+7 项独立视觉候选、旧基线、差异及 SHA-256 归档在
+[Authentication 视觉确认](authentication/visual-differences/index.html)，尚未写入 golden。
+
+用户于 2026-10-09 在打开本批对照时回复“确认”，授权本轮全部 7 项。已在写入前
+校验全部候选与旧 golden SHA-256，仅创建 5 张认证新基线、更新 2 张 Form 基线。
+原图与差异保留；[更新记录](authentication/visual-differences/baseline-update.json)
+记录范围及前后校验值。`auth-check-approved-final.txt` 最终完整检查通过，exit 0。
+
+本轮全部前端范围通过，原失败日志和对照保留。此前28项Scroll Reveal
+和4项账户菜单批准独立于本轮7项批准。配置与待联调API契约见
 [Web Authentication](../../../../apps/web/src/auth/README.md)。Backend受控契约测试不代表
 真实API、服务器授权或安全Cookie/CORS/CSRF已完成联调；最终不得宣称真实Backend已验证。

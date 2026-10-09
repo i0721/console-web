@@ -81,6 +81,10 @@ for (const width of [320, 390, 768, 1440, 2048]) {
           path: `docs/changes/109-ui-ux-optimization/evidence/authentication/${path.slice(1)}-${width}.png`,
           fullPage: true,
         });
+      if ((width === 320 || width === 1440) && (path === '/login' || path === '/register'))
+        await expect.soft(page).toHaveScreenshot(`authentication-${path.slice(1)}-${width}.png`, {
+          fullPage: true,
+        });
     }
   });
 }
@@ -243,6 +247,9 @@ test('Large English dark mobile registration keeps password entry usable', async
   expect(axe.violations).toEqual([]);
   await page.screenshot({
     path: 'docs/changes/109-ui-ux-optimization/evidence/authentication/register-320-en-dark-large.png',
+    fullPage: true,
+  });
+  await expect.soft(page).toHaveScreenshot('authentication-register-320-en-dark-large.png', {
     fullPage: true,
   });
 });

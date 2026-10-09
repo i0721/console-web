@@ -10,7 +10,7 @@ test('最近访问记录：页面入口导航写入 workbench recents（LRU 去�
   // 访问两个页面入口（设置 + 参考资源）。
   await page.goto('/settings');
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
-  await expect(page.getByRole('heading', { level: 1, name: '设置', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: '外观', exact: true })).toBeVisible();
   await expect
     .poll(() => page.evaluate(() => localStorage.getItem('community-go.workbench')))
     .toContain('"/settings"');

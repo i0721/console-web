@@ -117,7 +117,9 @@ Store、设置入口与导航确认，新增同源UI Overlay展示。用户确�
 
 布局隔离、统一会话/模式/服务、页面设计与完整验收方案见
 [认证审查](design/authentication-review.md)。Public/Auth/App 路由布局、登录/注册表单、
-统一模式/会话、账户身份与退出已接入；专项流程与五种宽度验证正在收尾，完整回归
-尚未完成。当前成绩见[认证验证](evidence/authentication-verification.md)，配置及 API
+统一模式/会话、账户身份与退出已接入。用户确认本轮7项视觉后限定更新，完整
+`pnpm check` exit 0：403单元、329浏览器、生产构建、原预算及全部门禁通过。
+最终成绩见[认证验证](evidence/authentication-verification.md)，完整目标映射见
+[认证验收](evidence/authentication-acceptance.md)，配置及 API
 契约见[Web Authentication](../../../apps/web/src/auth/README.md)。真实 Backend 待联调，
 受控契约浏览器验证不等于真实认证已接通。

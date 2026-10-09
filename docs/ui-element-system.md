@@ -25,7 +25,7 @@ Semantic Design Token
 | Family                | 稳定语义                     | 当前 Element / Pattern                                                                                                                     | 不应混入                     |
 | --------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------- |
 | Actions               | 发起命令或提交               | `Action`、`IconAction`                                                                                                                     | 导航链接、值选择             |
-| Form Controls         | 输入、编辑或选择表单值       | `TextField`、`TextAreaField`、`SelectField`、`ComboField`、`DatePickerField`、`RadioGroupField`                                            | Action Menu、Navigation Menu |
+| Form Controls         | 输入、编辑或选择表单值       | `TextField`、`PasswordField`、`TextAreaField`、`SelectField`、`ComboField`、`DatePickerField`、`RadioGroupField`                           | Action Menu、Navigation Menu |
 | Selection             | 独立布尔或集合选择           | `CheckboxField`、`SwitchField`、`ToggleGroup`                                                                                              | 用 Switch 代替即时动作       |
 | Identity / Display    | 展示身份、媒体与键值信息     | `Avatar`、`UserIdentity`、`ReadyImage`、`DescriptionList`                                                                                  | 业务权限或在线状态机         |
 | Navigation            | 页面、层级、集合或视图切换   | `TextLink`、`BreadcrumbTrail`、`PaginationControl`、`TabsView`、Host Router Link、Shell Navigation                                         | 表单值提交                   |

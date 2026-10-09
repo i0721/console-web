@@ -1,10 +1,12 @@
 'use client';
 
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 
 export type ContentSwapTransitionProps = Readonly<{
   contentKey: string;
   children: ReactNode;
+  /** A parent collection may mount this subtree as the result of an actual selection change. */
+  initialChange?: boolean;
 }>;
 
 /**
@@ -18,9 +20,20 @@ export type ContentSwapTransitionProps = Readonly<{
  * 语义：内容替换的短 crossfade 降级为新内容淡入（React 同步替换旧内容，无快照
  * 退出）；克制、不阻塞。不承担数据请求状态。
  */
-export function ContentSwapTransition({ contentKey, children }: ContentSwapTransitionProps) {
+export function ContentSwapTransition({
+  contentKey,
+  children,
+  initialChange = false,
+}: ContentSwapTransitionProps) {
+  const [entry, setEntry] = useState({ key: contentKey, changed: initialChange });
+  if (entry.key !== contentKey) setEntry({ key: contentKey, changed: true });
   return (
-    <div className="ui-content-swap-surface" data-motion-recipe="content-swap" key={contentKey}>
+    <div
+      className="ui-content-swap-surface"
+      data-motion-recipe="content-swap"
+      data-swap-entry={entry.changed ? 'true' : 'false'}
+      key={contentKey}
+    >
       {children}
     </div>
   );

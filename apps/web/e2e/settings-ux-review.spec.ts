@@ -439,8 +439,10 @@ for (const width of [320, 390, 430, 768, 1024, 1279]) {
     await setup(page);
     await page.goto('/settings/actions');
     await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
+    await expect(page.locator('.surface-settings-nav')).toBeVisible();
     for (const offset of [650, 1600, 3000]) {
       await page.evaluate((y) => window.scrollTo(0, y), offset);
+      await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(100);
       const position = await page.locator('.surface-settings-nav').boundingBox();
       const tabs = await page.getByRole('navigation', { name: '页面标签' }).boundingBox();
       expect(position?.y).toBeGreaterThanOrEqual((tabs?.y ?? 0) + (tabs?.height ?? 0) - 1);

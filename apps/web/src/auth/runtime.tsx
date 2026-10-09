@@ -39,6 +39,27 @@ export function AuthRuntime({ children }: Readonly<{ children: ReactNode }>) {
     return () => window.removeEventListener('storage', synchronize);
   }, [controller]);
   useEffect(() => {
+    if (typeof BroadcastChannel === 'undefined') return;
+    const channel = new BroadcastChannel('community-go.auth-session');
+    // A signal invalidates this document; it never supplies or authorizes an identity.
+    channel.onmessage = (event: MessageEvent<unknown>) => {
+      if (event.data === 'session-changed') window.location.reload();
+    };
+    const unsubscribe = controller.subscribe((next, previous) => {
+      if (!previous.busy || next.busy) return;
+      if (
+        (next.status === 'authenticated' &&
+          (next.authenticatedFrom === 'login' || next.authenticatedFrom === 'register')) ||
+        (next.status === 'anonymous' && next.endReason === 'logout')
+      )
+        channel.postMessage('session-changed');
+    });
+    return () => {
+      unsubscribe();
+      channel.close();
+    };
+  }, [controller]);
+  useEffect(() => {
     if (!session) return;
     const expire = () => controller.getState().expire();
     const remaining = session.expiresAt - Date.now();

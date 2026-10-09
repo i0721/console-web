@@ -202,6 +202,7 @@ test('进度条不推动 Header/Sidebar/内容布局', async ({ page }) => {
   await expectHydrated(page);
 
   const header = page.locator('header').first();
+  await expect(header).toBeVisible();
   const before = await header.boundingBox();
 
   await delayRscRoute(page, '/ui-elements/status-async', 1200);

@@ -4,6 +4,8 @@ export default defineConfig({
   testDir: './apps/web/e2e',
   fullyParallel: false,
   workers: 1,
+  // New and changed goldens both require explicit human review.
+  updateSnapshots: 'none',
   timeout: 30_000,
   expect: {
     timeout: 5_000,

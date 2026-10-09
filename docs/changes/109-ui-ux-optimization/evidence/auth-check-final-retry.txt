@@ -510,3 +510,1178 @@ Running 328 tests using 1 worker
   x  255 [chromium] › apps\web\e2e\settings-ux-review.spec.ts:435:3 › Settings category navigation stays reachable through continuous tasks at 768 (1.8s)
 (node:29684) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 (Use `node --trace-warnings ...` to show where the warning was created)
+  x  256 [chromium] › apps\web\e2e\settings-ux-review.spec.ts:435:3 › Settings category navigation stays reachable through continuous tasks at 1024 (1.5s)
+(node:3828) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  257 [chromium] › apps\web\e2e\settings-ux-review.spec.ts:435:3 › Settings category navigation stays reachable through continuous tasks at 1279 (1.6s)
+(node:29952) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 258 [chromium] › apps\web\e2e\settings-ux-review.spec.ts:468:1 › Pinned page tabs track the header; unpinned tabs scroll and persist after reload (2.5s)
+  ok 259 [chromium] › apps\web\e2e\settings-ux-review.spec.ts:492:1 › All page tabs stay manageable on desktop and closing active restores useful focus (3.6s)
+  ok 260 [chromium] › apps\web\e2e\settings-ux-review.spec.ts:516:1 › Settings drawer and form authority retain WCAG AA semantics in dark English (4.7s)
+  ok 261 [chromium] › apps\web\e2e\settings-ux-review.spec.ts:548:3 › Touch settings tasks › Touch control and category entry work without hover at different scroll positions (2.4s)
+  ok 262 [chromium] › apps\web\e2e\settings-ux-review.spec.ts:565:1 › Settings keep search context, same-category position, and native Back continuity (3.2s)
+  ok 263 [chromium] › apps\web\e2e\settings.spec.ts:13:1 › 打开 /settings 直接是外观分类页（默认页，无索引）：即时生效并持久化 (3.4s)
+  ok 264 [chromium] › apps\web\e2e\settings.spec.ts:41:1 › 分类页顶部搜索跨目录：命中"删除"跳操作偏好页 (1.5s)
+  ok 265 [chromium] › apps\web\e2e\settings.spec.ts:55:1 › 恢复全部默认（任意分类页 header）：确认弹窗重置回默认 (2.1s)
+  ok 266 [chromium] › apps\web\e2e\settings.spec.ts:67:1 › 语言与地区独立页：切换 English 即时生效并持久化 (2.0s)
+  ok 267 [chromium] › apps\web\e2e\settings.spec.ts:80:1 › 深链直达：/settings/shortcuts 打开快捷键分类页 (1.1s)
+  ok 268 [chromium] › apps\web\e2e\settings.spec.ts:90:1 › 左导航跳转：外观(根) 与其他分类互跳且各自 active (1.7s)
+  x  269 [chromium] › apps\web\e2e\shortcuts.spec.ts:11:1 › Alt+Shift+N：参考列表执行"新建参考资源"命令（同一 run/可用性） (6.1s)
+(node:23304) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 270 [chromium] › apps\web\e2e\shortcuts.spec.ts:20:1 › 快捷键关闭后 Alt+Shift+N 不再执行 (2.9s)
+  ok 271 [chromium] › apps\web\e2e\states.spec.ts:11:1 › Loading、Skeleton 与恢复动作保持完整状态语义 (2.1s)
+  x  272 [chromium] › apps\web\e2e\surface-foundation.spec.ts:21:1 › 七类 Page Archetype 在四级视口可直接验收 (4.1s)
+(node:28348) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 273 [chromium] › apps\web\e2e\surface-foundation.spec.ts:44:1 › Universal 与 Surface authority 视觉面保持分层 (4.4s)
+  ok 274 [chromium] › apps\web\e2e\table-density.spec.ts:18:1 › 全局默认表格密度流入参考列表（数据展示 → 资源列表） (2.6s)
+  ok 275 [chromium] › apps\web\e2e\table-density.spec.ts:28:1 › 页面显式操作优先于全局默认（参考列表密度切换为舒适） (3.0s)
+  ok 276 [chromium] › apps\web\e2e\time-display.spec.ts:17:1 › 通知条目显示时刻（默认 24 小时） (1.9s)
+  ok 277 [chromium] › apps\web\e2e\time-display.spec.ts:25:1 › 12 小时制：通知条目时刻带 AM/PM（真实联动） (3.2s)
+  ok 278 [chromium] › apps\web\e2e\toast-duration.spec.ts:15:1 › 提示时长偏好流入 Toast（长=8s：toast 在 6.5s 仍可见） (9.0s)
+  ok 279 [chromium] › apps\web\e2e\toast-duration.spec.ts:27:1 › 提示时长偏好流入 Toast（短=3s：toast 在 4.5s 消失） (7.1s)
+  ok 280 [chromium] › apps\web\e2e\top-progress.spec.ts:59:1 › 极快导航（warm 缓存路由）仍显示一次完整进度周期并自然退出 (2.0s)
+  ok 281 [chromium] › apps\web\e2e\top-progress.spec.ts:84:1 › 普通首次导航（未缓存路由）能感知到进度条 (2.0s)
+  ok 282 [chromium] › apps\web\e2e\top-progress.spec.ts:100:1 › 慢速导航：进度条在 viewport 顶部、非零可见尺寸、foreground 实际延伸、完成后退出 (3.6s)
+  ok 283 [chromium] › apps\web\e2e\top-progress.spec.ts:176:1 › 连续快速点击不同路由不错误结束、不永久卡住 (2.5s)
+  ok 284 [chromium] › apps\web\e2e\top-progress.spec.ts:192:1 › 访问不存在路由不导致进度条卡住 (637ms)
+  ok 285 [chromium] › apps\web\e2e\top-progress.spec.ts:199:1 › 进度条不推动 Header/Sidebar/内容布局 (3.0s)
+  ok 286 [chromium] › apps\web\e2e\top-progress.spec.ts:218:1 › Dark Mode 与窄屏下进度条正常显示 (3.5s)
+  ok 287 [chromium] › apps\web\e2e\top-progress.spec.ts:245:1 › Reduced Motion 下进度条动画时长被压低但仍完成收尾 (3.2s)
+  ok 288 [chromium] › apps\web\e2e\transition.spec.ts:117:1 › 无 Suspense 页面深入导航播放方向进入并恢复稳定 (2.3s)
+  ok 289 [chromium] › apps\web\e2e\transition.spec.ts:153:1 › Family 页面导航在拆帧场景下保持功能正确且动画不失控 (2.5s)
+  ok 290 [chromium] › apps\web\e2e\transition.spec.ts:170:1 › 减弱动态效果时方向过渡时长接近零 (2.1s)
+  ok 291 [chromium] › apps\web\e2e\transition.spec.ts:186:1 › 浏览器后退不播放方向进入并正确恢复页面 (2.6s)
+  ok 292 [chromium] › apps\web\e2e\ui-ux-109.spec.ts:6:1 › Shell keeps the main content in its viewport at breakpoint boundaries (3.9s)
+  ok 293 [chromium] › apps\web\e2e\ui-ux-109.spec.ts:22:1 › Mobile navigation traps focus, closes with Escape and releases on desktop resize (1.8s)
+  ok 294 [chromium] › apps\web\e2e\ui-ux-109.spec.ts:38:1 › Settings search hands focus to the requested field after closing its drawer (2.1s)
+  ok 295 [chromium] › apps\web\e2e\ui-ux-109.spec.ts:57:1 › Reference identity, validation and local saves stay consistent (2.9s)
+  ok 296 [chromium] › apps\web\e2e\ui-ux-109.spec.ts:76:1 › Routes retain titles and main content on mobile and desktop (52.7s)
+  ok 297 [chromium] › apps\web\e2e\ui-ux-109.spec.ts:96:1 › Critical mobile paths meet WCAG AA automated checks (2.6s)
+  ok 298 [chromium] › apps\web\e2e\ui-ux-109.spec.ts:112:1 › Short dialogs keep actions reachable at 256 and 400 pixels (5.5s)
+  ok 299 [chromium] › apps\web\e2e\ui-ux-109.spec.ts:130:1 › Column resizing preserves pointer and keyboard widths through reload (4.2s)
+  ok 300 [chromium] › apps\web\e2e\ui-ux-109.spec.ts:165:1 › Closing the active page tab can be cancelled without losing inputs (3.1s)
+  ok 301 [chromium] › apps\web\e2e\ui-ux-109.spec.ts:191:1 › Operation example closes failure, retry and cancellation loops (7.2s)
+  ok 302 [chromium] › apps\web\e2e\ui-ux-109.spec.ts:209:1 › Detail example validates, saves and resets its real local fields (1.8s)
+  ok 303 [chromium] › apps\web\e2e\ui-ux-109.spec.ts:226:1 › Mobile showcase index focuses the actual component heading (1.6s)
+  ok 304 [chromium] › apps\web\e2e\ui-ux-109.spec.ts:241:3 › Public families keep their boundaries in dark English large text: compact (8.1s)
+  ok 305 [chromium] › apps\web\e2e\ui-ux-109.spec.ts:241:3 › Public families keep their boundaries in dark English large text: standard (8.3s)
+  ok 306 [chromium] › apps\web\e2e\ui-ux-109.spec.ts:241:3 › Public families keep their boundaries in dark English large text: comfortable (8.2s)
+  ok 307 [chromium] › apps\web\e2e\ui-ux-109.spec.ts:315:1 › Corrupt current column layout is reported and can be retried (1.7s)
+  ok 308 [chromium] › apps\web\e2e\ui-ux-109.spec.ts:340:1 › Saving a restored draft clears its dirty baseline before continuing creation (2.6s)
+  ok 309 [chromium] › apps\web\e2e\ui-ux-109.spec.ts:377:1 › Native repeated submits create one resource and allow retry after validation (1.8s)
+  ok 310 [chromium] › apps\web\e2e\ui-ux-109.spec.ts:394:1 › Leaving during validation prevents a stale save and redirect (2.4s)
+  ok 311 [chromium] › apps\web\e2e\ui-ux-109.spec.ts:430:1 › Leaving the local form simulation cancels its pending feedback (2.2s)
+  ok 312 [chromium] › apps\web\e2e\unread-reminder.spec.ts:15:1 › 未读提醒默认开：未读通知带"刚刚"标记（真实联动） (1.9s)
+  ok 313 [chromium] › apps\web\e2e\unread-reminder.spec.ts:21:1 › 关闭 未读提醒：未读行无"刚刚"标记但角标仍计数 (3.2s)
+  ok 314 [chromium] › apps\web\e2e\visual.spec.ts:14:1 › 桌面与超宽屏 Reference 布局保持稳定 (3.1s)
+  ok 315 [chromium] › apps\web\e2e\visual.spec.ts:26:1 › 桌面 UI Elements Family 保持基础组件权威面稳定 (1.4s)
+  x  316 [chromium] › apps\web\e2e\visual.spec.ts:40:1 › 九个 UI Element Family 页面均有独立视觉基线 (5.3s)
+(node:30288) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  317 [chromium] › apps\web\e2e\visual.spec.ts:68:1 › 移动窗口、Dark Mode 与英文扩张保持无溢出 (2.3s)
+(node:24696) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] ⨯ The directory at "C:\rin\coder\i0721\console-web\apps\web\.next\backend-contract\dev" was deleted.
+[WebServer] 
+[WebServer] Deleting this directory while Next.js is running can lead to undefined behavior. Restarting the server to recover...
+[WebServer] (node:32208) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  x  318 [chromium] › apps\web\e2e\visual.spec.ts:86:1 › 移动侧栏打开状态纳入视觉回归 (2.4s)
+(node:27184) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  319 [chromium] › apps\web\e2e\visual.spec.ts:95:1 › 状态体系页面保持 Loading 与异常状态视觉基线 (2.3s)
+(node:6108) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  320 [chromium] › apps\web\e2e\visual.spec.ts:107:1 › Overview、Reference Form 与 Settings 真实页面进入视觉矩阵 (2.3s)
+(node:23832) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  321 [chromium] › apps\web\e2e\visual.spec.ts:127:1 › Toast、Destructive Confirm 与 Compact Density 开启态进入视觉矩阵 (2.4s)
+(node:24632) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  322 [chromium] › apps\web\e2e\visual.spec.ts:141:1 › Reference 多选与分页的真实联动状态进入视觉矩阵 (2.4s)
+(node:12056) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  323 [chromium] › apps\web\e2e\workbench-home.spec.ts:14:1 › 收藏：详情页收藏 → 首页"收藏"区段展示并可跳转 (2.3s)
+(node:31456) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  324 [chromium] › apps\web\e2e\workbench-home.spec.ts:28:1 › 最近访问：访问参考列表后首页"最近访问"区段展示（默认开） (2.3s)
+(node:28048) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  325 [chromium] › apps\web\e2e\workbench-mobile-109.spec.ts:4:1 › Mobile workbench detail preserves identity, selection and list focus (2.3s)
+(node:17528) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:29980) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] [browser] A PressResponder was rendered without a pressable child. Either call the usePress hook, or wrap your DOM node with <Pressable> component.
+[WebServer] [browser] A PressResponder was rendered without a pressable child. Either call the usePress hook, or wrap your DOM node with <Pressable> component.
+[WebServer] [browser] A PressResponder was rendered without a pressable child. Either call the usePress hook, or wrap your DOM node with <Pressable> component.
+  ok 326 [backend-contract] › apps\web\e2e\authentication-backend.spec.ts:6:1 › Backend mode uses CSRF/session API for login, restore and logout without Mock persistence (7.8s)
+  ok 327 [backend-contract] › apps\web\e2e\authentication-backend.spec.ts:58:1 › Backend restore failure stays closed, supports retry and never supplies a demo identity (2.4s)
+[WebServer] [browser] A PressResponder was rendered without a pressable child. Either call the usePress hook, or wrap your DOM node with <Pressable> component.
+[WebServer] [browser] A PressResponder was rendered without a pressable child. Either call the usePress hook, or wrap your DOM node with <Pressable> component.
+  ok 328 [backend-contract] › apps\web\e2e\authentication-backend.spec.ts:81:1 › Backend registration reports pending/success and failed logout keeps all private content hidden (4.1s)
+
+
+  1) [chromium] › apps\web\e2e\commands.spec.ts:3:1 › 命令菜单聚合插件注册命令：Ctrl+K → 新建资源命令执行跳转 ─────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('searchbox', { name: '搜索命令' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByRole('searchbox', { name: '搜索命令' })
+
+
+       7 |   await page.keyboard.press('Control+K');
+       8 |   const search = page.getByRole('searchbox', { name: '搜索命令' });
+    >  9 |   await expect(search).toBeVisible();
+         |                        ^
+      10 |   // 插件注册的页面命令 "新建资源" 出现在结果中。
+      11 |   await search.fill('新建资源');
+      12 |   const option = page.getByRole('option', { name: /新建资源/ }).first();
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\commands.spec.ts:9:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\commands-命令菜单聚合插件注册命令：Ctrl-K-→-新建资源命令执行跳转-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\commands-命令菜单聚合插件注册命令：Ctrl-K-→-新建资源命令执行跳转-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\commands-命令菜单聚合插件注册命令：Ctrl-K-→-新建资源命令执行跳转-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\commands-命令菜单聚合插件注册命令：Ctrl-K-→-新建资源命令执行跳转-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › apps\web\e2e\motion-progressive.spec.ts:41:3 › progressive settings remains usable through long, fast and reverse scrolling at 1440 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 10
+    Received:   0
+
+      69 |     await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
+      70 |     const regions = page.locator('[id^=settings-][data-reveal]');
+    > 71 |     expect(await regions.count()).toBeGreaterThan(10);
+         |                                   ^
+      72 |     await expect(regions.last()).toHaveAttribute('data-reveal', 'pending');
+      73 |     await expect(regions.first()).toHaveCSS('opacity', '1');
+      74 |     const height = await page.evaluate(() => document.documentElement.scrollHeight);
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\motion-progressive.spec.ts:71:35
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\motion-progressive-progres-5f16e-d-reverse-scrolling-at-1440-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\motion-progressive-progres-5f16e-d-reverse-scrolling-at-1440-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\motion-progressive-progres-5f16e-d-reverse-scrolling-at-1440-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\motion-progressive-progres-5f16e-d-reverse-scrolling-at-1440-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium] › apps\web\e2e\motion-progressive.spec.ts:41:3 › progressive settings remains usable through long, fast and reverse scrolling at 390 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 10
+    Received:   0
+
+      69 |     await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
+      70 |     const regions = page.locator('[id^=settings-][data-reveal]');
+    > 71 |     expect(await regions.count()).toBeGreaterThan(10);
+         |                                   ^
+      72 |     await expect(regions.last()).toHaveAttribute('data-reveal', 'pending');
+      73 |     await expect(regions.first()).toHaveCSS('opacity', '1');
+      74 |     const height = await page.evaluate(() => document.documentElement.scrollHeight);
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\motion-progressive.spec.ts:71:35
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\motion-progressive-progres-88a58-nd-reverse-scrolling-at-390-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\motion-progressive-progres-88a58-nd-reverse-scrolling-at-390-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\motion-progressive-progres-88a58-nd-reverse-scrolling-at-390-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\motion-progressive-progres-88a58-nd-reverse-scrolling-at-390-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [chromium] › apps\web\e2e\motion-progressive.spec.ts:41:3 › progressive settings remains usable through long, fast and reverse scrolling at 320 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 10
+    Received:   0
+
+      69 |     await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
+      70 |     const regions = page.locator('[id^=settings-][data-reveal]');
+    > 71 |     expect(await regions.count()).toBeGreaterThan(10);
+         |                                   ^
+      72 |     await expect(regions.last()).toHaveAttribute('data-reveal', 'pending');
+      73 |     await expect(regions.first()).toHaveCSS('opacity', '1');
+      74 |     const height = await page.evaluate(() => document.documentElement.scrollHeight);
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\motion-progressive.spec.ts:71:35
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\motion-progressive-progres-a254d-nd-reverse-scrolling-at-320-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\motion-progressive-progres-a254d-nd-reverse-scrolling-at-320-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\motion-progressive-progres-a254d-nd-reverse-scrolling-at-320-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\motion-progressive-progres-a254d-nd-reverse-scrolling-at-320-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [chromium] › apps\web\e2e\navigation.spec.ts:228:1 › UI Elements 根路径进入默认子级且旧 Showcase 不再匹配 ────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('404 Not Found')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByText('404 Not Found')
+
+
+      231 |
+      232 |   await page.goto('/showcase');
+    > 233 |   await expect(page.getByText('404 Not Found')).toBeVisible();
+          |                                                 ^
+      234 | });
+      235 |
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\navigation.spec.ts:233:49
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\navigation-UI-Elements-根路径进入默认子级且旧-Showcase-不再匹配-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\navigation-UI-Elements-根路径进入默认子级且旧-Showcase-不再匹配-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\navigation-UI-Elements-根路径进入默认子级且旧-Showcase-不再匹配-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\navigation-UI-Elements-根路径进入默认子级且旧-Showcase-不再匹配-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [chromium] › apps\web\e2e\recents.spec.ts:3:1 › 最近访问记录：页面入口导航写入 workbench recents（LRU 去重） ─────
+
+    Error: expect(received).toContain(expected) // indexOf
+
+    Expected value: "/settings"
+    Received array: []
+
+      25 |   const recents = workbench?.state?.recents ?? [];
+      26 |   const pathnames = recents.map((entry) => entry.pathname);
+    > 27 |   expect(pathnames).toContain('/settings');
+         |                     ^
+      28 |   expect(pathnames).toContain('/reference-resources');
+      29 |   expect(pathnames[0]).toBe('/reference-resources'); // 最近在前
+      30 |   expect(recents[0]?.title.length ?? 0).toBeGreaterThan(0); // 标题非空（i18n 解析）
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\recents.spec.ts:27:21
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\recents-最近访问记录：页面入口导航写入-workbench-recents（LRU-去重）-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\recents-最近访问记录：页面入口导航写入-workbench-recents（LRU-去重）-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\recents-最近访问记录：页面入口导航写入-workbench-recents（LRU-去重）-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\recents-最近访问记录：页面入口导航写入-workbench-recents（LRU-去重）-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) [chromium] › apps\web\e2e\remember-filters.spec.ts:18:1 › 记住筛选条件默认关：状态筛选后重载回默认全部 ──────────────
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 0
+    Received: 21
+
+      30 |   // 默认关：回全部（行数恢复完整）。
+      31 |   await expect(page.getByRole('button', { name: '全部 状态', exact: true })).toBeVisible();
+    > 32 |   expect(await fullRowCount(page)).toBe(full);
+         |                                    ^
+      33 | });
+      34 |
+      35 | test('开启 记住筛选条件：状态筛选后重载仍保持', async ({ page }) => {
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\remember-filters.spec.ts:32:36
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\remember-filters-记住筛选条件默认关：状态筛选后重载回默认全部-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\remember-filters-记住筛选条件默认关：状态筛选后重载回默认全部-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\remember-filters-记住筛选条件默认关：状态筛选后重载回默认全部-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\remember-filters-记住筛选条件默认关：状态筛选后重载回默认全部-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) [chromium] › apps\web\e2e\scroll-reveal-items.spec.ts:77:1 › first viewport items have bounded stagger and offscreen items wait for scrolling 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 1
+    Received:   0
+
+      82 |   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
+      83 |   const rows = page.locator('[id^=settings-appearance][data-reveal="revealed"]');
+    > 84 |   expect(await rows.count()).toBeGreaterThan(1);
+         |                              ^
+      85 |   const sample = await rows.evaluateAll((items) =>
+      86 |     items.map((e) => ({
+      87 |       order: Number(e.getAttribute('data-reveal-order')),
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\scroll-reveal-items.spec.ts:84:30
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\scroll-reveal-items-first--a680b-en-items-wait-for-scrolling-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\scroll-reveal-items-first--a680b-en-items-wait-for-scrolling-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\scroll-reveal-items-first--a680b-en-items-wait-for-scrolling-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\scroll-reveal-items-first--a680b-en-items-wait-for-scrolling-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) [chromium] › apps\web\e2e\scroll-to-top.spec.ts:17:1 › 跳转后自动滚顶默认开：长页滚下后导航到设置 → 回到顶部 ───────────
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 100
+    Received:   0
+
+      22 |   await page.waitForTimeout(300);
+      23 |   const before = await page.evaluate(() => window.scrollY);
+    > 24 |   expect(before).toBeGreaterThan(100);
+         |                  ^
+      25 |   await spaToSettings(page);
+      26 |   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
+      27 |   await page.waitForTimeout(500);
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\scroll-to-top.spec.ts:24:18
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\scroll-to-top-跳转后自动滚顶默认开：长页滚下后导航到设置-→-回到顶部-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\scroll-to-top-跳转后自动滚顶默认开：长页滚下后导航到设置-→-回到顶部-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\scroll-to-top-跳转后自动滚顶默认开：长页滚下后导航到设置-→-回到顶部-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\scroll-to-top-跳转后自动滚顶默认开：长页滚下后导航到设置-→-回到顶部-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  10) [chromium] › apps\web\e2e\scroll-to-top.spec.ts:32:1 › 关闭 跳转后自动滚顶：长页滚下后导航保持滚动位置 ──────────────
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 100
+    Received:   0
+
+      49 |   await page.waitForTimeout(500);
+      50 |   const after = await page.evaluate(() => window.scrollY);
+    > 51 |   expect(after).toBeGreaterThan(100);
+         |                 ^
+      52 | });
+      53 |
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\scroll-to-top.spec.ts:51:17
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\scroll-to-top-关闭-跳转后自动滚顶：长页滚下后导航保持滚动位置-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\scroll-to-top-关闭-跳转后自动滚顶：长页滚下后导航保持滚动位置-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\scroll-to-top-关闭-跳转后自动滚顶：长页滚下后导航保持滚动位置-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\scroll-to-top-关闭-跳转后自动滚顶：长页滚下后导航保持滚动位置-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  11) [chromium] › apps\web\e2e\settings-ux-review.spec.ts:435:3 › Settings category navigation stays reachable through continuous tasks at 320 
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < 210
+    Received:   311
+
+      445 |       const tabs = await page.getByRole('navigation', { name: '页面标签' }).boundingBox();
+      446 |       expect(position?.y).toBeGreaterThanOrEqual((tabs?.y ?? 0) + (tabs?.height ?? 0) - 1);
+    > 447 |       expect(position?.y).toBeLessThan(210);
+          |                           ^
+      448 |     }
+      449 |     await chooseCategory(page, '通知');
+      450 |     await page.evaluate(() => window.scrollTo(0, 800));
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\settings-ux-review.spec.ts:447:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\settings-ux-review-Setting-459fb-ugh-continuous-tasks-at-320-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\settings-ux-review-Setting-459fb-ugh-continuous-tasks-at-320-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\settings-ux-review-Setting-459fb-ugh-continuous-tasks-at-320-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\settings-ux-review-Setting-459fb-ugh-continuous-tasks-at-320-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  12) [chromium] › apps\web\e2e\settings-ux-review.spec.ts:435:3 › Settings category navigation stays reachable through continuous tasks at 390 
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < 210
+    Received:   311
+
+      445 |       const tabs = await page.getByRole('navigation', { name: '页面标签' }).boundingBox();
+      446 |       expect(position?.y).toBeGreaterThanOrEqual((tabs?.y ?? 0) + (tabs?.height ?? 0) - 1);
+    > 447 |       expect(position?.y).toBeLessThan(210);
+          |                           ^
+      448 |     }
+      449 |     await chooseCategory(page, '通知');
+      450 |     await page.evaluate(() => window.scrollTo(0, 800));
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\settings-ux-review.spec.ts:447:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\settings-ux-review-Setting-15444-ugh-continuous-tasks-at-390-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\settings-ux-review-Setting-15444-ugh-continuous-tasks-at-390-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\settings-ux-review-Setting-15444-ugh-continuous-tasks-at-390-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\settings-ux-review-Setting-15444-ugh-continuous-tasks-at-390-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  13) [chromium] › apps\web\e2e\settings-ux-review.spec.ts:435:3 › Settings category navigation stays reachable through continuous tasks at 430 
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < 210
+    Received:   311
+
+      445 |       const tabs = await page.getByRole('navigation', { name: '页面标签' }).boundingBox();
+      446 |       expect(position?.y).toBeGreaterThanOrEqual((tabs?.y ?? 0) + (tabs?.height ?? 0) - 1);
+    > 447 |       expect(position?.y).toBeLessThan(210);
+          |                           ^
+      448 |     }
+      449 |     await chooseCategory(page, '通知');
+      450 |     await page.evaluate(() => window.scrollTo(0, 800));
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\settings-ux-review.spec.ts:447:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\settings-ux-review-Setting-2ca40-ugh-continuous-tasks-at-430-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\settings-ux-review-Setting-2ca40-ugh-continuous-tasks-at-430-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\settings-ux-review-Setting-2ca40-ugh-continuous-tasks-at-430-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\settings-ux-review-Setting-2ca40-ugh-continuous-tasks-at-430-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  14) [chromium] › apps\web\e2e\settings-ux-review.spec.ts:435:3 › Settings category navigation stays reachable through continuous tasks at 768 
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < 210
+    Received:   295
+
+      445 |       const tabs = await page.getByRole('navigation', { name: '页面标签' }).boundingBox();
+      446 |       expect(position?.y).toBeGreaterThanOrEqual((tabs?.y ?? 0) + (tabs?.height ?? 0) - 1);
+    > 447 |       expect(position?.y).toBeLessThan(210);
+          |                           ^
+      448 |     }
+      449 |     await chooseCategory(page, '通知');
+      450 |     await page.evaluate(() => window.scrollTo(0, 800));
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\settings-ux-review.spec.ts:447:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\settings-ux-review-Setting-bd8cb-ugh-continuous-tasks-at-768-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\settings-ux-review-Setting-bd8cb-ugh-continuous-tasks-at-768-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\settings-ux-review-Setting-bd8cb-ugh-continuous-tasks-at-768-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\settings-ux-review-Setting-bd8cb-ugh-continuous-tasks-at-768-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  15) [chromium] › apps\web\e2e\settings-ux-review.spec.ts:435:3 › Settings category navigation stays reachable through continuous tasks at 1024 
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < 210
+    Received:   295
+
+      445 |       const tabs = await page.getByRole('navigation', { name: '页面标签' }).boundingBox();
+      446 |       expect(position?.y).toBeGreaterThanOrEqual((tabs?.y ?? 0) + (tabs?.height ?? 0) - 1);
+    > 447 |       expect(position?.y).toBeLessThan(210);
+          |                           ^
+      448 |     }
+      449 |     await chooseCategory(page, '通知');
+      450 |     await page.evaluate(() => window.scrollTo(0, 800));
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\settings-ux-review.spec.ts:447:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\settings-ux-review-Setting-715da-gh-continuous-tasks-at-1024-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\settings-ux-review-Setting-715da-gh-continuous-tasks-at-1024-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\settings-ux-review-Setting-715da-gh-continuous-tasks-at-1024-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\settings-ux-review-Setting-715da-gh-continuous-tasks-at-1024-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  16) [chromium] › apps\web\e2e\settings-ux-review.spec.ts:435:3 › Settings category navigation stays reachable through continuous tasks at 1279 
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < 210
+    Received:   295
+
+      445 |       const tabs = await page.getByRole('navigation', { name: '页面标签' }).boundingBox();
+      446 |       expect(position?.y).toBeGreaterThanOrEqual((tabs?.y ?? 0) + (tabs?.height ?? 0) - 1);
+    > 447 |       expect(position?.y).toBeLessThan(210);
+          |                           ^
+      448 |     }
+      449 |     await chooseCategory(page, '通知');
+      450 |     await page.evaluate(() => window.scrollTo(0, 800));
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\settings-ux-review.spec.ts:447:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\settings-ux-review-Setting-eb917-gh-continuous-tasks-at-1279-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\settings-ux-review-Setting-eb917-gh-continuous-tasks-at-1279-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\settings-ux-review-Setting-eb917-gh-continuous-tasks-at-1279-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\settings-ux-review-Setting-eb917-gh-continuous-tasks-at-1279-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  17) [chromium] › apps\web\e2e\shortcuts.spec.ts:11:1 › Alt+Shift+N：参考列表执行"新建参考资源"命令（同一 run/可用性） ──
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/reference-resources\/create/
+    Received string:  "http://127.0.0.1:4173/reference-resources"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        14 × locator resolved to <html lang="zh-CN" data-theme="light" data-accent="purple" data-hydrated="true" data-motion-swap="on" data-motion-async="on" data-motion-media="on" data-contrast="system" data-motion-screen="on" data-motion-reveal="on" data-density="standard" data-follow-system="on" data-enhance-focus="off" data-motion-mode="system" data-motion-feedback="on" data-content-width="auto" data-enhance-target="off" data-font-scale="standard" data-system-contrast="standard">…</html>
+           - unexpected value "http://127.0.0.1:4173/reference-resources"
+
+
+      14 |   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
+      15 |   await page.keyboard.press('Alt+Shift+n');
+    > 16 |   await expect(page).toHaveURL(/\/reference-resources\/create/);
+         |                      ^
+      17 |   await expect(page.getByRole('heading', { level: 1 })).toHaveText('创建参考资源');
+      18 | });
+      19 |
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\shortcuts.spec.ts:16:22
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\shortcuts-Alt-Shift-N：参考列表执行-新建参考资源-命令（同一-run-可用性）-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\shortcuts-Alt-Shift-N：参考列表执行-新建参考资源-命令（同一-run-可用性）-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\shortcuts-Alt-Shift-N：参考列表执行-新建参考资源-命令（同一-run-可用性）-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\shortcuts-Alt-Shift-N：参考列表执行-新建参考资源-命令（同一-run-可用性）-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  18) [chromium] › apps\web\e2e\surface-foundation.spec.ts:21:1 › 七类 Page Archetype 在四级视口可直接验收 ─────
+
+    Error: /page-archetypes/resource-list at 1440px
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -   1
+    + Received  + 163
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+    +     "help": "Elements must meet minimum color contrast ratio thresholds",
+    +     "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+    +     "id": "color-contrast",
+    +     "impact": "serious",
+    +     "nodes": Array [
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Object {
+    +               "bgColor": "#ffffff",
+    +               "contrastRatio": 3.82,
+    +               "expectedContrastRatio": "4.5:1",
+    +               "fgColor": "#7a8393",
+    +               "fontSize": "10.5pt (14px)",
+    +               "fontWeight": "normal",
+    +               "messageKey": null,
+    +             },
+    +             "id": "color-contrast",
+    +             "impact": "serious",
+    +             "message": "Element has insufficient color contrast of 3.82 (foreground color: #7a8393, background color: #ffffff, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +             "relatedNodes": Array [
+    +               Object {
+    +                 "html": "<section class=\"rounded-panel border shadow-none border-border bg-surface overflow-hidden\">",
+    +                 "target": Array [
+    +                   ".surface-split-detail > .shadow-none",
+    +                 ],
+    +               },
+    +             ],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   Element has insufficient color contrast of 3.82 (foreground color: #7a8393, background color: #ffffff, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +         "html": "<p>本地参考数据用于验证长内容、状态组合、响应式布局和浏览器交互，不依赖后端。</p>",
+    +         "impact": "serious",
+    +         "none": Array [],
+    +         "target": Array [
+    +           ".space-y-5 > p",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Object {
+    +               "bgColor": "#ffffff",
+    +               "contrastRatio": 3.82,
+    +               "expectedContrastRatio": "4.5:1",
+    +               "fgColor": "#7a8393",
+    +               "fontSize": "9.0pt (12px)",
+    +               "fontWeight": "normal",
+    +               "messageKey": null,
+    +             },
+    +             "id": "color-contrast",
+    +             "impact": "serious",
+    +             "message": "Element has insufficient color contrast of 3.82 (foreground color: #7a8393, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +             "relatedNodes": Array [
+    +               Object {
+    +                 "html": "<section class=\"rounded-panel border shadow-none border-border bg-surface overflow-hidden\">",
+    +                 "target": Array [
+    +                   ".surface-split-detail > .shadow-none",
+    +                 ],
+    +               },
+    +             ],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   Element has insufficient color contrast of 3.82 (foreground color: #7a8393, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +         "html": "<dt class=\"text-xs font-semibold uppercase tracking-wider text-ink-muted\">负责人</dt>",
+    +         "impact": "serious",
+    +         "none": Array [],
+    +         "target": Array [
+    +           ".min-w-0:nth-child(1) > dt",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Object {
+    +               "bgColor": "#ffffff",
+    +               "contrastRatio": 3.82,
+    +               "expectedContrastRatio": "4.5:1",
+    +               "fgColor": "#7a8393",
+    +               "fontSize": "9.0pt (12px)",
+    +               "fontWeight": "normal",
+    +               "messageKey": null,
+    +             },
+    +             "id": "color-contrast",
+    +             "impact": "serious",
+    +             "message": "Element has insufficient color contrast of 3.82 (foreground color: #7a8393, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +             "relatedNodes": Array [
+    +               Object {
+    +                 "html": "<section class=\"rounded-panel border shadow-none border-border bg-surface overflow-hidden\">",
+    +                 "target": Array [
+    +                   ".surface-split-detail > .shadow-none",
+    +                 ],
+    +               },
+    +             ],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   Element has insufficient color contrast of 3.82 (foreground color: #7a8393, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +         "html": "<span class=\"mt-0.5 block truncate text-xs text-ink-muted\">亚太</span>",
+    +         "impact": "serious",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "dd > .gap-3.inline-flex.items-center > .min-w-0 > .mt-0\\.5.block.truncate",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Object {
+    +               "bgColor": "#ffffff",
+    +               "contrastRatio": 3.82,
+    +               "expectedContrastRatio": "4.5:1",
+    +               "fgColor": "#7a8393",
+    +               "fontSize": "9.0pt (12px)",
+    +               "fontWeight": "normal",
+    +               "messageKey": null,
+    +             },
+    +             "id": "color-contrast",
+    +             "impact": "serious",
+    +             "message": "Element has insufficient color contrast of 3.82 (foreground color: #7a8393, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +             "relatedNodes": Array [
+    +               Object {
+    +                 "html": "<section class=\"rounded-panel border shadow-none border-border bg-surface overflow-hidden\">",
+    +                 "target": Array [
+    +                   ".surface-split-detail > .shadow-none",
+    +                 ],
+    +               },
+    +             ],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   Element has insufficient color contrast of 3.82 (foreground color: #7a8393, background color: #ffffff, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +         "html": "<dt class=\"text-xs font-semibold uppercase tracking-wider text-ink-muted\">更新时间</dt>",
+    +         "impact": "serious",
+    +         "none": Array [],
+    +         "target": Array [
+    +           ".min-w-0:nth-child(2) > dt",
+    +         ],
+    +       },
+    +     ],
+    +     "tags": Array [
+    +       "cat.color",
+    +       "wcag2aa",
+    +       "wcag143",
+    +       "TTv5",
+    +       "TT13.c",
+    +       "EN-301-549",
+    +       "EN-9.1.4.3",
+    +       "ACT",
+    +       "RGAAv4",
+    +       "RGAA-3.2.1",
+    +     ],
+    +   },
+    + ]
+
+      36 |           .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+      37 |           .analyze();
+    > 38 |         expect(accessibility.violations, `${route} at ${viewport.width}px`).toEqual([]);
+         |                                                                             ^
+      39 |       }
+      40 |     }
+      41 |   }
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\surface-foundation.spec.ts:38:77
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\surface-foundation-七类-Page-Archetype-在四级视口可直接验收-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\surface-foundation-七类-Page-Archetype-在四级视口可直接验收-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\surface-foundation-七类-Page-Archetype-在四级视口可直接验收-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\surface-foundation-七类-Page-Archetype-在四级视口可直接验收-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  19) [chromium] › apps\web\e2e\visual.spec.ts:40:1 › 九个 UI Element Family 页面均有独立视觉基线 ──────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/ui-elements/status-async
+    Call log:
+      - navigating to "http://127.0.0.1:4173/ui-elements/status-async", waiting until "load"
+
+
+      56 |
+      57 |   for (const family of families) {
+    > 58 |     await page.goto(`/ui-elements/${family}`);
+         |                ^
+      59 |     await expectHydrated(page);
+      60 |     await expect(page.getByText('公开 Element 46 / 46')).toBeVisible();
+      61 |     const sectionId = family === 'actions-selection' ? 'actions' : family;
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\visual.spec.ts:58:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\visual-九个-UI-Element-Family-页面均有独立视觉基线-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\visual-九个-UI-Element-Family-页面均有独立视觉基线-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\visual-九个-UI-Element-Family-页面均有独立视觉基线-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\visual-九个-UI-Element-Family-页面均有独立视觉基线-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  20) [chromium] › apps\web\e2e\visual.spec.ts:68:1 › 移动窗口、Dark Mode 与英文扩张保持无溢出 ────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/ui-elements/forms
+    Call log:
+      - navigating to "http://127.0.0.1:4173/ui-elements/forms", waiting until "load"
+
+
+      68 | test('移动窗口、Dark Mode 与英文扩张保持无溢出', async ({ page }) => {
+      69 |   await page.setViewportSize({ width: 390, height: 844 });
+    > 70 |   await page.goto('/ui-elements/forms');
+         |              ^
+      71 |   await expectHydrated(page);
+      72 |   await page.getByRole('button', { name: '当前用户', exact: true }).click();
+      73 |   await page.getByRole('menuitem', { name: /^主题 / }).click();
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\visual.spec.ts:70:14
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\visual-移动窗口、Dark-Mode-与英文扩张保持无溢出-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\visual-移动窗口、Dark-Mode-与英文扩张保持无溢出-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\visual-移动窗口、Dark-Mode-与英文扩张保持无溢出-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\visual-移动窗口、Dark-Mode-与英文扩张保持无溢出-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  21) [chromium] › apps\web\e2e\visual.spec.ts:86:1 › 移动侧栏打开状态纳入视觉回归 ───────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/page-archetypes/resource-list
+    Call log:
+      - navigating to "http://127.0.0.1:4173/page-archetypes/resource-list", waiting until "load"
+
+
+      86 | test('移动侧栏打开状态纳入视觉回归', async ({ page }) => {
+      87 |   await page.setViewportSize({ width: 390, height: 844 });
+    > 88 |   await page.goto('/page-archetypes/resource-list');
+         |              ^
+      89 |   await expectHydrated(page);
+      90 |   await page.getByRole('button', { name: '打开导航' }).click();
+      91 |   await expect(page.getByRole('navigation', { name: '主导航' })).toBeVisible();
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\visual.spec.ts:88:14
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\visual-移动侧栏打开状态纳入视觉回归-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\visual-移动侧栏打开状态纳入视觉回归-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\visual-移动侧栏打开状态纳入视觉回归-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\visual-移动侧栏打开状态纳入视觉回归-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  22) [chromium] › apps\web\e2e\visual.spec.ts:95:1 › 状态体系页面保持 Loading 与异常状态视觉基线 ───────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/states
+    Call log:
+      - navigating to "http://127.0.0.1:4173/states", waiting until "load"
+
+
+       95 | test('状态体系页面保持 Loading 与异常状态视觉基线', async ({ page }) => {
+       96 |   await page.setViewportSize({ width: 1440, height: 900 });
+    >  97 |   await page.goto('/states');
+          |              ^
+       98 |   await expectHydrated(page);
+       99 |   await expect(page.getByRole('heading', { name: '加载未完成' })).toBeVisible();
+      100 |   await expect(page.getByRole('region', { name: '正在同步界面能力' })).toHaveAttribute(
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\visual.spec.ts:97:14
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\visual-状态体系页面保持-Loading-与异常状态视觉基线-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\visual-状态体系页面保持-Loading-与异常状态视觉基线-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\visual-状态体系页面保持-Loading-与异常状态视觉基线-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\visual-状态体系页面保持-Loading-与异常状态视觉基线-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  23) [chromium] › apps\web\e2e\visual.spec.ts:107:1 › Overview、Reference Form 与 Settings 真实页面进入视觉矩阵 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/
+    Call log:
+      - navigating to "http://127.0.0.1:4173/", waiting until "load"
+
+
+      108 |   await page.setViewportSize({ width: 1440, height: 900 });
+      109 |
+    > 110 |   await page.goto('/');
+          |              ^
+      111 |   await expectHydrated(page);
+      112 |   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+      113 |   await expect.soft(page).toHaveScreenshot('overview-desktop.png', { fullPage: true });
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\visual.spec.ts:110:14
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\visual-Overview、Reference-Form-与-Settings-真实页面进入视觉矩阵-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\visual-Overview、Reference-Form-与-Settings-真实页面进入视觉矩阵-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\visual-Overview、Reference-Form-与-Settings-真实页面进入视觉矩阵-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\visual-Overview、Reference-Form-与-Settings-真实页面进入视觉矩阵-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  24) [chromium] › apps\web\e2e\visual.spec.ts:127:1 › Toast、Destructive Confirm 与 Compact Density 开启态进入视觉矩阵 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/ui-elements/feedback?overlay=toast&density=compact
+    Call log:
+      - navigating to "http://127.0.0.1:4173/ui-elements/feedback?overlay=toast&density=compact", waiting until "load"
+
+
+      128 |   await page.setViewportSize({ width: 1440, height: 900 });
+      129 |
+    > 130 |   await page.goto('/ui-elements/feedback?overlay=toast&density=compact');
+          |              ^
+      131 |   await expectHydrated(page);
+      132 |   await expect(page.getByText('项目反馈已入队')).toBeVisible();
+      133 |   await expect.soft(page).toHaveScreenshot('ui-elements-toast-compact.png');
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\visual.spec.ts:130:14
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\visual-Toast、Destructive-Confirm-与-Compact-Density-开启态进入视觉矩阵-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\visual-Toast、Destructive-Confirm-与-Compact-Density-开启态进入视觉矩阵-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\visual-Toast、Destructive-Confirm-与-Compact-Density-开启态进入视觉矩阵-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\visual-Toast、Destructive-Confirm-与-Compact-Density-开启态进入视觉矩阵-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  25) [chromium] › apps\web\e2e\visual.spec.ts:141:1 › Reference 多选与分页的真实联动状态进入视觉矩阵 ────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/page-archetypes/resource-list
+    Call log:
+      - navigating to "http://127.0.0.1:4173/page-archetypes/resource-list", waiting until "load"
+
+
+      141 | test('Reference 多选与分页的真实联动状态进入视觉矩阵', async ({ page }) => {
+      142 |   await page.setViewportSize({ width: 1440, height: 900 });
+    > 143 |   await page.goto('/page-archetypes/resource-list');
+          |              ^
+      144 |   await expectReferenceReady(page);
+      145 |   const rows = page.getByRole('grid').getByRole('row');
+      146 |   await rows.nth(1).click();
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\visual.spec.ts:143:14
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\visual-Reference-多选与分页的真实联动状态进入视觉矩阵-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\visual-Reference-多选与分页的真实联动状态进入视觉矩阵-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\visual-Reference-多选与分页的真实联动状态进入视觉矩阵-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\visual-Reference-多选与分页的真实联动状态进入视觉矩阵-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  26) [chromium] › apps\web\e2e\workbench-home.spec.ts:14:1 › 收藏：详情页收藏 → 首页"收藏"区段展示并可跳转 ────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/settings
+    Call log:
+      - navigating to "http://127.0.0.1:4173/settings", waiting until "load"
+
+
+      3 |
+      4 | async function resetAll(page: Page) {
+    > 5 |   await page.goto('/settings');
+        |              ^
+      6 |   await page.evaluate(() => {
+      7 |     window.localStorage.removeItem('community-go.shell');
+      8 |     window.localStorage.removeItem('community-go.workbench');
+        at resetAll (C:\rin\coder\i0721\console-web\apps\web\e2e\workbench-home.spec.ts:5:14)
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\workbench-home.spec.ts:15:9
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\workbench-home-收藏：详情页收藏-→-首页-收藏-区段展示并可跳转-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\workbench-home-收藏：详情页收藏-→-首页-收藏-区段展示并可跳转-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\workbench-home-收藏：详情页收藏-→-首页-收藏-区段展示并可跳转-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\workbench-home-收藏：详情页收藏-→-首页-收藏-区段展示并可跳转-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  27) [chromium] › apps\web\e2e\workbench-home.spec.ts:28:1 › 最近访问：访问参考列表后首页"最近访问"区段展示（默认开） ────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/settings
+    Call log:
+      - navigating to "http://127.0.0.1:4173/settings", waiting until "load"
+
+
+      3 |
+      4 | async function resetAll(page: Page) {
+    > 5 |   await page.goto('/settings');
+        |              ^
+      6 |   await page.evaluate(() => {
+      7 |     window.localStorage.removeItem('community-go.shell');
+      8 |     window.localStorage.removeItem('community-go.workbench');
+        at resetAll (C:\rin\coder\i0721\console-web\apps\web\e2e\workbench-home.spec.ts:5:14)
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\workbench-home.spec.ts:29:9
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\workbench-home-最近访问：访问参考列表后首页-最近访问-区段展示（默认开）-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\workbench-home-最近访问：访问参考列表后首页-最近访问-区段展示（默认开）-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\workbench-home-最近访问：访问参考列表后首页-最近访问-区段展示（默认开）-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\workbench-home-最近访问：访问参考列表后首页-最近访问-区段展示（默认开）-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  28) [chromium] › apps\web\e2e\workbench-mobile-109.spec.ts:4:1 › Mobile workbench detail preserves identity, selection and list focus 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/page-archetypes/resource-list
+    Call log:
+      - navigating to "http://127.0.0.1:4173/page-archetypes/resource-list", waiting until "load"
+
+
+      4 | test('Mobile workbench detail preserves identity, selection and list focus', async ({ page }) => {
+      5 |   await page.setViewportSize({ width: 390, height: 844 });
+    > 6 |   await page.goto('/page-archetypes/resource-list');
+        |              ^
+      7 |   const rows = page.getByRole('grid').getByRole('row');
+      8 |   await expect(rows).toHaveCount(21);
+      9 |   const row = rows.nth(1);
+        at C:\rin\coder\i0721\console-web\apps\web\e2e\workbench-mobile-109.spec.ts:6:14
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\playwright\workbench-mobile-109-Mobil-7c773-ty-selection-and-list-focus-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\playwright\workbench-mobile-109-Mobil-7c773-ty-selection-and-list-focus-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\playwright\workbench-mobile-109-Mobil-7c773-ty-selection-and-list-focus-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\playwright\workbench-mobile-109-Mobil-7c773-ty-selection-and-list-focus-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  28 failed
+    [chromium] › apps\web\e2e\commands.spec.ts:3:1 › 命令菜单聚合插件注册命令：Ctrl+K → 新建资源命令执行跳转 ──────────────
+    [chromium] › apps\web\e2e\motion-progressive.spec.ts:41:3 › progressive settings remains usable through long, fast and reverse scrolling at 1440 
+    [chromium] › apps\web\e2e\motion-progressive.spec.ts:41:3 › progressive settings remains usable through long, fast and reverse scrolling at 390 
+    [chromium] › apps\web\e2e\motion-progressive.spec.ts:41:3 › progressive settings remains usable through long, fast and reverse scrolling at 320 
+    [chromium] › apps\web\e2e\navigation.spec.ts:228:1 › UI Elements 根路径进入默认子级且旧 Showcase 不再匹配 ─────
+    [chromium] › apps\web\e2e\recents.spec.ts:3:1 › 最近访问记录：页面入口导航写入 workbench recents（LRU 去重） ──────
+    [chromium] › apps\web\e2e\remember-filters.spec.ts:18:1 › 记住筛选条件默认关：状态筛选后重载回默认全部 ───────────────
+    [chromium] › apps\web\e2e\scroll-reveal-items.spec.ts:77:1 › first viewport items have bounded stagger and offscreen items wait for scrolling 
+    [chromium] › apps\web\e2e\scroll-to-top.spec.ts:17:1 › 跳转后自动滚顶默认开：长页滚下后导航到设置 → 回到顶部 ────────────
+    [chromium] › apps\web\e2e\scroll-to-top.spec.ts:32:1 › 关闭 跳转后自动滚顶：长页滚下后导航保持滚动位置 ────────────────
+    [chromium] › apps\web\e2e\settings-ux-review.spec.ts:435:3 › Settings category navigation stays reachable through continuous tasks at 320 
+    [chromium] › apps\web\e2e\settings-ux-review.spec.ts:435:3 › Settings category navigation stays reachable through continuous tasks at 390 
+    [chromium] › apps\web\e2e\settings-ux-review.spec.ts:435:3 › Settings category navigation stays reachable through continuous tasks at 430 
+    [chromium] › apps\web\e2e\settings-ux-review.spec.ts:435:3 › Settings category navigation stays reachable through continuous tasks at 768 
+    [chromium] › apps\web\e2e\settings-ux-review.spec.ts:435:3 › Settings category navigation stays reachable through continuous tasks at 1024 
+    [chromium] › apps\web\e2e\settings-ux-review.spec.ts:435:3 › Settings category navigation stays reachable through continuous tasks at 1279 
+    [chromium] › apps\web\e2e\shortcuts.spec.ts:11:1 › Alt+Shift+N：参考列表执行"新建参考资源"命令（同一 run/可用性） ────
+    [chromium] › apps\web\e2e\surface-foundation.spec.ts:21:1 › 七类 Page Archetype 在四级视口可直接验收 ───────
+    [chromium] › apps\web\e2e\visual.spec.ts:40:1 › 九个 UI Element Family 页面均有独立视觉基线 ────────────────
+    [chromium] › apps\web\e2e\visual.spec.ts:68:1 › 移动窗口、Dark Mode 与英文扩张保持无溢出 ──────────────────────
+    [chromium] › apps\web\e2e\visual.spec.ts:86:1 › 移动侧栏打开状态纳入视觉回归 ─────────────────────────────────
+    [chromium] › apps\web\e2e\visual.spec.ts:95:1 › 状态体系页面保持 Loading 与异常状态视觉基线 ─────────────────────
+    [chromium] › apps\web\e2e\visual.spec.ts:107:1 › Overview、Reference Form 与 Settings 真实页面进入视觉矩阵 ─
+    [chromium] › apps\web\e2e\visual.spec.ts:127:1 › Toast、Destructive Confirm 与 Compact Density 开启态进入视觉矩阵 
+    [chromium] › apps\web\e2e\visual.spec.ts:141:1 › Reference 多选与分页的真实联动状态进入视觉矩阵 ──────────────────
+    [chromium] › apps\web\e2e\workbench-home.spec.ts:14:1 › 收藏：详情页收藏 → 首页"收藏"区段展示并可跳转 ──────────────
+    [chromium] › apps\web\e2e\workbench-home.spec.ts:28:1 › 最近访问：访问参考列表后首页"最近访问"区段展示（默认开） ──────────
+    [chromium] › apps\web\e2e\workbench-mobile-109.spec.ts:4:1 › Mobile workbench detail preserves identity, selection and list focus 
+  300 passed (18.9m)
+ ELIFECYCLE  Command failed with exit code 1.
+ ELIFECYCLE  Command failed with exit code 1.

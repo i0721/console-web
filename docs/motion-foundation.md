@@ -128,6 +128,9 @@ Browser API 的一般豁免。新增平台生命周期仍优先在 Host 或明�
 - Async Region 各自 progressive ready；不得 Wait-all → Reveal-all。
 - `refreshing → ready`、`background → ready` 保留同一内容实例，不重播整块进场。
 - `TabsView` 的键盘、Selection 和 Focus 仍由 HeroUI 主持，Content Swap 只主持面板视觉切换。
+- 初始内容不是内容替换，`ContentSwapTransition` 首次挂载默认稳定；仅 `contentKey`
+  改变后播放替换。Tabs 的惰性 Panel 因选择变化挂载时，经 `initialChange` 传递该生命周期，
+  首次选择不重复叠加淡入。
 - 输入每次击键、筛选请求、表格行和 UI Element 不播放页面级动效。
 - Avatar 继续使用 HeroUI Image/Fallback readiness，不嵌套 `ReadyImage`。
 

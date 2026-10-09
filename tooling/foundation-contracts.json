@@ -111,6 +111,7 @@
         "apps/web/src/test/ui-element-actions.test.tsx",
         "apps/web/src/test/password-field.test.tsx",
         "apps/web/e2e/authentication.spec.ts",
+        "apps/web/e2e/surface-foundation.spec.ts",
         "apps/web/e2e/overlays.spec.ts",
         "apps/web/e2e/account-menu.spec.ts",
         "apps/web/e2e/settings-ux-review.spec.ts",

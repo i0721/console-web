@@ -786,10 +786,13 @@ Host独占速度/恢复判断，交互与状态继续使用既有HeroUI/Adapter�
 根布局将所有页面包入后台Shell，无会话与认证接口，固定Rin身份不能承载完整认证。
 续轮拆分Public/Auth/App真实路由布局，配置Mock/Backend统一服务，复用现役Form/
 State/Token，接入登录/注册/退出/恢复与身份。方案与待联调边界见
-[认证审查](../109-ui-ux-optimization/design/authentication-review.md)，实施与验收进行中。
+[认证审查](../109-ui-ux-optimization/design/authentication-review.md)，前端实施与验收完成。
 
 已落地真实三类布局、统一 Mock/Backend 服务、登录/注册/会话过期界面和身份菜单退出。
 品牌区与表单复用现役 Token、Page/Form/Alert；密码输入统一收口 Adapter，并在 UI
 Elements 同源展示。320px 确认密码后缀导致输入框溢出的问题已修复；注册成功、深链
 返回、刷新恢复、跨标签页退出及私有记录清理已有浏览器证据。Backend 受控契约测试
-已通过，真实 API 仍未提供，不把本次验证作为服务器安全认证证据。完整检查正在进行。
+已通过，真实 API 仍未提供，不把本次验证作为服务器安全认证证据。用户确认本轮7项视觉后
+限定更新，完整 `pnpm check` exit 0：403单元、329浏览器、生产构建、原预算与全部门禁
+通过。失败过程和原对照保留，最终范围见
+[认证验收](../109-ui-ux-optimization/evidence/authentication-acceptance.md)。
