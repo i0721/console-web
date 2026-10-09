@@ -104,3 +104,11 @@ evidence/semantic-final-check-current.txt。此结果是以下 Motion 专项实�
 用户随后明确确认这28项，已限定范围更新对应golden并保存前后hash。
 人工确认后的完整 `pnpm check` exit 0：383单元、301浏览器、生产构建、原预算与全部
 门禁通过，含38个真实入口及已批准基线复验。最终成绩见上述验证记录；旧对照与失败证据保留。
+
+## UserIdentity 账户菜单专项（2026-10-09）
+
+见[设计审查](design/account-menu-review.md)与[验证记录](evidence/account-menu-verification.md)。
+身份摘要、偏好分组、当前值及语言/主题二级单选复用现役MenuButton/HeroUI；沿用Shell
+Store、设置入口与导航确认，新增同源UI Overlay展示。用户确认本轮4项视觉差异后限定更新，
+383单元、310浏览器全部通过；完整命令末尾对照HTML格式问题修复后，格式/文档门禁复验
+通过。原对照、失败过程及前后hash保留，成绩与命令退出码详见验证记录。

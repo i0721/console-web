@@ -90,6 +90,22 @@
     @apply rounded-panel border border-border bg-surface-raised text-ink shadow-overlay;
   }
 
+  .ui-menu-surface {
+    max-width: calc(100dvw - var(--spacing) * 8);
+    overflow-y: auto;
+    will-change: opacity;
+  }
+
+  .ui-menu-surface[data-entering] {
+    animation: content-fade-in var(--motion-duration-control) var(--ease-product);
+    transition-property: opacity;
+  }
+
+  .ui-menu-surface[data-exiting] {
+    animation: content-fade-out var(--motion-duration-control) var(--ease-product);
+    transition-property: opacity;
+  }
+
   /* High contrast preserves foreground contrast throughout the overlay lifecycle. */
   html[data-contrast='high'] .ui-overlay-motion[data-entering],
   html[data-contrast='high'] .ui-overlay-motion[data-exiting],

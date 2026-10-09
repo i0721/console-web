@@ -5,8 +5,7 @@ import { ShellRoot } from '@community-go/surface-foundation/shell-navigation';
 import { PluginLocaleProvider } from '@community-go/plugin-framework/plugin';
 import type { NavigationNode } from '@community-go/types';
 import { IconAction } from '@community-go/ui-adapter/icon-action';
-import { Avatar, UserIdentity } from '@community-go/ui-adapter/identity';
-import { MenuButton } from '@community-go/ui-adapter/menu-button';
+import { AccountMenu } from './account-menu';
 import {
   Languages,
   Menu,
@@ -303,40 +302,10 @@ export function AppShell({ children }: Readonly<{ children: ReactNode }>) {
                 </IconAction>
               </div>
               <NotificationCenter />
-              <MenuButton
-                ariaLabel={t('shell.account')}
-                items={[
-                  { id: 'locale', label: t('shell.locale') },
-                  { id: 'theme', label: t('shell.theme') },
-                  {
-                    id: routeTargetResolver.resolveHref({ routeId: 'settings', params: {} }),
-                    label: t('nav.settings'),
-                    description: t('shell.settingsDescription'),
-                  },
-                ]}
-                label={
-                  <>
-                    <span className="md:hidden">
-                      <Avatar name="Rin" size="sm" />
-                    </span>
-                    <span className="hidden md:inline-flex">
-                      <UserIdentity
-                        avatarSize="sm"
-                        description={t('shell.productOwner')}
-                        name="Rin"
-                      />
-                    </span>
-                  </>
-                }
-                onAction={(href) => {
-                  if (href === 'locale') {
-                    setLocale(locale === 'zh-CN' ? 'en' : 'zh-CN');
-                    return;
-                  }
-                  if (href === 'theme') {
-                    setTheme(theme === 'light' ? 'dark' : 'light');
-                    return;
-                  }
+              <AccountMenu
+                compact={!desktopTools}
+                onNavigate={() => {
+                  const href = routeTargetResolver.resolveHref({ routeId: 'settings', params: {} });
                   void proceedAfterLeaveConfirm(href, t('shell.account')).then((proceed) => {
                     if (!proceed) return;
                     markForwardRouteIntent();

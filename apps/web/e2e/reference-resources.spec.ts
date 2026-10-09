@@ -84,7 +84,8 @@ test('窄屏与英文扩张下 Reference Resources 无横向溢出', async ({ pa
   await page.goto(referenceResources);
   await expectHydrated(page);
   await page.getByRole('button', { name: '当前用户', exact: true }).click();
-  await page.getByRole('menuitem', { name: '切换语言', exact: true }).click();
+  await page.getByRole('menuitem', { name: '语言 简体中文', exact: true }).click();
+  await page.getByRole('menuitemradio', { name: 'English', exact: true }).click();
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - window.innerWidth,

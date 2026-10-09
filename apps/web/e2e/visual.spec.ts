@@ -70,9 +70,11 @@ test('移动窗口、Dark Mode 与英文扩张保持无溢出', async ({ page })
   await page.goto('/ui-elements/forms');
   await expectHydrated(page);
   await page.getByRole('button', { name: '当前用户', exact: true }).click();
-  await page.getByRole('menuitem', { name: '切换主题', exact: true }).click();
+  await page.getByRole('menuitem', { name: /^主题 / }).click();
+  await page.getByRole('menuitemradio', { name: '深色', exact: true }).click();
   await page.getByRole('button', { name: '当前用户', exact: true }).click();
-  await page.getByRole('menuitem', { name: '切换语言', exact: true }).click();
+  await page.getByRole('menuitem', { name: '语言 简体中文', exact: true }).click();
+  await page.getByRole('menuitemradio', { name: 'English', exact: true }).click();
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - window.innerWidth,

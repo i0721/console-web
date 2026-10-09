@@ -648,12 +648,25 @@ test('Dropdown、Popover 与 Tooltip 展开面进入视觉回归', async ({ page
   const pageHeightBeforeOpen = await page
     .locator('html')
     .evaluate((element) => element.scrollHeight);
-  const triggerRect = await popoverTrigger.evaluate((element) => element.getBoundingClientRect());
   await popoverTrigger.click();
   const popover = page.getByRole('dialog', { name: '组合提示' });
   await expect(popover).toBeVisible();
-  const popoverRect = await popover.evaluate((element) => element.getBoundingClientRect());
-  expect(popoverRect.top).toBeGreaterThanOrEqual(triggerRect.bottom);
+  // The reference grows as capabilities are added; collision handling may flip the overlay above.
+  await expect
+    .poll(async () => {
+      const anchor = await popoverTrigger.evaluate((element) => element.getBoundingClientRect());
+      const overlay = await popover.evaluate((element) => element.getBoundingClientRect());
+      const viewport = page.viewportSize();
+      return (
+        viewport !== null &&
+        overlay.left >= 0 &&
+        overlay.right <= viewport.width &&
+        overlay.top >= 0 &&
+        overlay.bottom <= viewport.height &&
+        (overlay.top >= anchor.bottom || overlay.bottom <= anchor.top)
+      );
+    })
+    .toBe(true);
   await expect(popover).toBeFocused();
   const pageHeightAfterOpen = await page
     .locator('html')

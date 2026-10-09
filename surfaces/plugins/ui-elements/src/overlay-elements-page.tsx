@@ -24,6 +24,7 @@ export function OverlayElementsPage() {
   const overlay = searchParams.get('overlay');
   const [checked, setChecked] = useState(true);
   const [lastAction, setLastAction] = useState<string>();
+  const [selectedChoice, setSelectedChoice] = useState('edit');
   return (
     <UiElementsFamilyPage
       familyId="overlays"
@@ -70,6 +71,49 @@ export function OverlayElementsPage() {
                       label: t('uiElements.menuDelete'),
                       icon: <Trash2 className="size-4" />,
                       tone: 'danger',
+                    },
+                  ]}
+                />
+              </ComponentPreview>
+              <ComponentPreview
+                name="MenuButton · Groups / Submenu"
+                description={t('uiElements.groupedMenu')}
+                states={['Group', 'Selected', 'Submenu', 'Keyboard', 'Touch', 'Collision']}
+              >
+                <MenuButton
+                  label={t('uiElements.groupedMenu')}
+                  ariaLabel={t('uiElements.groupedMenu')}
+                  onAction={(id) => {
+                    setSelectedChoice(id);
+                    setLastAction(id);
+                  }}
+                  groups={[
+                    {
+                      id: 'choices',
+                      label: t('uiElements.menuChoices'),
+                      items: [
+                        {
+                          id: 'choice',
+                          label: t('uiElements.menuChoices'),
+                          value: t(
+                            selectedChoice === 'edit'
+                              ? 'uiElements.menuEdit'
+                              : 'uiElements.menuCopy',
+                          ),
+                          selectedId: selectedChoice,
+                          options: [
+                            { id: 'edit', label: t('uiElements.menuEdit') },
+                            { id: 'copy', label: t('uiElements.menuCopy') },
+                          ],
+                        },
+                      ],
+                    },
+                    {
+                      id: 'actions',
+                      label: t('uiElements.menuActions'),
+                      items: [
+                        { id: 'archive', label: t('uiElements.menuArchive'), disabled: true },
+                      ],
                     },
                   ]}
                 />

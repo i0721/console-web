@@ -130,6 +130,14 @@ Listbox 的滚动属于列表内部责任：Overlay Surface 提供外壳，Listb
 
 `ui-overlay-surface` 是 Dropdown、Select、Combobox、Popover、DatePicker、Dialog、Drawer 和 Command 共用的 Surface 语义，统一 Background、Border、Radius、Shadow 和文字颜色。不同 Overlay 只决定内容 Padding、宽度策略和结构，不复制一套 Surface。
 
+`MenuButton` 使用互斥的平铺 `items` 或分组 `groups`。组可包含动作或单选偏好
+（当前值、selectedId、options）；身份摘要组合在首组Header，装饰头像隐藏重复名称。
+Section/Header/Separator、SubmenuTrigger、单选Menu和ItemIndicator使用HeroUI公开
+anatomy。`submenuLayout` adjacent用于桌面、stacked用于窄屏触摸，Host提供尺寸判断。
+两者都在同一Dropdown浮层树，碰撞处理、外部关闭、Escape层级返回、焦点及指针跨层
+由HeroUI管理。Menu的轻量淡入淡出复用现役Motion Primitive与control duration，避免
+缩放改变聚焦滚动计算；视口宽度和最大高度受限，overflow保留可操作内容。
+
 Dialog/Confirm 的主操作与普通 Action 消费同一 `bg-brand` / `text-on-brand` 配对；危险操作使用 `bg-danger` / `text-on-danger`。不得固定白色文字：深色主题的强调背景较亮，前景必须随主题与强调色一起变化，并在真实打开态验证对比度。
 
 `PopoverCard` 当前只承载与 Trigger 直接相关的短说明，使用内容宽度和稳定的 `bottom start` Placement；打开时 HeroUI 将焦点移入 Popover Dialog，Escape 关闭后再返回 Trigger。它不是表单值选择、命令列表或强制确认。更短且不可交互的补充说明使用 `TooltipAction`，操作集合使用 `MenuButton`，必须阻断主流程并等待决策时使用 `DialogSurface`。外部参考出现更多方向或内容组合，不自动扩大项目 API；只有真实产品场景需要时才新增可验证的交互内容或 Placement 语义。
