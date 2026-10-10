@@ -35,7 +35,7 @@
     "route": "/system-tools/icons",
     "height": 720,
     "overflow": false,
-    "units": 20,
+    "units": 22,
     "nested": false,
     "hidden": false
   },
@@ -201,7 +201,7 @@
   },
   {
     "route": "/ui-elements/overlays",
-    "height": 1976,
+    "height": 2040,
     "overflow": false,
     "units": 24,
     "nested": false,

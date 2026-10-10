@@ -44,9 +44,9 @@ UI Elements 桌面和三个 Backend Contract 均通过，后端缓存竞争不�
 Family 和 Confirm 的稳定差异失败，日志 `sidebar-visual-isolated.txt`。先前的 Reference/
 Forms 不稳定截图不作为新基线；也不因此宣称完整门禁已通过。
 
-### 待人工视觉确认
+### 人工视觉确认与限定更新
 
-[最终前后对照](sidebar/visual-differences-final/index.html) 中 6 项待确认：展开父级导航、
+[最终前后对照](sidebar/visual-differences-final/index.html) 中用户已确认的 6 项：展开父级导航、
 收缩 Flyout、收缩兄弟切换、移动 Drawer、Overlay Family 与 Confirm。
 前三项和 Drawer 来自正式 Sidebar 模式/激活/轴线改进；Overlay Family 新增同源
 Tooltip/Flyout 示例后高度从 1074 变为 1114；Confirm 的背景受同页示例影响，弹窗
@@ -54,6 +54,27 @@ Tooltip/Flyout 示例后高度从 1074 变为 1114；Confirm 的背景受同页�
 其它两项保留失败现场并标记不更新，原断言复验已通过。
 
 每项原基线/当前结果/差异及 SHA-256 在 manifest.json；收集时逐项验证 expected hash
-与仓库现有 golden 相同。没有修改任何 golden、阈值或测试排除。根 AGENTS §10 要求
-“视觉基线只能在人工确认变化合理后更新”，故确认后才能限定更新这 6 项并完成最终
-完整门禁。其余生产实现、专项验证、构建原预算、治理、Lint/TypeScript 和报告已完成。
+与当时仓库 golden 相同。用户回复“确认”后再次校验原基线与 reviewed actual 的 hash，
+仅复制这 6 个确认文件；更新前后 hash 和确认时间保存在
+[approved-baselines.json](sidebar/visual-differences-final/approved-baselines.json)。没有修改
+其它 golden、阈值或测试排除。保留前后图片和早期失败证据；原图不因确认而覆盖。
+确认后的视觉复验见 sidebar-approved-visual.txt，随后执行完整 pnpm check。
+
+### 按目标逐项核对
+
+| 用户验收项                          | 当前证据与结论                                                                                                                     |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| 先实测再分析、参考成熟设计          | sidebar-review.md 记录原始几何与实际 TailAdmin Tooltip/Popover 状态；108 审查已追加专项                                            |
+| 图标/容器比例、对齐、间距和点击区   | sidebar-design.spec.ts 第 1/4 项通过：24px 图标、48px 热区、80px 标准栏宽；密度与增强热区同源联动                                  |
+| 展开与收缩分别定义、状态共享        | Surface Shell 管模式布局，Adapter 管 Trigger/Overlay；第 3 项验证展开 264px/16px 与探索状态保留                                    |
+| 当前页、祖先激活、Hover/Press/Focus | 第 1 项验证 aria-current、祖先激活、提示和 2px/4px 焦点；状态样式由同一 Adapter 规则消费 Token                                     |
+| Tooltip、子菜单不丢功能、避免误关   | 第 2/6/8 项验证跨层 Hover、点击固定/再次关闭、键盘焦点保持、Escape、触摸子级导航与同源 Showcase；原深层 Accordion fixture 单元通过 |
+| Header/主内容联动、品牌/底部高度    | 第 7/10 项验证布局列联动及双向 40 帧图标轴线；原 navigation.spec.ts 的滚动/品牌/底部测试在全量通过                                 |
+| 偏好/当前位置、刷新、Host 导航保护  | 第 1/3/5/9 项覆盖刷新恢复、模式往返、移动再回桌面、dirty leave confirmation；Shell Store 单元通过                                  |
+| 桌面/窄屏/移动/Dark/英文/短高度     | 第 4/5 项覆盖 1024/1440/2560、320/390/768/1023、Dark/English、480px 高度；截图保存在 sidebar/                                      |
+| 缩放与触摸验证的边界                | 已验证 125% 字体缩放和 hasTouch 模拟；不是原生浏览器 Zoom 或真实触摸设备，不能把模拟证据扩张为硬件验证                             |
+| 无障碍与轻量 Motion                 | 第 2/7/8 项包含 Axe；第 5 项验证 Drawer 焦点圈定/恢复；第 7/10 项覆盖 Reduced Motion 与正常切换                                    |
+| 公共边界、原预算与报告              | Foundation/Architecture、Lint/TypeScript、403 单元、顺序构建/原性能预算、格式/文档门禁通过；设计和审查已更新                       |
+| 最终完整门禁与视觉验收              | 6 项已人工确认并限定更新；最终完整 pnpm check 尚待结果，不能以专项通过替代                                                         |
+
+上述核对不增加新验收标准，也不把未验证的原生 Zoom/真实设备或未通过的完整门禁记为完成。

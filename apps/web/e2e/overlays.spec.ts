@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
+import { waitForVisualReadiness } from './visual-readiness';
 
 async function assertOverlayAccessibility(page: Page) {
   const accessibility = await new AxeBuilder({ page })
@@ -685,7 +686,10 @@ test('Dropdown、Popover 与 Tooltip 展开面进入视觉回归', async ({ page
 
 test('DatePicker 与 Command 展开面支持键盘及无障碍扫描', async ({ page }) => {
   await page.goto('/ui-elements/forms');
+  await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
   const datePickerTrigger = page.getByRole('button', { name: '日历 DatePicker' });
+  // Focus entry stabilizes the project's Reveal before measuring the offscreen anchor.
+  await datePickerTrigger.focus();
   // 触发元素位于首屏之外：先滚动进入视口再点击，避免打开弹层时的滚动定位竞态
   // （页面转场组件加入后，点击视口外触发器会偶发改变锚点测量结果）
   await datePickerTrigger.evaluate((element) =>
@@ -693,6 +697,8 @@ test('DatePicker 与 Command 展开面支持键盘及无障碍扫描', async ({ 
   );
   await datePickerTrigger.click();
   await expect(page.getByRole('dialog')).toBeVisible();
+  await expect(page.getByRole('dialog').getByRole('grid')).toBeVisible();
+  await waitForVisualReadiness(page);
   await expect.soft(page).toHaveScreenshot('ui-elements-date-picker-open.png');
   await page.keyboard.press('Escape');
 
@@ -717,6 +723,7 @@ test('Dialog 与 Drawer 锁定焦点并支持 Escape 恢复 Trigger', async ({ p
   await expect(dialog).toBeVisible();
   await page.keyboard.press('Tab');
   await expect(dialog.locator(':focus')).toHaveCount(1);
+  await waitForVisualReadiness(page);
   await expect.soft(page).toHaveScreenshot('ui-elements-dialog-open.png');
   await page.keyboard.press('Escape');
   await expect(dialogTrigger).toBeFocused();

@@ -1,7 +1,9 @@
 import { expect, test, type Page } from '@playwright/test';
+import { waitForVisualReadiness } from './visual-readiness';
 
 async function expectHydrated(page: Page) {
   await expect(page.locator('html')).toHaveAttribute('data-hydrated', 'true');
+  await waitForVisualReadiness(page);
 }
 
 async function expectReferenceReady(page: Page) {
