@@ -33,10 +33,20 @@ export function NavigationTree({
   const menuMemory = useShellStore((state) => state.preferences.navigation.menuMemory);
   const router: RouterPort = {
     currentPath,
-    renderLink: ({ href, className, children, ariaLabel, title, onNavigate: onLinkNavigate }) => (
+    renderLink: ({
+      href,
+      className,
+      children,
+      ariaLabel,
+      title,
+      current,
+      onNavigate: onLinkNavigate,
+    }) => (
       <Link
         className={className}
         href={href}
+        aria-current={current ? 'page' : undefined}
+        data-active={current || undefined}
         transitionTypes={[pageTransitionTypes.forward]}
         {...(ariaLabel ? { 'aria-label': ariaLabel } : {})}
         {...(title ? { title } : {})}
@@ -75,7 +85,8 @@ export function NavigationTree({
     translate: (key, values) => (values ? t(key, values) : t(key)),
     icon: (iconId, active) =>
       createElement(resolveNavigationIcon(iconId), {
-        className: 'size-4 shrink-0',
+        className: 'size-full shrink-0',
+        'aria-hidden': true,
         strokeWidth: active ? 2.3 : 1.9,
       }),
   };

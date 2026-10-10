@@ -8,17 +8,29 @@
   --surface-timeline-marker-size: 0.75rem;
   --surface-timeline-marker-offset: 0.375rem;
   --surface-timeline-marker-radius: 9999px;
+  --surface-shell-expanded-width: 16.5rem;
+  --surface-shell-compact-width: calc(var(--spacing-control-lg) + var(--spacing) * 8);
 }
 
 @layer components {
   .surface-shell-grid {
     display: grid;
-    grid-template-columns: 16.5rem minmax(0, 1fr);
+    grid-template-columns: var(--surface-shell-expanded-width) minmax(0, 1fr);
     transition: grid-template-columns var(--motion-duration-standard) var(--ease-product);
   }
 
   .surface-shell-grid[data-sidebar='collapsed'] {
-    grid-template-columns: 5.5rem minmax(0, 1fr);
+    grid-template-columns: var(--surface-shell-compact-width) minmax(0, 1fr);
+  }
+
+  .surface-shell-compact-group + .surface-shell-compact-group {
+    margin-block-start: calc(var(--spacing) * 3);
+    padding-block-start: calc(var(--spacing) * 3);
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  .surface-shell-navigation-root-item {
+    padding-inline: calc((var(--spacing-control-lg) - var(--spacing-icon-sm)) / 2 + var(--spacing));
   }
 
   /* Shell 导航滚动视口：占 Sidebar 顶部/底部稳定区之间的剩余高度，独立纵向滚动。

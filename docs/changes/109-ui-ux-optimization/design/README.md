@@ -70,3 +70,7 @@ Reference 列表、详情、编辑、通知、最近访问和收藏使用同一 
 完整检查、局部几何与失败恢复证据见 [账本](../tasks.md)。视觉差异单独提供
 [原基线/当前/diff](../evidence/visual-diffs-final/index.html)，不自动更新快照；
 真实设备和原生 zoom 的限制不以 Chromium CSS viewport 结果替代。
+
+## Sidebar 专项
+
+展开/纯图标模式的比例、导航交互、状态和边界见[专项审查](sidebar-review.md)。

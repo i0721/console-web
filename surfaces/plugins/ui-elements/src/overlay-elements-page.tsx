@@ -3,6 +3,7 @@
 import { CommandMenu } from '@community-go/ui-adapter/command-menu';
 import { SwitchField, TextField } from '@community-go/ui-adapter/form-field';
 import { MenuButton } from '@community-go/ui-adapter/menu-button';
+import { NavigationFlyout, NavigationHint } from '@community-go/ui-adapter/navigation-flyout';
 import {
   ConfirmDialog,
   DestructiveConfirmDialog,
@@ -25,6 +26,7 @@ export function OverlayElementsPage() {
   const [checked, setChecked] = useState(true);
   const [lastAction, setLastAction] = useState<string>();
   const [selectedChoice, setSelectedChoice] = useState('edit');
+  const [navigationOpen, setNavigationOpen] = useState(false);
   return (
     <UiElementsFamilyPage
       familyId="overlays"
@@ -141,6 +143,30 @@ export function OverlayElementsPage() {
                   tooltip={t('uiElements.tooltipContent')}
                   defaultOpen={overlay === 'tooltip'}
                 />
+                <div className="mt-4 flex items-center gap-3">
+                  <NavigationHint label={t('uiElements.popoverTitle')}>
+                    <a
+                      href="#element-popovercard"
+                      aria-label={t('uiElements.popoverTitle')}
+                      className="ui-navigation-icon-trigger"
+                    >
+                      <Copy aria-hidden="true" className="size-icon-lg" />
+                    </a>
+                  </NavigationHint>
+                  <NavigationFlyout
+                    label={t('uiElements.overlaysTitle')}
+                    icon={<Copy className="size-full" />}
+                    isOpen={navigationOpen}
+                    onOpenChange={setNavigationOpen}
+                  >
+                    <a
+                      href="#element-tooltipaction"
+                      className="block rounded-control px-3 py-2 text-sm text-ink outline-none hover:bg-surface-muted focus-visible:ring-2 focus-visible:ring-focus-ring"
+                    >
+                      {t('uiElements.tooltip')}
+                    </a>
+                  </NavigationFlyout>
+                </div>
               </ComponentPreview>
               <ComponentPreview
                 name="DialogSurface"

@@ -796,3 +796,11 @@ Elements 同源展示。320px 确认密码后缀导致输入框溢出的问题�
 限定更新，完整 `pnpm check` exit 0：403单元、329浏览器、生产构建、原预算与全部门禁
 通过。失败过程和原对照保留，最终范围见
 [认证验收](../109-ui-ux-optimization/evidence/authentication-acceptance.md)。
+
+## 24. Sidebar 纯图标模式专项（2026-10-11）
+
+补充实测：88px 收缩栏仍沿用16px图标，叶子热区横向偏宽；分组只留空白、叶子
+依赖原生title，设置/Icon大全重复图标、Motion fallback。续轮统一80px/48px/24px
+比例和分组分隔，复用HeroUI Tooltip/Flyout，补当前页/焦点、触摸与偏好恢复。
+详见[专项审查](../109-ui-ux-optimization/design/sidebar-review.md)与
+[验证记录](../109-ui-ux-optimization/evidence/sidebar-verification.md)，不以旧报告成绩替代现役结果。

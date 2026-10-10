@@ -9,6 +9,9 @@
 ## 109 当前验收
 
 本轮代码和结果逐项见 [109 实施账本](changes/109-ui-ux-optimization/tasks.md)。
+最新 Sidebar 轮次见 [专项验证](changes/109-ui-ux-optimization/evidence/sidebar-verification.md)：
+10 项专项通过；全量和视觉人工确认状态以该账本为准。以下 check-final.txt 数字是
+109 初始实施轮的历史检查，不代表后续 Authentication / Sidebar 轮次。
 完整门禁记录为 `docs/changes/109-ui-ux-optimization/evidence/check-final.txt`。
 最后代码已通过治理/lint/类型、369 项单元测试、生产构建与原产物预算。
 浏览器 219 项：205 通过、14 项因视觉比较失败；其后格式/文档门独立补跑。

@@ -7,7 +7,7 @@ import type {
   NavigationLeaf,
   NavigationNode,
 } from '@community-go/types';
-import { NavigationFlyout } from '@community-go/ui-adapter/navigation-flyout';
+import { NavigationFlyout, NavigationHint } from '@community-go/ui-adapter/navigation-flyout';
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 
 import {
@@ -28,6 +28,7 @@ export type NavigationLink = Readonly<{
   children: ReactNode;
   ariaLabel?: string;
   title?: string;
+  current?: boolean;
   onNavigate?: () => void;
 }>;
 
@@ -68,7 +69,7 @@ function ExpandedNode({
   onNavigate,
 }: TreeNodeProps) {
   const active = node.kind === 'leaf' ? node.id === activeLeafId : activeAncestorIds.has(node.id);
-  const linkClassName = `group flex min-h-10 items-center gap-3 rounded-control px-3 py-2 text-sm font-semibold transition-colors ${
+  const linkClassName = `ui-navigation-focus group flex min-h-10 items-center gap-3 rounded-control ${scopeKey === accordionRootScope ? 'surface-shell-navigation-root-item' : 'px-3'} py-2 text-sm font-semibold transition-colors active:bg-surface-inset ${
     active ? 'bg-brand-soft text-brand' : 'text-ink-muted hover:bg-surface-muted hover:text-ink'
   }`;
 
@@ -77,10 +78,16 @@ function ExpandedNode({
       <li>
         {router.renderLink({
           href: node.href,
+          current: active,
           className: linkClassName,
           children: (
             <>
-              {presenter.icon(node.iconId, active)}
+              <span
+                aria-hidden="true"
+                className="flex size-icon-sm shrink-0 items-center justify-center"
+              >
+                {presenter.icon(node.iconId, active)}
+              </span>
               <span className="min-w-0 flex-1 truncate">{presenter.translate(node.labelKey)}</span>
             </>
           ),
@@ -106,11 +113,13 @@ function ExpandedNode({
         aria-label={presenter.translate('shell.toggleNavigation', {
           label: presenter.translate(node.labelKey),
         })}
-        className={`${linkClassName} w-full border-0 bg-transparent text-start`}
+        className={`${linkClassName} w-full border-0 text-start`}
         onClick={() => onToggle(node, scopeKey, expanded)}
         type="button"
       >
-        {presenter.icon(node.iconId, active)}
+        <span aria-hidden="true" className="flex size-icon-sm shrink-0 items-center justify-center">
+          {presenter.icon(node.iconId, active)}
+        </span>
         <span className="min-w-0 flex-1 truncate">{presenter.translate(node.labelKey)}</span>
         <svg
           aria-hidden="true"
@@ -163,16 +172,22 @@ function CompactLeaf({
   onNavigate?: (() => void) | undefined;
 }>) {
   const label = presenter.translate(leaf.labelKey);
-  return router.renderLink({
-    href: leaf.href,
-    ariaLabel: label,
-    title: label,
-    className: `flex h-11 items-center justify-center rounded-control px-2 transition-colors ${
-      active ? 'bg-brand-soft text-brand' : 'text-ink-muted hover:bg-surface-muted hover:text-ink'
-    }`,
-    children: presenter.icon(leaf.iconId, active),
-    ...(onNavigate ? { onNavigate } : {}),
-  });
+  return (
+    <NavigationHint label={label}>
+      {router.renderLink({
+        href: leaf.href,
+        ariaLabel: label,
+        current: active,
+        className: `ui-navigation-icon-trigger ${active ? 'bg-brand-soft text-brand' : ''}`,
+        children: (
+          <span aria-hidden="true" className="ui-navigation-icon">
+            {presenter.icon(leaf.iconId, active)}
+          </span>
+        ),
+        ...(onNavigate ? { onNavigate } : {}),
+      })}
+    </NavigationHint>
+  );
 }
 
 function CompactBranch({
@@ -340,13 +355,16 @@ export function ShellNavigation({
   };
 
   return groups.map((group) => (
-    <div key={group.id}>
+    <div
+      key={group.id}
+      className={compact ? 'surface-shell-compact-group w-control-lg' : undefined}
+    >
       {compact ? null : (
         <p className="mb-2 px-3 text-xs font-bold uppercase tracking-widest text-ink-muted">
           {presenter.translate(group.labelKey)}
         </p>
       )}
-      <ul className="space-y-1">
+      <ul className="space-y-1" aria-label={presenter.translate(group.labelKey)}>
         {group.items.map((node) => {
           const active =
             node.kind === 'leaf' ? node.id === activePath?.leaf.id : activeAncestorIds.has(node.id);
@@ -370,7 +388,11 @@ export function ShellNavigation({
                     exploration={effectiveExploration}
                     isOpen={openBranchId === node.id}
                     onNavigate={onNavigate}
-                    onOpenChange={(open) => setOpenBranchId(open ? node.id : null)}
+                    onOpenChange={(open) =>
+                      setOpenBranchId((current) =>
+                        open ? node.id : current === node.id ? null : current,
+                      )
+                    }
                     onToggle={handleBranchToggle}
                     presenter={presenter}
                     router={router}

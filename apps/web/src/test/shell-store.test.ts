@@ -8,7 +8,7 @@ import { useShellStore } from '../state/use-shell-store';
  * 直接驱动 actions（不依赖 hydration 单例时序），验证
  * - 分类更新写 preferences 并同步兼容投影；
  * - theme/locale/sidebar 快捷入口写入偏好显式值；
- * - remember 折叠只改会话投影；
+ * - remember 保留侧栏状态，不被无关偏好更新重置；
  * - 分类/全部恢复默认。
  */
 describe('useShellStore（v1 嵌套偏好）', () => {
@@ -55,12 +55,20 @@ describe('useShellStore（v1 嵌套偏好）', () => {
     expect(s.sidebarCollapsed).toBe(true);
   });
 
-  it('sidebarBehavior=remember 时折叠只改会话投影、不写偏好（记忆语义留给 SET-005）', () => {
+  it('sidebarBehavior=remember 保留策略，主题/语言/无关偏好更新不重置侧栏', () => {
     // 默认 sidebarBehavior = remember
     useShellStore.getState().setSidebarCollapsed(true);
     const s = useShellStore.getState();
     expect(s.preferences.navigation.sidebarBehavior).toBe('remember');
     expect(s.sidebarCollapsed).toBe(true);
+    s.setTheme('dark');
+    s.setLocale('en');
+    s.updateCategory('dataDisplay', { pageSize: 50 });
+    s.resetCategory('appearance');
+    s.applyPersistedPreferences(useShellStore.getState().preferences);
+    expect(useShellStore.getState().sidebarCollapsed).toBe(true);
+    s.updateCategory('navigation', { sidebarBehavior: 'expanded' });
+    expect(useShellStore.getState().sidebarCollapsed).toBe(false);
   });
 
   it('resetCategory 只恢复该分类默认', () => {

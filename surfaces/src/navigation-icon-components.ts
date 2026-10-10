@@ -22,6 +22,8 @@ import {
   Palette,
   PanelsTopLeft,
   Settings2,
+  Shapes,
+  Orbit,
   Table2,
   TableProperties,
   Waypoints,
@@ -47,6 +49,8 @@ export const navigationIconComponents: Readonly<Record<NavigationIconId, LucideI
   overlay: Layers3,
   states: Workflow,
   settings: Settings2,
+  icons: Shapes,
+  motion: Orbit,
   resource: TableProperties,
   // 设置中心分类语义（SET-011）。
   palette: Palette,

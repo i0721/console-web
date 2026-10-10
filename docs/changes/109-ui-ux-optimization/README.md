@@ -123,3 +123,9 @@ Store、设置入口与导航确认，新增同源UI Overlay展示。用户确�
 [认证验收](evidence/authentication-acceptance.md)，配置及 API
 契约见[Web Authentication](../../../apps/web/src/auth/README.md)。真实 Backend 待联调，
 受控契约浏览器验证不等于真实认证已接通。
+
+## Sidebar 展开与纯图标专项（2026-10-11）
+
+已完成实际体验、模式比例与 Tooltip/Flyout、导航分组和偏好恢复调整；方案见
+[侧栏审查](design/sidebar-review.md)，过程与验收见
+[侧栏验证](evidence/sidebar-verification.md)。当前全量结果与视觉基线确认以验证记录为准。

@@ -13,7 +13,7 @@ export const navigationContribution = {
       navigationId: 'system-tools.root',
       labelKey: 'systemTools.nav.icons',
       groupId: 'system',
-      iconId: 'settings',
+      iconId: 'icons',
       routeId: 'system-tools.icons',
     },
   ],

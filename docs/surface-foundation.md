@@ -48,3 +48,21 @@ surface-route-content 使用 overflow-x:clip 收敛绘制范围，该属性不�
 
 验证见 [设置与导航回归](../apps/web/e2e/settings-ux-review.spec.ts)，审查理由见
 [108 报告](changes/108-ui-ux-audit/README.md)。
+
+## Shell 展开与纯图标模式
+
+Shell 宽度分别为 surface-shell-expanded-width / surface-shell-compact-width；收缩态
+以已有 control-lg 方形热区与 icon-lg 图标形成独立 Rail。分组使用边框与语义间距，
+栏宽由 control-lg 加两侧 spacing×4 推导，收缩组保持 control-lg 宽度；顶层图文行内距
+同时消费 control-lg/icon-sm，保证密度、增强点击区和模式切换共享图标轴线。
+所有导航 list 保留 i18n 名称；ExpandedNode 的图标槽保持 icon-sm，文字/递归结构不变。
+NavigationPresenter 只提供填满槽位的装饰图标；Route current 经 RouterPort 传递给
+Host 的 aria-current。叶子使用 Adapter NavigationHint，父级使用带标题的同源 Flyout，
+不为父级同时打开 Tooltip。切换模式保留 Accordion exploration 与 route current。
+
+Nav 控制使用 data-navigation-control 标记：Flyout Trigger/侧栏模式切换按钮可直接
+完成原操作，不让非模态浮层外部关闭机制吞掉第一次点击；其它外部关闭与 Escape
+仍由 Overlay 管理。移动端小于 lg 保持完整 Navigation Drawer，不使用图标 Rail。
+Host 的 remember 在原 v1 key 中追加可选上次模式字段，缺字段旧记录保持默认行为；
+主题/语言等无关偏好更新不复位侧栏。设计与验证见
+[Sidebar 专项](changes/109-ui-ux-optimization/design/sidebar-review.md)。

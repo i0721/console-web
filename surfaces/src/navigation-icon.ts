@@ -39,6 +39,8 @@ export const navigationIconVocabulary = [
   'overlay',
   'states',
   'settings',
+  'icons',
+  'motion',
   'resource',
   // 设置中心分类语义（SET-011：settings 内页导航为真实消费方；沿用受控语义 id 体系）。
   'palette',

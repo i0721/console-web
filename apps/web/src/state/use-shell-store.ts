@@ -19,7 +19,9 @@ import type { SupportedLocale as AppLocale } from '../i18n/i18n';
  *   显式值（不套新默认）；首次（无记录）用 `defaultPreferences`；
  * - 运行时保留“兼容投影” `theme`(light|dark) / `locale` / `sidebarCollapsed`，供既有
  *   Shell 消费者（providers/app-shell）与 hydration 门控使用；真正持久化的是
- *   `preferences`（投影不入白名单，避免双事实源漂移）。themeMode=system 的解析
+ *   `preferences`。Sidebar 专项仅在 remember 策略下追加 rememberedSidebarCollapsed
+ *   durable 字段；显式策略仍只由 preferences 决定，theme/locale 投影不入白名单。
+ *   themeMode=system 的解析
  *   （matchMedia prefers-color-scheme）在 Host providers 应用层完成。
  * - skipHydration + hasHydrated 门控语义保持（AppLoadingSurface 依赖）。
  *
@@ -55,16 +57,19 @@ type ShellState = {
   applyPersistedPreferences: (preferences: Preferences) => void;
 };
 
-/** 持久化白名单：只持久化八分类偏好（投影/瞬时状态不入库）。 */
-type ShellPersisted = { preferences: Preferences };
+/** 白名单：八分类偏好 + remember 时的上次侧栏状态；瞬时 UI 不入库。 */
+type ShellPersisted = { preferences: Preferences; rememberedSidebarCollapsed?: boolean };
 
 /** 由嵌套偏好同步兼容投影（theme/locale/sidebarCollapsed）。 */
-function projectPreferences(preferences: Preferences) {
+function projectPreferences(preferences: Preferences, rememberedSidebarCollapsed = false) {
   const themeMode = preferences.appearance.themeMode;
   return {
     theme: themeMode === 'system' ? 'light' : themeMode,
     locale: preferences.localeRegion.language,
-    sidebarCollapsed: preferences.navigation.sidebarBehavior === 'collapsed',
+    sidebarCollapsed:
+      preferences.navigation.sidebarBehavior === 'remember'
+        ? rememberedSidebarCollapsed
+        : preferences.navigation.sidebarBehavior === 'collapsed',
   };
 }
 
@@ -110,7 +115,7 @@ export const useShellStore = createPersistStore<ShellState, ShellPersisted>(
           ...state.preferences,
           appearance: { ...state.preferences.appearance, themeMode: theme },
         };
-        return { preferences, ...projectPreferences(preferences) };
+        return { preferences, ...projectPreferences(preferences, state.sidebarCollapsed) };
       }),
     setLocale: (locale) =>
       set((state) => {
@@ -118,11 +123,10 @@ export const useShellStore = createPersistStore<ShellState, ShellPersisted>(
           ...state.preferences,
           localeRegion: { ...state.preferences.localeRegion, language: locale },
         };
-        return { preferences, ...projectPreferences(preferences) };
+        return { preferences, ...projectPreferences(preferences, state.sidebarCollapsed) };
       }),
     setMobileNavigationOpen: (mobileNavigationOpen) => set({ mobileNavigationOpen }),
-    // 折叠/展开侧栏：当前若为 remember（记忆上次使用），只改会话投影不入偏好（SET-005
-    // 落实跨导航记忆持久化）；显式 expanded/collapsed 则写偏好并同步投影。
+    // remember 保留策略并通过 partialize 记录上次模式；显式策略则写偏好。
     setSidebarCollapsed: (collapsed) =>
       set((state) => {
         const behavior = state.preferences.navigation.sidebarBehavior;
@@ -136,7 +140,7 @@ export const useShellStore = createPersistStore<ShellState, ShellPersisted>(
             sidebarBehavior: collapsed ? 'collapsed' : 'expanded',
           },
         };
-        return { preferences, ...projectPreferences(preferences) };
+        return { preferences, ...projectPreferences(preferences, state.sidebarCollapsed) };
       }),
     updateCategory: (category, patch) =>
       set((state) => {
@@ -144,7 +148,7 @@ export const useShellStore = createPersistStore<ShellState, ShellPersisted>(
           ...state.preferences,
           [category]: { ...state.preferences[category], ...patch },
         };
-        return { preferences, ...projectPreferences(preferences) };
+        return { preferences, ...projectPreferences(preferences, state.sidebarCollapsed) };
       }),
     resetCategory: (category) =>
       set((state) => {
@@ -152,7 +156,7 @@ export const useShellStore = createPersistStore<ShellState, ShellPersisted>(
           ...state.preferences,
           [category]: defaultPreferences[category],
         };
-        return { preferences, ...projectPreferences(preferences) };
+        return { preferences, ...projectPreferences(preferences, state.sidebarCollapsed) };
       }),
     resetAll: () =>
       set(() => {
@@ -160,7 +164,7 @@ export const useShellStore = createPersistStore<ShellState, ShellPersisted>(
         return { preferences, ...projectPreferences(preferences) };
       }),
     applyPersistedPreferences: (preferences) =>
-      set(() => ({ preferences, ...projectPreferences(preferences) })),
+      set((state) => ({ preferences, ...projectPreferences(preferences, state.sidebarCollapsed) })),
   }),
   {
     name: 'community-go.shell',
@@ -168,7 +172,12 @@ export const useShellStore = createPersistStore<ShellState, ShellPersisted>(
     version: PREFERENCES_VERSION,
     skipHydration: true,
     storage: createLocalStorage(),
-    partialize: ({ preferences }) => ({ preferences }),
+    partialize: ({ preferences, sidebarCollapsed }) => ({
+      preferences,
+      ...(preferences.navigation.sidebarBehavior === 'remember'
+        ? { rememberedSidebarCollapsed: sidebarCollapsed }
+        : {}),
+    }),
     // 读取期解析：v0 保真迁移 / v1 校验；损坏（无法解析）→ 抛错走 hydration 失败语义，
     // 不静默覆盖（调用方呈现原因 + 恢复动作）。
     migrate: (persisted) => {
@@ -189,7 +198,7 @@ export const useShellStore = createPersistStore<ShellState, ShellPersisted>(
       return {
         ...currentState,
         preferences: result.value,
-        ...projectPreferences(result.value),
+        ...projectPreferences(result.value, typed.rememberedSidebarCollapsed === true),
       };
     },
     // 保持迁移前语义：hydration 完成后标记 hasHydrated（供 RuntimeProviders 门控）。

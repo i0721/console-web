@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { useFrontendTranslation } from '@community-go/i18n';
 import type { ReactNode } from 'react';
 
@@ -37,10 +37,13 @@ import { useShellStore } from '../state/use-shell-store';
 import { useCommandsPort } from '@community-go/plugin-framework/commands';
 import { BrandMark } from './brand-mark';
 import { combinedShellNavigationGroups } from './navigation';
-import { NavigationTree } from './navigation-tree';
 import { NotificationCenter } from './notification-center';
 import { PageTabs } from './page-tabs';
 import { usePageTabsRecorder } from './use-page-tabs-recorder';
+
+const NavigationTree = lazy(() =>
+  import('./navigation-tree').then((module) => ({ default: module.NavigationTree })),
+);
 
 const subscribeDesktop = (notify: () => void) => {
   window.addEventListener('resize', notify);
@@ -83,14 +86,34 @@ function NavigationContent({
         )}
       </div>
       <nav
-        className={`surface-shell-navigation-viewport flex-1 space-y-7 py-6 ${compact ? 'px-2' : 'px-3'}`}
+        className={`surface-shell-navigation-viewport min-h-0 flex-1 py-6 ${compact ? 'px-4' : 'space-y-7 px-3'}`}
         aria-label={t('shell.primaryNav')}
       >
-        <NavigationTree
-          compact={compact}
-          groups={combinedShellNavigationGroups}
-          onNavigate={onNavigate}
-        />
+        <Suspense
+          fallback={combinedShellNavigationGroups.map((group) => (
+            <div
+              key={group.id}
+              className={
+                compact ? 'surface-shell-compact-group w-control-lg space-y-1' : 'space-y-1'
+              }
+              aria-busy="true"
+            >
+              {compact ? null : <Skeleton className="mb-2 h-4 w-24" />}
+              {group.items.map((item) => (
+                <Skeleton
+                  key={item.id}
+                  className={compact ? 'mx-auto h-control-lg w-control-lg' : 'h-10 w-full'}
+                />
+              ))}
+            </div>
+          ))}
+        >
+          <NavigationTree
+            compact={compact}
+            groups={combinedShellNavigationGroups}
+            onNavigate={onNavigate}
+          />
+        </Suspense>
       </nav>
       {compact ? null : (
         <div className="m-3 rounded-panel border border-brand/15 bg-brand-soft p-4">
@@ -248,7 +271,7 @@ export function AppShell({ children }: Readonly<{ children: ReactNode }>) {
                 <Menu className="size-5" />
               </IconAction>
             </div>
-            <div className="hidden lg:block">
+            <div className="hidden lg:block" data-navigation-control>
               <IconAction
                 label={sidebarCollapsed ? t('shell.expandSidebar') : t('shell.collapseSidebar')}
                 onPress={() => setSidebarCollapsed(!sidebarCollapsed)}

@@ -233,3 +233,15 @@ row 的悬停/聚焦表面必须包含左右内容留白（复用现有 px-3 与
 不得以缩小指示器替代触控热区。回归须真实点击指示器、文字、留白，并验证 Space / 方向键及 Disabled。
 
 本次证据：[共享控件与设置任务回归](../apps/web/e2e/settings-ux-review.spec.ts)。
+
+## Icon Navigation Overlay 组合
+
+NavigationHint（现役 navigation-flyout 子路径）为已有 anchor/Host router link 添加
+右侧 HeroUI Tooltip：完整 accessible name、单一焦点目标、Hover 延迟 300ms、Focus/
+Escape，子元素必须转发标准 anchor props/ref，提示加载不得替换已聚焦的链接。
+NavigationFlyout 的统一 Icon Trigger 使用 control-lg 与 icon-lg，Hover/Open/Active/
+Focus/Disabled 共享语义 Token；Mouse Hover 与 Press 固定分离，Touch 使用 Tap。
+Flyout 有标题和完整子树，键盘内部焦点不会因指针离开关闭。data-navigation-control
+声明可直接交互的导航控制边界，公开 outside-interaction 过滤避免吞掉第一次点击。
+普通外部关闭、Escape、Portal/Collision 与焦点返回仍由 HeroUI 负责。
+同源组合在 /ui-elements/overlays 的 Tooltip 预览与 App Shell 验证。

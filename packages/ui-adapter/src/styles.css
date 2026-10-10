@@ -1,6 +1,39 @@
 @import '@heroui/styles';
 
 @layer components {
+  .ui-navigation-focus {
+    outline: none;
+  }
+  .ui-navigation-focus:focus-visible,
+  .ui-navigation-focus[data-focus-visible='true'],
+  .ui-navigation-icon-trigger:focus-visible,
+  .ui-navigation-icon-trigger[data-focus-visible='true'] {
+    outline: var(--spacing-focus-ring-width) solid var(--color-focus-ring);
+    outline-offset: var(--spacing-focus-ring-offset);
+  }
+  .ui-navigation-icon-trigger {
+    @apply relative mx-auto flex h-control-lg w-control-lg shrink-0 items-center justify-center rounded-control border-0 bg-transparent text-ink-muted outline-none transition-colors;
+    &:hover,
+    &[data-open='true'] {
+      @apply bg-surface-muted text-ink;
+    }
+    &:active {
+      @apply bg-surface-inset;
+    }
+    &[data-active='true'] {
+      @apply bg-brand-soft text-brand;
+    }
+    &:disabled,
+    &[aria-disabled='true'] {
+      @apply cursor-not-allowed opacity-55;
+    }
+  }
+  .ui-navigation-icon {
+    @apply flex size-icon-lg shrink-0 items-center justify-center;
+  }
+  .ui-navigation-hint {
+    @apply rounded-control border border-border bg-ink px-3 py-2 text-xs font-medium text-surface shadow-overlay;
+  }
   /* Item owns a public vendor Link: map its semantic theme at the boundary. */
   .ui-breadcrumbs {
     --muted: var(--color-ink-muted);

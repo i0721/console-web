@@ -13,6 +13,7 @@ export const navigationContribution = {
       navigationId: 'motion.root',
       labelKey: 'motionNav.root',
       groupId: 'development',
+      iconId: 'motion',
       routeId: 'motion',
     },
   ],
